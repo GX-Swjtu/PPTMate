@@ -54,7 +54,7 @@ WORKDIR /app
 ARG TARGETARCH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates unzip \
+    ca-certificates curl unzip \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package.json /app/

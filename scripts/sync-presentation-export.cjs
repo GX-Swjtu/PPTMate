@@ -304,6 +304,36 @@ function validateExistingRuntime(expectedVersion) {
 }
 
 function downloadFile(url, outputPath, redirects = 5) {
+  const proxyUrl = (
+    process.env.HTTPS_PROXY ||
+    process.env.https_proxy ||
+    process.env.HTTP_PROXY ||
+    process.env.http_proxy ||
+    ""
+  ).trim();
+  if (proxyUrl) {
+    ensureDir(path.dirname(outputPath));
+    execFileSync(
+      "curl",
+      [
+        "--fail",
+        "--location",
+        "--silent",
+        "--show-error",
+        "--retry",
+        "3",
+        "--retry-all-errors",
+        "--connect-timeout",
+        "15",
+        "--output",
+        outputPath,
+        url,
+      ],
+      { stdio: "inherit" }
+    );
+    return Promise.resolve();
+  }
+
   return new Promise((resolve, reject) => {
     const client = url.startsWith("https:") ? https : http;
     const req = client.get(
