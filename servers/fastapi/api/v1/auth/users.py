@@ -207,8 +207,13 @@ async def read_user_from_cookie(
 
 
 async def get_current_user(
+    request: Request,
     user: User | None = Depends(read_user_from_cookie),
 ) -> User:
+    from api.v1.auth.oidc import is_oidc_auth_mode
+
+    if is_oidc_auth_mode():
+        user = getattr(request.state, "current_user", None)
     if user is None:
         raise HTTPException(status_code=401, detail="Unauthorized")
     return user

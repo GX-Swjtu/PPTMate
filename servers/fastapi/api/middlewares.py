@@ -1,4 +1,4 @@
-from fastapi import Request
+from fastapi import HTTPException, Request
 from sqlalchemy import func, select
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
@@ -8,14 +8,21 @@ from api.v1.auth.principal import resolve_request_principal
 from api.v1.auth.context import (
     reset_current_owner_id,
     reset_current_owner_is_admin,
+    reset_current_session_token,
     set_current_owner_id,
     set_current_owner_is_admin,
+    set_current_session_token,
 )
 from api.v1.auth.users import get_jwt_strategy
 from models.sql.user import User
 from services.database import async_session_maker
 from utils.get_env import get_can_change_keys_env, is_disable_auth_enabled
 from utils.user_config import update_env_with_user_config
+from api.v1.auth.oidc import (
+    is_oidc_auth_mode,
+    session_cookie_name,
+    validate_oidc_request_origin,
+)
 
 
 class UserConfigEnvUpdateMiddleware(BaseHTTPMiddleware):
@@ -32,6 +39,7 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
         "/api/v1/auth/setup",
         "/api/v1/auth/login",
         "/api/v1/auth/logout",
+        "/api/v1/auth/oidc/login",
     }
     _PUBLIC_APP_DATA_PREFIXES = (
         "/app_data/fonts/",
@@ -61,7 +69,7 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         async with async_session_maker() as session:
-            configured = bool(
+            configured = is_oidc_auth_mode() or bool(
                 await session.scalar(select(func.count()).select_from(User))
             )
             if not configured:
@@ -92,7 +100,7 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
                 )
             )
             if admin_only and (
-                principal.method != "jwt" or not principal.is_admin
+                principal.method not in {"jwt", "oidc"} or not principal.is_admin
             ):
                 return JSONResponse(
                     status_code=403,
@@ -114,10 +122,18 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
                 request.state.internal_session_token = (
                     await get_jwt_strategy().write_token(user)
                 )
+            try:
+                validate_oidc_request_origin(request)
+            except HTTPException as exc:
+                return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
             context_token = set_current_owner_id(principal.user_id)
             admin_context_token = set_current_owner_is_admin(principal.is_admin)
+            session_context_token = set_current_session_token(
+                request.cookies.get(session_cookie_name())
+            )
             try:
                 return await call_next(request)
             finally:
+                reset_current_session_token(session_context_token)
                 reset_current_owner_is_admin(admin_context_token)
                 reset_current_owner_id(context_token)

@@ -3,10 +3,10 @@ import { Metadata } from "next";
 import OutlinePage from "./components/OutlinePage";
 
 export const metadata: Metadata = {
-  title: "Outline Presentation",
-  description: "Customize and organize your presentation outline. Drag and drop slides, add charts, and generate your presentation with ease.",
+  title: "演示大纲 | PPTMate",
+  description: "上传资料，通过 AI 快速生成、修改和完善演示文稿。",
   alternates: {
-    canonical: "https://presenton.ai/create"
+    canonical: "/outline"
   },
   keywords: [
     "presentation generator",

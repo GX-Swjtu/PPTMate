@@ -17,6 +17,7 @@ from api.v1.ppt.endpoints.template import TEMPLATE_ROUTER
 from api.v1.ppt.endpoints.presentation import PRESENTATION_ROUTER
 from api.v1.ppt.endpoints.theme import THEMES_ROUTER
 from api.v1.ppt.endpoints.theme_generate import THEME_ROUTER
+from api.v1.auth.oidc import is_platform_mode
 
 
 API_V1_PPT_ROUTER = APIRouter(prefix="/api/v1/ppt")
@@ -27,14 +28,16 @@ API_V1_PPT_ROUTER.include_router(OUTLINES_ROUTER)
 API_V1_PPT_ROUTER.include_router(SLIDE_ROUTER)
 API_V1_PPT_ROUTER.include_router(IMAGES_ROUTER)
 API_V1_PPT_ROUTER.include_router(ICONS_ROUTER)
-API_V1_PPT_ROUTER.include_router(OLLAMA_ROUTER)
-API_V1_PPT_ROUTER.include_router(OPENAI_ROUTER)
-API_V1_PPT_ROUTER.include_router(ANTHROPIC_ROUTER)
-API_V1_PPT_ROUTER.include_router(GOOGLE_ROUTER)
-API_V1_PPT_ROUTER.include_router(CODEX_AUTH_ROUTER)
+if not is_platform_mode():
+    API_V1_PPT_ROUTER.include_router(OLLAMA_ROUTER)
+    API_V1_PPT_ROUTER.include_router(OPENAI_ROUTER)
+    API_V1_PPT_ROUTER.include_router(ANTHROPIC_ROUTER)
+    API_V1_PPT_ROUTER.include_router(GOOGLE_ROUTER)
+    API_V1_PPT_ROUTER.include_router(CODEX_AUTH_ROUTER)
 API_V1_PPT_ROUTER.include_router(PRESENTATION_ROUTER)
 API_V1_PPT_ROUTER.include_router(THEMES_ROUTER)
 API_V1_PPT_ROUTER.include_router(THEME_ROUTER)
 API_V1_PPT_ROUTER.include_router(CHAT_ROUTER)
 API_V1_PPT_ROUTER.include_router(TEMPLATE_ROUTER)
-API_V1_PPT_ROUTER.include_router(COMMUNITY_ROUTER)
+if not is_platform_mode():
+    API_V1_PPT_ROUTER.include_router(COMMUNITY_ROUTER)

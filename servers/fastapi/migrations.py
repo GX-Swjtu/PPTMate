@@ -1,4 +1,5 @@
 import asyncio
+import os
 from pathlib import Path
 
 from alembic import command
@@ -29,9 +30,12 @@ REVISION_ASYNC_TASK_STATUS_NORMALIZED = "b8e2f4a7c9d1"
 REVISION_MULTI_USER_AUTH = "c9f1a2b3d4e5"
 REVISION_USERNAME_PROVIDER_SETTINGS = "d0a2b4c6e8f1"
 REVISION_PRIMARY_ADMIN_SLOT = "f3a7c1d9e5b2"
+REVISION_PLATFORM_OIDC = "e4c1a7b9d2f0"
 
 
 async def migrate_database_on_startup() -> None:
+    if (os.getenv("DATABASE_SCHEMA_MODE") or "managed").strip().lower() == "external":
+        return
     if get_migrate_database_on_startup_env() not in ["true", "True"]:
         return
 
@@ -132,6 +136,12 @@ def _infer_revision_from_schema(
         for table in owned_tables
     )
     if "provider_settings" in tables and "user" in tables and ownership_ready:
+        if (
+            "application_sessions" in tables
+            and "oidc_login_transactions" in tables
+            and _has_column(inspector, "user", "oidc_subject")
+        ):
+            return REVISION_PLATFORM_OIDC
         return (
             REVISION_PRIMARY_ADMIN_SLOT
             if _has_column(inspector, "user", "admin_slot")

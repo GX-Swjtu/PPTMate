@@ -17,6 +17,8 @@ from utils.asset_directory_utils import (
 from utils.get_env import get_pexels_api_key_env, get_pixabay_api_key_env
 from utils.image_provider import get_selected_image_provider
 from enums.image_provider import ImageProvider
+from api.v1.auth.oidc import is_platform_mode
+from utils.image_provider import is_image_generation_disabled
 import os
 import uuid
 from utils.file_utils import get_file_name_with_random_uuid
@@ -120,6 +122,8 @@ async def search_stock_images(
     strict_api_key: bool = Query(default=False),
     x_provider_api_key: str | None = Header(default=None, alias="X-Provider-Api-Key"),
 ):
+    if is_platform_mode():
+        raise HTTPException(status_code=404, detail="Not found")
     normalized_provider = _normalize_stock_provider(provider)
 
     image_generation_service = ImageGenerationService(get_images_directory())
@@ -166,6 +170,8 @@ async def search_stock_images(
 async def generate_image(
     prompt: str, sql_session: AsyncSession = Depends(get_async_session)
 ):
+    if is_platform_mode() and is_image_generation_disabled():
+        raise HTTPException(status_code=404, detail="Not found")
     images_directory = get_images_directory()
     image_prompt = ImagePrompt(prompt=prompt)
     image_generation_service = ImageGenerationService(images_directory)
@@ -264,5 +270,7 @@ async def delete_uploaded_image_by_id(
         await sql_session.delete(image)
         await sql_session.commit()
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete image: {str(e)}")

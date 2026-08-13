@@ -189,6 +189,7 @@ function DashboardHeader() {
     (state: RootState) => state.userConfig.llm_config,
   );
   const [isElectronApp, setIsElectronApp] = useState(false);
+  const platformMode = process.env.NEXT_PUBLIC_PLATFORM_MODE === "true";
 
   const textProvider = LLM_PROVIDERS[llmConfig.LLM || "openai"];
   const imageProvider = llmConfig.DISABLE_IMAGE_GENERATION
@@ -217,7 +218,7 @@ function DashboardHeader() {
         </h1>
       </div>
 
-      <div className="max-w-full overflow-x-auto hide-scrollbar lg:overflow-visible">
+      {!platformMode && <div className="max-w-full overflow-x-auto hide-scrollbar lg:overflow-visible">
         <div className="flex h-[42.24px] w-max max-w-none items-center gap-3 rounded-full pl-3">
           <div className="flex h-[42.24px] items-center gap-[18px] rounded-[32px] border border-[#EDEEEF] bg-white px-3 py-1">
             <Link
@@ -348,7 +349,7 @@ function DashboardHeader() {
             </Link>
           )}
         </div>
-      </div>
+      </div>}
     </header>
   );
 }

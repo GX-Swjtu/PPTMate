@@ -24,6 +24,28 @@ import userConfigEnv from "./scripts/user-config-env.cjs";
 
 const { buildUserConfigFromEnv, readUserConfigEnv } = userConfigEnv;
 
+const secretFileBindings = {
+  DATABASE_URL_FILE: "DATABASE_URL",
+  CUSTOM_LLM_API_KEY_FILE: "CUSTOM_LLM_API_KEY",
+  OPENAI_COMPAT_IMAGE_API_KEY_FILE: "OPENAI_COMPAT_IMAGE_API_KEY",
+};
+
+for (const [fileVariable, targetVariable] of Object.entries(secretFileBindings)) {
+  const secretPath = process.env[fileVariable]?.trim();
+  if (!secretPath || process.env[targetVariable]) {
+    continue;
+  }
+  const value = readFileSync(secretPath, "utf8").trim();
+  if (!value) {
+    throw new Error(`${fileVariable} points to an empty secret file`);
+  }
+  process.env[targetVariable] = value;
+}
+
+if (!process.env.MEM0_LLM_API_KEY && process.env.CUSTOM_LLM_API_KEY) {
+  process.env.MEM0_LLM_API_KEY = process.env.CUSTOM_LLM_API_KEY;
+}
+
 process.umask(0o022);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -618,19 +640,20 @@ const startServers = async (nginxReadyPromise) => {
   };
   watchManagedProcess("FastAPI", fastApiProcess, restartFastApi);
 
-  const appmcpProcess = spawn(
-    "python",
-    ["mcp_server.py", "--port", appmcpPort.toString()],
-    {
-      cwd: fastapiDir,
-      stdio: "ignore",
-      env: process.env,
-    }
-  );
-
-  appmcpProcess.on("error", (err) => {
-    console.error("App MCP process failed to start:", err);
-  });
+  if (process.env.MCP_ENABLED !== "false") {
+    const appmcpProcess = spawn(
+      "python",
+      ["mcp_server.py", "--port", appmcpPort.toString()],
+      {
+        cwd: fastapiDir,
+        stdio: "ignore",
+        env: process.env,
+      }
+    );
+    watchManagedProcess("App MCP", appmcpProcess);
+  } else {
+    console.log("App MCP disabled (MCP_ENABLED=false)");
+  }
 
   let nextjsProcess = spawnNextjsProcess();
   const restartNextjs = () => {

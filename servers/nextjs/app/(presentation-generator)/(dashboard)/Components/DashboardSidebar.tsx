@@ -22,6 +22,7 @@ export const BelongingNavItems = [
 
 const DashboardSidebar = () => {
     const pathname = usePathname();
+    const platformMode = process.env.NEXT_PUBLIC_PLATFORM_MODE === "true";
 
     return (
         <aside
@@ -67,7 +68,7 @@ const DashboardSidebar = () => {
                                 <span className="text-[11px] text-slate-800">Templates</span>
                             </div>
                         </Link>
-                        <Link
+                        {!platformMode && <Link
                             prefetch={false}
                             href="/community"
                             className="flex flex-col items-center gap-2 text-center transition-colors"
@@ -76,7 +77,7 @@ const DashboardSidebar = () => {
                         >
                             <UsersRound className={`h-4 w-4 ${pathname === "/community" ? "text-[#5146E5]" : "text-slate-600"}`} />
                             <span className="text-[11px] text-slate-800">Community</span>
-                        </Link>
+                        </Link>}
                         {/* <Link
                             prefetch={false}
                             href={`/theme`}
@@ -96,7 +97,7 @@ const DashboardSidebar = () => {
                 </nav>
             </div>
 
-            <div className="border-t border-[#E1E1E5] pt-5 font-syne">
+            {!platformMode && <div className="border-t border-[#E1E1E5] pt-5 font-syne">
                 <Link
                     href="https://docs.presenton.ai/help"
                     target="_blank"
@@ -105,7 +106,7 @@ const DashboardSidebar = () => {
                     <HelpCircle className="h-4 w-4" />
                     <span className="text-[11px] text-slate-800">Help</span>
                 </Link>
-            </div>
+            </div>}
 
         </aside>
     );

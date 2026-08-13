@@ -46,6 +46,10 @@ def is_disable_auth_enabled():
     return _is_truthy(get_disable_auth_env())
 
 
+def is_remote_font_access_disabled() -> bool:
+    return _is_truthy(os.getenv("DISABLE_REMOTE_FONTS"))
+
+
 def is_presenton_electron_desktop():
     """True when running inside the Presenton Electron desktop app."""
     return _is_truthy(os.getenv("PRESENTON_ELECTRON"))

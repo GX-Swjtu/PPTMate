@@ -32,6 +32,7 @@ from services.chat.tools import ChatToolMode, ChatTools
 from services.documents_loader import DocumentsLoader
 from services.mem0_presentation_memory_service import MEM0_PRESENTATION_MEMORY_SERVICE
 from services.temp_file_service import TEMP_FILE_SERVICE
+from services.source_document_service import SOURCE_DOCUMENT_SERVICE
 from utils.llm_client_error_handler import handle_llm_client_exceptions
 from utils.llm_config import get_llm_config
 from utils.llm_provider import get_model
@@ -582,6 +583,46 @@ class PresentationChatService:
             for index, attachment in enumerate(attachments)
         ]
 
+        temp_dir = TEMP_FILE_SERVICE.create_temp_dir(str(uuid.uuid4()))
+        loader = DocumentsLoader(
+            file_paths=[attachment.file_path for attachment in attachments],
+            presentation_language=presentation_language,
+        )
+        try:
+            await loader.load_documents(temp_dir=temp_dir)
+        finally:
+            try:
+                TEMP_FILE_SERVICE.cleanup_temp_dir(temp_dir)
+            except (HTTPException, OSError):
+                pass
+            for attachment in attachments:
+                try:
+                    TEMP_FILE_SERVICE.cleanup_temp_file(attachment.file_path)
+                except (HTTPException, OSError):
+                    # Existing durable sources are never removed as request
+                    # temp files. New raw uploads are always request-scoped.
+                    pass
+
+        persistent_documents = [
+            (self._attachment_display_name(attachment), loader.documents[index])
+            for index, attachment in enumerate(attachments)
+            if index < len(loader.documents)
+        ]
+        presentation = await self._sql_session.get(
+            PresentationModel, self._presentation_id
+        )
+        if presentation is None:
+            raise HTTPException(status_code=404, detail="Presentation not found")
+        new_paths = SOURCE_DOCUMENT_SERVICE.append_text_documents(
+            self._presentation_id, persistent_documents
+        )
+        try:
+            presentation.file_paths = [*(presentation.file_paths or []), *new_paths]
+            await self._sql_session.commit()
+        except Exception:
+            await self._sql_session.rollback()
+            SOURCE_DOCUMENT_SERVICE.remove_documents(new_paths)
+            raise
         if not should_parse:
             context = "\n".join(
                 [
@@ -595,13 +636,6 @@ class PresentationChatService:
                 ]
             )
             return context, ""
-
-        temp_dir = TEMP_FILE_SERVICE.create_temp_dir(str(uuid.uuid4()))
-        loader = DocumentsLoader(
-            file_paths=[attachment.file_path for attachment in attachments],
-            presentation_language=presentation_language,
-        )
-        await loader.load_documents(temp_dir=temp_dir)
 
         context_lines = [
             (

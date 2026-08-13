@@ -12,6 +12,7 @@ import { Sparkles } from "lucide-react";
 
 import IconsEditor from "@/components/slide-editor/images/IconsEditor";
 import { useTailwindRuntimeReady } from "@/components/runtime/TailwindBrowserRuntime";
+import { isAllowedFontSource } from "@/lib/font-security";
 import {
   clearChatHtmlSelection,
   setChatHtmlSelection,
@@ -449,6 +450,7 @@ export default function SmartHtmlEditor({
     const assets: HTMLElement[] = [];
     Object.entries(fonts as Record<string, unknown>).forEach(([family, source]) => {
       if (typeof source !== "string" || !source.trim()) return;
+      if (!isAllowedFontSource(source)) return;
       if (source.includes("fonts.googleapis.com") || source.endsWith(".css")) {
         const link = document.createElement("link");
         link.rel = "stylesheet";

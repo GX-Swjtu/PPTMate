@@ -1,3 +1,5 @@
+import os
+
 from constants.llm import OPENAI_URL
 from enums.image_provider import ImageProvider
 from enums.llm_provider import LLMProvider
@@ -45,6 +47,9 @@ from utils.get_env import (
     get_deepseek_api_key_env,
     get_deepseek_base_url_env,
     get_deepseek_model_env,
+    get_openai_compat_image_api_key_env,
+    get_openai_compat_image_base_url_env,
+    get_openai_compat_image_model_env,
 )
 from utils.get_env import get_google_api_key_env
 from utils.get_env import get_ollama_model_env
@@ -67,6 +72,17 @@ def _check_image_provider_configuration() -> None:
     selected_image_provider = get_selected_image_provider()
     if not selected_image_provider:
         raise Exception("IMAGE_PROVIDER must be provided")
+
+    platform_mode = (os.getenv("PLATFORM_MODE") or "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if platform_mode and selected_image_provider != ImageProvider.OPENAI_COMPATIBLE:
+        raise Exception(
+            "Platform mode permits only the openai_compatible image provider"
+        )
 
     if selected_image_provider == ImageProvider.PEXELS:
         pexels_api_key = get_pexels_api_key_env()
@@ -101,6 +117,14 @@ def _check_image_provider_configuration() -> None:
         workflow_json = get_comfyui_workflow_env()
         if not workflow_json:
             raise Exception("COMFYUI_WORKFLOW must be provided")
+
+    elif selected_image_provider == ImageProvider.OPENAI_COMPATIBLE:
+        if not get_openai_compat_image_base_url_env():
+            raise Exception("OPENAI_COMPAT_IMAGE_BASE_URL must be provided")
+        if not get_openai_compat_image_api_key_env():
+            raise Exception("OPENAI_COMPAT_IMAGE_API_KEY must be provided")
+        if not get_openai_compat_image_model_env():
+            raise Exception("OPENAI_COMPAT_IMAGE_MODEL must be provided")
 
 
 async def check_llm_and_image_provider_api_or_model_availability():

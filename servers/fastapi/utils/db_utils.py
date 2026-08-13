@@ -1,6 +1,7 @@
 import os
+from pathlib import Path
 from utils.get_env import get_app_data_directory_env, get_database_url_env
-from urllib.parse import urlsplit, urlunsplit, parse_qsl
+from urllib.parse import parse_qsl, quote, urlsplit, urlunsplit
 import ssl
 
 
@@ -20,6 +21,27 @@ def _ensure_sqlite_parent_dir(database_url: str) -> None:
     parent = os.path.dirname(db_path)
     if parent:
         os.makedirs(parent, exist_ok=True)
+
+
+def _inject_database_password(database_url: str) -> str:
+    password_file = (os.getenv("DATABASE_PASSWORD_FILE") or "").strip()
+    if not password_file:
+        return database_url
+    password = Path(password_file).read_text(encoding="utf-8").strip()
+    if not password:
+        raise ValueError("DATABASE_PASSWORD_FILE points to an empty file")
+    parsed = urlsplit(database_url)
+    if parsed.password is not None or not parsed.username or not parsed.hostname:
+        return database_url
+    host = f"[{parsed.hostname}]" if ":" in parsed.hostname else parsed.hostname
+    if parsed.port:
+        host = f"{host}:{parsed.port}"
+    netloc = f"{quote(parsed.username, safe='')}:{quote(password, safe='')}@{host}"
+    return urlunsplit(
+        (parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment)
+    )
+
+
 def _int_env(name: str, default: int) -> int:
     """Read an integer from an environment variable, falling back to *default*."""
     raw = os.getenv(name)
@@ -58,6 +80,7 @@ def get_database_url_and_connect_args() -> tuple[str, dict]:
     database_url = get_database_url_env() or "sqlite:///" + os.path.join(
         get_app_data_directory_env() or "/tmp/presenton", "fastapi.db"
     )
+    database_url = _inject_database_password(database_url)
 
     _ensure_sqlite_parent_dir(database_url)
 

@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+import os
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     create_async_engine,
@@ -28,6 +29,7 @@ from models.sql.webhook_subscription import WebhookSubscription
 from models.sql.user import User
 from models.sql.access_token import AccessToken
 from models.sql.provider_settings import ProviderSettings
+from models.sql.oidc import ApplicationSession, OidcLoginTransaction
 from api.v1.auth.context import get_current_owner_id
 from utils.get_env import get_migrate_database_on_startup_env
 from utils.db_utils import get_database_url_and_connect_args, get_pool_kwargs
@@ -120,6 +122,8 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 # Create Database and Tables
 async def create_db_and_tables():
+    if (os.getenv("DATABASE_SCHEMA_MODE") or "managed").strip().lower() == "external":
+        return
     should_run_alembic = get_migrate_database_on_startup_env() in ["true", "True"]
     if not should_run_alembic:
         async with sql_engine.begin() as conn:
@@ -144,6 +148,8 @@ async def create_db_and_tables():
                         User.__table__,
                         AccessToken.__table__,
                         ProviderSettings.__table__,
+                        ApplicationSession.__table__,
+                        OidcLoginTransaction.__table__,
                     ],
                 )
             )

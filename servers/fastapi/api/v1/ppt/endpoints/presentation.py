@@ -44,6 +44,8 @@ from models.presentation_with_slides import (
 from services.documents_loader import DocumentsLoader
 from services.chat.slide_ui_helpers import _normalize_generated_image_fit
 from services.temp_file_service import TEMP_FILE_SERVICE
+from services.source_document_service import SOURCE_DOCUMENT_SERVICE
+from api.v1.auth.oidc import is_platform_mode, session_cookie_name
 from services.webhook_service import WebhookService
 from services.image_generation_service import ImageGenerationService
 from services.mem0_presentation_memory_service import (
@@ -95,7 +97,6 @@ from utils.process_slides import (
 from utils.icon_weights import DEFAULT_ICON_TYPE, extract_icon_type_from_settings
 from utils.llm_utils import TextGenerationMetrics, message_content_to_text
 from utils.sse import safe_sse_stream
-from api.v1.auth.config import SESSION_COOKIE_NAME
 from utils.web_search import get_selected_web_search_provider, get_web_search_route
 from utils.web_search import build_web_search_query, get_web_search_context
 from api.v1.auth.context import get_current_owner_id
@@ -144,6 +145,21 @@ BLANK_PRESENTATION_SLIDE_UI: dict[str, Any] = {
         }
     ],
 }
+
+
+def _platform_safe_fonts(fonts: Any) -> Any:
+    if not is_platform_mode() or not isinstance(fonts, dict):
+        return fonts
+    return {
+        family: source
+        for family, source in fonts.items()
+        if isinstance(family, str)
+        and isinstance(source, str)
+        and (
+            (source.startswith("/") and not source.startswith("//"))
+            or source.startswith("data:")
+        )
+    }
 
 
 class PresentationPrepareResponse(BaseModel):
@@ -1312,11 +1328,12 @@ def _build_export_cookie_header(request: Request) -> Optional[str]:
         request.state, "internal_session_token", None
     )
     if isinstance(internal_session_token, str) and internal_session_token:
-        return f"{SESSION_COOKIE_NAME}={internal_session_token}"
+        return f"{session_cookie_name()}={internal_session_token}"
 
-    session_token = request.cookies.get(SESSION_COOKIE_NAME)
+    cookie_name = session_cookie_name()
+    session_token = request.cookies.get(cookie_name)
     if session_token:
-        return f"{SESSION_COOKIE_NAME}={session_token}"
+        return f"{cookie_name}={session_token}"
 
     return None
 
@@ -1402,8 +1419,15 @@ async def delete_presentation(
     if not presentation:
         raise HTTPException(404, "Presentation not found")
 
-    await sql_session.delete(presentation)
-    await sql_session.commit()
+    trash = SOURCE_DOCUMENT_SERVICE.stage_delete(id)
+    try:
+        await sql_session.delete(presentation)
+        await sql_session.commit()
+    except Exception:
+        await sql_session.rollback()
+        SOURCE_DOCUMENT_SERVICE.restore_staged_delete(id, trash)
+        raise
+    SOURCE_DOCUMENT_SERVICE.purge_staged_delete(trash)
 
 
 @PRESENTATION_ROUTER.post("/{id}/duplicate", response_model=PresentationWithSlides)
@@ -1425,10 +1449,21 @@ async def duplicate_presentation(
     if new_presentation.title:
         new_presentation.title = f"{new_presentation.title} (Copy)"
     new_slides = [slide.get_new_slide(new_presentation.id) for slide in slides]
-
-    sql_session.add(new_presentation)
-    sql_session.add_all(new_slides)
-    await sql_session.commit()
+    copied_sources = SOURCE_DOCUMENT_SERVICE.duplicate_presentation(
+        id,
+        new_presentation.id,
+        presentation.file_paths or [],
+    )
+    new_presentation.file_paths = copied_sources or None
+    try:
+        sql_session.add(new_presentation)
+        sql_session.add_all(new_slides)
+        await sql_session.commit()
+    except Exception:
+        await sql_session.rollback()
+        trash = SOURCE_DOCUMENT_SERVICE.stage_delete(new_presentation.id)
+        SOURCE_DOCUMENT_SERVICE.purge_staged_delete(trash)
+        raise
     await sql_session.refresh(new_presentation)
 
     return PresentationWithSlides(
@@ -1473,6 +1508,11 @@ async def create_presentation(
     )
 
     normalized_community_ids = normalize_community_ids(community_design_ids)
+    if is_platform_mode() and (web_search or normalized_community_ids):
+        raise HTTPException(
+            status_code=400,
+            detail="Web search and community references are disabled in platform mode",
+        )
     if generation_mode != "smart" and normalized_community_ids:
         raise HTTPException(
             status_code=400,
@@ -1493,6 +1533,13 @@ async def create_presentation(
         if file_paths
         else None
     )
+    persistent_file_paths = (
+        SOURCE_DOCUMENT_SERVICE.promote_temp_documents(
+            presentation_id, validated_file_paths
+        )
+        if validated_file_paths
+        else None
+    )
     # DB schema stores an int; 0 is used as internal marker for auto slide count.
     n_slides_to_store = n_slides if n_slides is not None else 0
 
@@ -1502,7 +1549,7 @@ async def create_presentation(
         content=content,
         n_slides=n_slides_to_store,
         language=language_to_store,
-        file_paths=validated_file_paths,
+        file_paths=persistent_file_paths,
         tone=tone.value,
         verbosity=verbosity.value,
         instructions=instructions,
@@ -1513,8 +1560,14 @@ async def create_presentation(
         community_design_ids=normalized_community_ids or None,
     )
 
-    sql_session.add(presentation)
-    await sql_session.commit()
+    try:
+        sql_session.add(presentation)
+        await sql_session.commit()
+    except Exception:
+        await sql_session.rollback()
+        trash = SOURCE_DOCUMENT_SERVICE.stage_delete(presentation_id)
+        SOURCE_DOCUMENT_SERVICE.purge_staged_delete(trash)
+        raise
 
     search_route, actual_search_provider = get_web_search_route()
     logger.info(
@@ -1663,7 +1716,7 @@ async def prepare_presentation(
     # as "convert these to Chinese".
     presentation.language = ""
     presentation.layout = layout_payload
-    presentation.fonts = template_fonts
+    presentation.fonts = _platform_safe_fonts(template_fonts)
     presentation.set_structure(presentation_structure)
     await sql_session.commit()
 
@@ -1749,9 +1802,13 @@ async def _stream_smart_presentation(
 
         slide_count = resolve_smart_slide_count(presentation.n_slides)
         presentation.n_slides = slide_count
-        presentation.fonts = reference_fonts or {
-            "Inter": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        }
+        presentation.fonts = _platform_safe_fonts(reference_fonts) or (
+            {}
+            if is_platform_mode()
+            else {
+                "Inter": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            }
+        )
         yield SSEResponse(
             event="response",
             data=json.dumps({"type": "fonts", "fonts": presentation.fonts}),
@@ -2583,7 +2640,7 @@ async def generate_presentation_handler(
             tone=request.tone.value,
             verbosity=request.verbosity.value,
             instructions=request.instructions,
-            fonts=template_fonts,
+            fonts=_platform_safe_fonts(template_fonts),
         )
 
         # Updating async status

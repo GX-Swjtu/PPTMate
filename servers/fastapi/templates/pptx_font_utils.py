@@ -13,6 +13,7 @@ from typing import Dict, List, Optional, Sequence, Set, Tuple
 from pydantic import BaseModel
 from pptx import Presentation
 from fontTools.ttLib import TTFont
+from utils.get_env import is_remote_font_access_disabled
 
 DEFAULT_GOOGLE_FONT_WEIGHTS = (400, 700)
 PPT_NS = {
@@ -262,6 +263,8 @@ def extract_fonts_from_oxml(xml_content: str) -> List[str]:
 
 # Helper: Fetch TTF/OTF file URLs for a Google Fonts family via Webfonts Developer API
 async def get_google_font_file_urls(family_name: str, api_key: str) -> List[str]:
+    if is_remote_font_access_disabled():
+        return []
     encoded_family = urllib.parse.quote_plus(family_name)
     api_url = f"https://www.googleapis.com/webfonts/v1/webfonts?family={encoded_family}&key={api_key}"
     try:
@@ -295,6 +298,8 @@ async def check_google_font_availability(
     font_name: str, variants: Optional[Sequence[str]] = None
 ) -> bool:
     """Return True when Google Fonts serves the requested family/variants."""
+    if is_remote_font_access_disabled():
+        return False
     try:
         url = build_google_fonts_stylesheet_url(font_name, variants=variants)
         async with aiohttp.ClientSession() as session:

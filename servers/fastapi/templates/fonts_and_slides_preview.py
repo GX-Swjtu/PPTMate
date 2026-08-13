@@ -40,7 +40,7 @@ from utils.asset_directory_utils import (
     resolve_app_path_to_filesystem,
 )
 from utils.download_helpers import download_file
-from utils.get_env import get_app_data_directory_env
+from utils.get_env import get_app_data_directory_env, is_remote_font_access_disabled
 from utils.font_uploads import (
     download_font_uploads,
     get_font_upload_url,
@@ -79,6 +79,17 @@ def _selected_google_font_maps(
     google_font_names: Optional[List[str]],
     google_font_urls: Optional[List[str]],
 ) -> Tuple[Dict[str, str], Dict[str, str]]:
+    if is_remote_font_access_disabled():
+        if any(
+            (
+                google_font_original_names,
+                google_font_replacement_names,
+                google_font_names,
+                google_font_urls,
+            )
+        ):
+            raise HTTPException(status_code=400, detail="Remote fonts are disabled")
+        return {}, {}
     replacement_names = google_font_replacement_names or google_font_names
     num_original_names = len(google_font_original_names or [])
     num_replacement_names = len(replacement_names or [])

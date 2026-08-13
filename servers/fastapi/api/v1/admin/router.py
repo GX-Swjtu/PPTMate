@@ -29,9 +29,15 @@ from utils.get_env import (
     is_disable_auth_enabled,
 )
 from utils.user_config import update_env_with_user_config
+from api.v1.auth.oidc import is_oidc_auth_mode
 
 
 API_V1_ADMIN_ROUTER = APIRouter(prefix="/api/v1/admin", tags=["Admin"])
+
+
+def _reject_oidc_user_management() -> None:
+    if is_oidc_auth_mode():
+        raise HTTPException(status_code=404, detail="Not found")
 
 
 async def require_settings_admin(
@@ -81,6 +87,7 @@ async def list_users(
     _: User = Depends(get_current_admin),
     session: AsyncSession = Depends(get_async_session),
 ):
+    _reject_oidc_user_management()
     users = (
         await session.scalars(
             select(User).order_by(User.created_at.desc(), User.username.asc())
@@ -97,6 +104,7 @@ async def create_user(
     _: User = Depends(get_current_admin),
     session: AsyncSession = Depends(get_async_session),
 ):
+    _reject_oidc_user_management()
     username = body.username.strip()
     if len(username) < 3:
         raise HTTPException(
@@ -129,6 +137,7 @@ async def reset_user_password(
     admin: User = Depends(get_current_admin),
     session: AsyncSession = Depends(get_async_session),
 ):
+    _reject_oidc_user_management()
     user = await session.get(User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -149,6 +158,7 @@ async def delete_user(
     admin: User = Depends(get_current_admin),
     session: AsyncSession = Depends(get_async_session),
 ):
+    _reject_oidc_user_management()
     user = await session.get(User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -168,6 +178,7 @@ async def delete_user(
         os.path.join(get_app_data_directory_env(), "images", "users"),
         os.path.join(get_app_data_directory_env(), "exports", "users"),
         os.path.join(get_app_data_directory_env(), "uploads", "users"),
+        os.path.join(get_app_data_directory_env(), "source-documents", "users"),
         os.path.join(get_app_data_directory_env(), "pptx-to-html", "users"),
         os.path.join(get_app_data_directory_env(), "pptx-to-json", "users"),
         get_temp_directory_env() or "/tmp/presenton",

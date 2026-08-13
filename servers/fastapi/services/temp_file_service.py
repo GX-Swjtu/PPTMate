@@ -52,7 +52,8 @@ class TempFileService:
             raise HTTPException(status_code=400, detail="Invalid file path")
 
         try:
-            resolved_path = os.path.realpath(os.path.abspath(file_path))
+            absolute_path = os.path.abspath(file_path)
+            resolved_path = os.path.realpath(absolute_path)
         except OSError as exc:
             raise HTTPException(status_code=404, detail="File not found") from exc
 
@@ -65,6 +66,31 @@ class TempFileService:
                 status_code=400,
                 detail="File path must stay within the temp directory",
             )
+
+        owner_id = get_current_owner_id()
+        lexical_base = os.path.abspath(
+            os.path.join(self.base_dir, str(owner_id)) if owner_id else self.base_dir
+        )
+        if absolute_path == lexical_base or absolute_path.startswith(
+            f"{lexical_base}{os.sep}"
+        ):
+            inspection_base = lexical_base
+        elif absolute_path == base_dir or absolute_path.startswith(
+            f"{base_dir}{os.sep}"
+        ):
+            inspection_base = base_dir
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="File path must stay within the temp directory",
+            )
+        cursor = inspection_base
+        relative = os.path.relpath(absolute_path, inspection_base)
+        if relative != ".":
+            for part in relative.split(os.sep):
+                cursor = os.path.join(cursor, part)
+                if os.path.islink(cursor):
+                    raise HTTPException(status_code=404, detail="File not found")
 
         if must_exist and not os.path.exists(resolved_path):
             raise HTTPException(status_code=404, detail="File not found")
@@ -154,8 +180,25 @@ class TempFileService:
             normalized_path, "File path must stay within the temp directory"
         )
 
-        with open(normalized_path, "wb") as f:
-            f.write(await upload_file.read())
+        temporary_path = f"{normalized_path}.upload-{uuid.uuid4()}"
+        written = 0
+        try:
+            with open(temporary_path, "xb") as f:
+                while chunk := await upload_file.read(1024 * 1024):
+                    written += len(chunk)
+                    if written > 100 * 1024 * 1024:
+                        raise HTTPException(
+                            status_code=413,
+                            detail="File exceeded max upload size of 100 MB",
+                        )
+                    f.write(chunk)
+            os.replace(temporary_path, normalized_path)
+        except Exception:
+            try:
+                os.remove(temporary_path)
+            except FileNotFoundError:
+                pass
+            raise
 
     def cleanup_temp_file(self, file_path: str):
         try:

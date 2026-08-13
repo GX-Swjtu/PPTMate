@@ -23,6 +23,8 @@ from services.documents_loader import DocumentsLoader
 from services.image_generation_service import ImageGenerationService
 from services.mem0_presentation_memory_service import MEM0_PRESENTATION_MEMORY_SERVICE
 from services.temp_file_service import TEMP_FILE_SERVICE
+from services.source_document_service import SOURCE_DOCUMENT_SERVICE
+from api.v1.auth.context import get_current_owner_id
 from templates.presentation_layout import PresentationLayoutModel, SlideLayoutModel
 from templates.v2.schema import get_template_schema
 from templates.v2.content import hydrate_repeated_top_level_groups
@@ -93,6 +95,11 @@ DEFAULT_INSERT_BOXES = {
     },
 }
 THEMES_STORAGE_KEY = "presentation_custom_themes"
+
+
+def _chat_themes_storage_key() -> str:
+    owner_id = get_current_owner_id()
+    return f"{THEMES_STORAGE_KEY}:{owner_id}" if owner_id else THEMES_STORAGE_KEY
 CHAT_BUILTIN_THEMES: list[dict[str, Any]] = [
     {
         "id": "edge-yellow",
@@ -781,7 +788,7 @@ class PresentationChatMemoryLayer:
 
             name = os.path.basename(raw_path) or f"Document {source_index + 1}"
             try:
-                resolved_path = TEMP_FILE_SERVICE.resolve_temp_path(
+                resolved_path = SOURCE_DOCUMENT_SERVICE.resolve_document_path(
                     raw_path,
                     must_exist=True,
                 )
@@ -4463,7 +4470,9 @@ class PresentationChatMemoryLayer:
     async def _get_chat_available_themes(self) -> list[dict[str, Any]]:
         merged_themes: list[dict[str, Any]] = [copy.deepcopy(theme) for theme in CHAT_BUILTIN_THEMES]
         row = await self._sql_session.scalar(
-            select(KeyValueSqlModel).where(KeyValueSqlModel.key == THEMES_STORAGE_KEY)
+            select(KeyValueSqlModel).where(
+                KeyValueSqlModel.key == _chat_themes_storage_key()
+            )
         )
         if not row or not isinstance(row.value, dict):
             return merged_themes
@@ -4495,7 +4504,9 @@ class PresentationChatMemoryLayer:
 
     async def _upsert_custom_theme_in_store(self, theme: dict[str, Any]) -> None:
         row = await self._sql_session.scalar(
-            select(KeyValueSqlModel).where(KeyValueSqlModel.key == THEMES_STORAGE_KEY)
+            select(KeyValueSqlModel).where(
+                KeyValueSqlModel.key == _chat_themes_storage_key()
+            )
         )
         themes: list[dict[str, Any]] = []
         if row and isinstance(row.value, dict):
@@ -4519,7 +4530,11 @@ class PresentationChatMemoryLayer:
             row.value = {"themes": themes}
             self._sql_session.add(row)
             return
-        self._sql_session.add(KeyValueSqlModel(key=THEMES_STORAGE_KEY, value={"themes": themes}))
+        self._sql_session.add(
+            KeyValueSqlModel(
+                key=_chat_themes_storage_key(), value={"themes": themes}
+            )
+        )
 
     @staticmethod
     def _resolve_base_theme_for_customization(

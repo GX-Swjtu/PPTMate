@@ -33,7 +33,9 @@ FROM node:20-bookworm-slim AS nextjs-builder
 
 WORKDIR /app/servers/nextjs
 
-ENV NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_PUBLIC_PLATFORM_MODE=false
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    NEXT_PUBLIC_PLATFORM_MODE=${NEXT_PUBLIC_PLATFORM_MODE}
 
 COPY servers/nextjs/package.json servers/nextjs/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
@@ -41,7 +43,8 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY servers/nextjs /app/servers/nextjs
 RUN npm run build \
-    && rm -rf .next-build/cache
+    && rm -rf .next-build/cache \
+    && find .next-build -type f -name '*.map' -delete
 
 
 FROM node:20-bookworm-slim AS assets-builder
@@ -161,3 +164,40 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 CMD ["node", "/app/start.js"]
+
+
+FROM fastapi-builder AS platform-fastapi-builder
+
+COPY --from=ngl_platform_auth / /tmp/ngl-platform-auth
+COPY --from=ngl_observability / /tmp/ngl-observability
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv pip install --python /opt/venv/bin/python \
+    /tmp/ngl-platform-auth /tmp/ngl-observability
+
+
+FROM runtime AS platform-runtime
+
+ARG PPTMATE_PLATFORM_SHA=unknown
+ARG PPTMATE_SOURCE_SHA=unknown
+ARG PPTMATE_UPSTREAM_SHA=unknown
+
+LABEL org.opencontainers.image.title="PPTMate｜智能演示生产平台" \
+      io.ngl.platform.sha="${PPTMATE_PLATFORM_SHA}" \
+      io.ngl.pptmate.sha="${PPTMATE_SOURCE_SHA}" \
+      io.ngl.pptmate.upstream.sha="${PPTMATE_UPSTREAM_SHA}"
+
+COPY --from=platform-fastapi-builder /opt/venv /opt/venv
+COPY nginx.platform.conf /etc/nginx/nginx.conf
+
+ENV PLATFORM_MODE=true \
+    AUTH_MODE=oidc \
+    API_KEYS_ENABLED=false \
+    MCP_ENABLED=false \
+    DISABLE_AUTH=false \
+    CAN_CHANGE_KEYS=false \
+    DISABLE_ANONYMOUS_TRACKING=true \
+    DISABLE_REMOTE_FONTS=true \
+    START_OLLAMA=false \
+    DATABASE_SCHEMA_MODE=external
+
+EXPOSE 80 9090

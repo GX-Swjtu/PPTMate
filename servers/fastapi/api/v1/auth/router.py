@@ -25,10 +25,17 @@ from api.v1.auth.config import (
     persist_admin_credentials,
 )
 from api.v1.auth.token import TOKEN_ROUTER
+from api.v1.auth.oidc import (
+    api_keys_enabled,
+    is_oidc_auth_mode,
+    oidc_logout,
+    validate_oidc_request_origin,
+)
 
 
 API_V1_AUTH_ROUTER = APIRouter(prefix="/api/v1/auth", tags=["Auth"])
-API_V1_AUTH_ROUTER.include_router(TOKEN_ROUTER)
+if api_keys_enabled():
+    API_V1_AUTH_ROUTER.include_router(TOKEN_ROUTER)
 
 
 def normalize_username(username: str) -> str:
@@ -78,8 +85,8 @@ def _set_login_cookie(response: JSONResponse, token: str, request: Request) -> N
 
 @API_V1_AUTH_ROUTER.get("/status")
 async def get_status(
+    request: Request,
     session: AsyncSession = Depends(get_async_session),
-    user: User | None = Depends(read_user_from_cookie),
 ):
     if is_disable_auth_enabled():
         return {
@@ -89,7 +96,19 @@ async def get_status(
             "user_id": None,
             "role": "admin",
         }
+    if is_oidc_auth_mode():
+        _principal, user = await resolve_request_principal(request, session)
+        return {
+            "configured": True,
+            "authenticated": user is not None,
+            "username": user.username if user else None,
+            "user_id": str(user.id) if user else None,
+            "role": "admin" if user and user.is_superuser else ("user" if user else None),
+            "auth_mode": "oidc",
+            "login_url": "/api/v1/auth/oidc/login",
+        }
     configured = await _account_count(session) > 0
+    _principal, user = await resolve_request_principal(request, session)
     return {
         "configured": configured,
         "authenticated": user is not None,
@@ -134,6 +153,8 @@ async def setup_credentials(
     request: Request,
     session: AsyncSession = Depends(get_async_session),
 ):
+    if is_oidc_auth_mode():
+        raise HTTPException(status_code=404, detail="Not found")
     if await _account_count(session):
         raise HTTPException(status_code=409, detail="Credentials already configured")
 
@@ -179,6 +200,8 @@ async def login(
     request: Request,
     session: AsyncSession = Depends(get_async_session),
 ):
+    if is_oidc_auth_mode():
+        raise HTTPException(status_code=404, detail="Not found")
     if not await _account_count(session):
         raise HTTPException(status_code=428, detail="Login setup is required")
     username = normalize_username(body.username)
@@ -225,8 +248,15 @@ async def login(
 
 
 @API_V1_AUTH_ROUTER.post("/logout")
-async def logout(request: Request):
+async def logout(
+    request: Request,
+    session: AsyncSession = Depends(get_async_session),
+):
     response = JSONResponse({"success": True})
+    if is_oidc_auth_mode():
+        validate_oidc_request_origin(request)
+        await oidc_logout(request, response, session)
+        return response
     response.delete_cookie(
         SESSION_COOKIE_NAME,
         httponly=True,

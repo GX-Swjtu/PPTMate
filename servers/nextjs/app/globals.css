@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Platform builds use the bundled Inter file for every UI font alias. */
+  --font-syne: var(--font-inter);
+  --font-manrope: var(--font-inter);
+  --font-unbounded: var(--font-inter);
+}
+
 body {
   font-family: var(--font-syne), var(--font-unbounded), var(--font-inter),
     sans-serif;

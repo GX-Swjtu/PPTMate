@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Manrope, Syne, Unbounded } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import { Providers } from "./providers";
@@ -19,31 +18,10 @@ const inter = localFont({
   variable: "--font-inter",
 });
 
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-syne",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  preload: false,
-  variable: "--font-manrope",
-});
-
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  preload: false,
-  variable: "--font-unbounded",
-});
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://presenton.ai"),
-  title: "Presenton - Open Source AI presentation generator",
-  description:
-    "Open-source AI presentation generator with custom layouts, multi-model support (OpenAI, Gemini, Ollama), and PDF/PPTX export. A free Gamma alternative.",
+  metadataBase: new URL(process.env.PPTMATE_PUBLIC_URL || "https://pptmate.ngl.local"),
+  title: "PPTMate｜智能演示生产平台",
+  description: "上传资料，通过 AI 快速生成、修改和完善演示文稿。",
   keywords: [
     "AI presentation generator",
     "data storytelling",
@@ -55,31 +33,20 @@ export const metadata: Metadata = {
     "professional slides",
   ],
   openGraph: {
-    title: "Presenton - Open Source AI presentation generator",
-    description:
-      "Open-source AI presentation generator with custom layouts, multi-model support (OpenAI, Gemini, Ollama), and PDF/PPTX export. A free Gamma alternative.",
-    url: "https://presenton.ai",
-    siteName: "Presenton",
-    images: [
-      {
-        url: "https://presenton.ai/presenton-feature-graphics.png",
-        width: 1200,
-        height: 630,
-        alt: "Presenton Logo",
-      },
-    ],
+    title: "PPTMate｜智能演示生产平台",
+    description: "上传资料，通过 AI 快速生成、修改和完善演示文稿。",
+    url: "/",
+    siteName: "PPTMate",
     type: "website",
-    locale: "en_US",
+    locale: "zh_CN",
   },
   alternates: {
-    canonical: "https://presenton.ai",
+    canonical: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Presenton - Open Source AI presentation generator",
-    description:
-      "Open-source AI presentation generator with custom layouts, multi-model support (OpenAI, Gemini, Ollama), and PDF/PPTX export. A free Gamma alternative.",
-    images: ["https://presenton.ai/presenton-feature-graphics.png"],
+    title: "PPTMate｜智能演示生产平台",
+    description: "上传资料，通过 AI 快速生成、修改和完善演示文稿。",
   },
 };
 
@@ -88,18 +55,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${syne.variable} ${manrope.variable} ${unbounded.variable} antialiased`}
-      >
+    <html lang="zh-CN">
+      <body className={`${inter.variable} antialiased`}>
         <Providers>
-          <MixpanelInitializer>
-
-            {children}
-
-          </MixpanelInitializer>
+          <MixpanelInitializer>{children}</MixpanelInitializer>
         </Providers>
         <TailwindBrowserRuntime />
         <Toaster position="top-center" />

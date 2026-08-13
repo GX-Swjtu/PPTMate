@@ -8,6 +8,7 @@ import {
   CHART_BROWSER_SCRIPT_URL,
   CHART_DATALABELS_SCRIPT_URL,
 } from "@/lib/chart-browser";
+import { isAllowedFontSource } from "@/lib/font-security";
 import { TAILWIND_BROWSER_SCRIPT_URL } from "@/lib/tailwind-browser";
 import { useSmartChartInjection } from "./useSmartChartInjection";
 
@@ -46,6 +47,7 @@ function fontAssets(fonts: unknown) {
   return Object.entries(fonts as Record<string, unknown>)
     .filter((entry): entry is [string, string] => typeof entry[1] === "string")
     .map(([family, url]) => {
+      if (!isAllowedFontSource(url)) return "";
       if (url.includes("fonts.googleapis.com") || url.endsWith(".css")) {
         return `<link rel="stylesheet" href="${escapeAttribute(url)}">`;
       }
@@ -87,6 +89,7 @@ function useSlideFontAssets(fonts: unknown, enabled: boolean) {
     const assets: HTMLElement[] = [];
     Object.entries(fonts as Record<string, unknown>).forEach(([family, source]) => {
       if (typeof source !== "string" || !source.trim()) return;
+      if (!isAllowedFontSource(source)) return;
       if (source.includes("fonts.googleapis.com") || source.endsWith(".css")) {
         const link = document.createElement("link");
         link.rel = "stylesheet";

@@ -10,6 +10,9 @@ type GitHubRepositoryResponse = {
 export const revalidate = 3600;
 
 export async function GET() {
+  if (process.env.PLATFORM_MODE === "true") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   try {
     const response = await fetch(GITHUB_REPOSITORY_API_URL, {
       headers: {

@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 from typing import Iterable
 
 import aiohttp
+from utils.get_env import is_remote_font_access_disabled
 
 _STYLE_TOKENS = {
     "italic",
@@ -126,6 +127,8 @@ def get_google_font_css_url(font_name: str) -> str:
 
 
 async def check_google_font_availability(font_name: str) -> bool:
+    if is_remote_font_access_disabled():
+        return False
     try:
         async with aiohttp.ClientSession() as session:
             async with session.head(

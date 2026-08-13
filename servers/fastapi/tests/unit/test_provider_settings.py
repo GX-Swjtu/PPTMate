@@ -25,11 +25,11 @@ class ProviderSettingsSession:
         return None
 
 
-def test_user_table_has_username_and_no_email_column():
+def test_user_table_keeps_username_and_adds_explicit_oidc_identity_columns():
     columns = set(User.__table__.columns.keys())
 
     assert "username" in columns
-    assert "email" not in columns
+    assert {"oidc_subject", "email", "display_name"}.issubset(columns)
 
 
 def test_provider_settings_exclude_all_legacy_auth_fields():

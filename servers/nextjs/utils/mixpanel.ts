@@ -3,6 +3,7 @@
 import mixpanel from 'mixpanel-browser';
 
 const MIXPANEL_TOKEN = 'd726e8bea8ec147f4c7720060cb2e6d1';
+const PLATFORM_MODE = process.env.NEXT_PUBLIC_PLATFORM_MODE === 'true';
 
 export enum MixpanelEvent {
   PageView = 'Page View',
@@ -210,7 +211,7 @@ declare global {
 }
 
 function canUseMixpanel(): boolean {
-  return typeof window !== 'undefined' && Boolean(MIXPANEL_TOKEN);
+  return !PLATFORM_MODE && typeof window !== 'undefined' && Boolean(MIXPANEL_TOKEN);
 }
 
 let trackingCheckPromise: Promise<boolean> | null = null;

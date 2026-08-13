@@ -1,4 +1,7 @@
+import { REMOTE_FONT_ACCESS_ENABLED } from "@/lib/font-security";
+
 export const loadGoogleFont = (fontFamily: string) => {
+  if (!REMOTE_FONT_ACCESS_ENABLED) return
   // Check if font is already loaded
   const existingLink = document.querySelector(`link[href*="${fontFamily.replace(' ', '+')}"]`)
   if (existingLink) return

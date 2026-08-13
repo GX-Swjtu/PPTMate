@@ -1,4 +1,6 @@
 
+import { isAllowedFontSource } from "@/lib/font-security";
+
 export const useFontLoader = (fonts: Record<string, string>) => {
     const injectFonts = () => {
         if (typeof document === 'undefined' || !fonts || typeof fonts !== 'object') return;
@@ -24,6 +26,7 @@ export const useFontLoader = (fonts: Record<string, string>) => {
 
         Object.entries(fonts).forEach(([name, url]) => {
             if (!name || !url) return;
+            if (!isAllowedFontSource(url)) return;
             const isCss = /\.css(\?|$)/i.test(url) || /fonts\.googleapis\.com/.test(url);
             if (isCss) {
                 ensureStylesheetLink(url);

@@ -1,3 +1,8 @@
+import {
+  isAllowedFontSource,
+  REMOTE_FONT_ACCESS_ENABLED,
+} from "@/lib/font-security";
+
 export type GoogleFontOption = {
   family: string;
   cssUrl: string;
@@ -13,7 +18,7 @@ type GoogleFontCatalogRecord = {
   font_url?: unknown;
 };
 
-export const GOOGLE_FONT_OPTIONS: GoogleFontOption[] = [
+const UPSTREAM_GOOGLE_FONT_OPTIONS: GoogleFontOption[] = [
   {
     family: "Inter",
     cssUrl:
@@ -220,6 +225,9 @@ export const GOOGLE_FONT_OPTIONS: GoogleFontOption[] = [
   },
 ];
 
+export const GOOGLE_FONT_OPTIONS: GoogleFontOption[] =
+  REMOTE_FONT_ACCESS_ENABLED ? UPSTREAM_GOOGLE_FONT_OPTIONS : [];
+
 const GOOGLE_FONT_STYLESHEET_TIMEOUT_MS = 2500;
 const FONT_FACE_LOAD_TIMEOUT_MS = 3000;
 const LOCAL_FONT_FAMILY_KEYS = new Set(
@@ -258,6 +266,7 @@ export function isGoogleFontFamily(family: string) {
 }
 
 export function loadGoogleFontOptions() {
+  if (!REMOTE_FONT_ACCESS_ENABLED) return Promise.resolve([]);
   if (!googleFontCatalogPromise) {
     googleFontCatalogPromise = import("../font.json")
       .then((module) => {
@@ -281,7 +290,7 @@ export function loadGoogleFontOptions() {
 }
 
 export function ensureGoogleFontLoaded(family: string) {
-  if (typeof document === "undefined") return null;
+  if (!REMOTE_FONT_ACCESS_ENABLED || typeof document === "undefined") return null;
 
   const normalizedFamily = family.trim();
   if (!normalizedFamily) return null;
@@ -420,6 +429,7 @@ export function templateFontOptionsFromMap(
 
 export function ensureTemplateFontLoaded(font: TemplateFontOption) {
   if (typeof document === "undefined") return null;
+  if (!isAllowedFontSource(font.sourceUrl)) return null;
 
   if (isFontStylesheetUrl(font.sourceUrl)) {
     return ensureStylesheetLoaded(font.family, font.sourceUrl);

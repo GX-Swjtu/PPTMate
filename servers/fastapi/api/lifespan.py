@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import logging
+import logging.config
 import os
 
 from fastapi import FastAPI
@@ -14,12 +15,28 @@ from utils.model_availability import (
 )
 from utils.user_config import update_env_with_user_config
 from api.v1.auth.bootstrap import bootstrap_database_admin
+from api.v1.auth.oidc import (
+    cleanup_oidc_state,
+    is_oidc_auth_mode,
+    is_platform_mode,
+    oidc_authenticator,
+)
 
 logger = logging.getLogger(__name__)
 
 
 def _configure_application_logging() -> None:
     """Honor LOG_LEVEL (default INFO) so template/export diagnostics are visible."""
+    if is_platform_mode():
+        from ngl_observability import build_uvicorn_log_config
+
+        logging.config.dictConfig(
+            build_uvicorn_log_config(
+                service_name="pptmate",
+                environment=(os.getenv("APP_ENV") or "development"),
+            )
+        )
+        return
     raw = (os.getenv("LOG_LEVEL") or "INFO").strip().upper()
     level = getattr(logging, raw, logging.INFO)
     root_logger = logging.getLogger()
@@ -56,7 +73,14 @@ async def app_lifespan(_: FastAPI):
     os.makedirs(get_app_data_directory_env(), exist_ok=True)
     await migrate_database_on_startup()
     await create_db_and_tables()
-    await bootstrap_database_admin()
+    if is_oidc_auth_mode():
+        # Fail readiness instead of falling back to local credentials when the
+        # platform OIDC contract is incomplete.
+        oidc_authenticator()
+        async with async_session_maker() as session:
+            await cleanup_oidc_state(session)
+    else:
+        await bootstrap_database_admin()
     async with async_session_maker() as session:
         await migrate_provider_settings_from_file(session)
     await import_default_templates_on_startup()
@@ -65,4 +89,6 @@ async def app_lifespan(_: FastAPI):
     await check_llm_and_image_provider_api_or_model_availability()
     yield
     # Shutdown: release all database connections to prevent stale/leaked pools.
+    if is_oidc_auth_mode():
+        await oidc_authenticator().client.aclose()
     await dispose_engines()

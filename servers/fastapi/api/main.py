@@ -10,6 +10,7 @@ from api.lifespan import app_lifespan
 from api.middlewares import SessionAuthMiddleware, UserConfigEnvUpdateMiddleware
 from api.v1.async_tasks.router import API_V1_ASYNC_TASKS_ROUTER
 from api.v1.auth.router import API_V1_AUTH_ROUTER
+from api.v1.auth.oidc import OIDC_AUTH_ROUTER, is_platform_mode
 from api.v1.admin.router import API_V1_ADMIN_ROUTER
 from api.v1.mock.router import API_V1_MOCK_ROUTER
 from api.v1.ppt.router import API_V1_PPT_ROUTER
@@ -28,6 +29,8 @@ init_sandbox_safe_mimetypes()
 
 
 def _maybe_init_sentry() -> None:
+    if is_platform_mode():
+        return
     sentry_dsn = get_sentry_dsn_env()
     if not sentry_dsn:
         return
@@ -64,9 +67,11 @@ app = FastAPI(lifespan=app_lifespan)
 
 # Routers
 app.include_router(API_V1_PPT_ROUTER)
-app.include_router(API_V1_WEBHOOK_ROUTER)
-app.include_router(API_V1_MOCK_ROUTER)
+if not is_platform_mode():
+    app.include_router(API_V1_WEBHOOK_ROUTER)
+    app.include_router(API_V1_MOCK_ROUTER)
 app.include_router(API_V1_AUTH_ROUTER)
+app.include_router(OIDC_AUTH_ROUTER)
 app.include_router(API_V1_ADMIN_ROUTER)
 app.include_router(API_V1_ASYNC_TASKS_ROUTER)
 
@@ -96,6 +101,28 @@ app.add_middleware(
 
 app.add_middleware(UserConfigEnvUpdateMiddleware)
 app.add_middleware(SessionAuthMiddleware)
+
+
+@app.get("/health", include_in_schema=False)
+async def health():
+    return {"status": "ok"}
+
+
+@app.get("/ready", include_in_schema=False)
+async def ready():
+    return {"status": "ready"}
+
+
+if is_platform_mode():
+    from ngl_observability import instrument_fastapi
+
+    instrument_fastapi(
+        app,
+        service_name="pptmate",
+        environment=(os.getenv("APP_ENV") or "development"),
+        version=(os.getenv("PPTMATE_BUILD_VERSION") or "development"),
+        max_request_body_bytes=110 * 1024 * 1024,
+    )
 
 
 @app.middleware("http")

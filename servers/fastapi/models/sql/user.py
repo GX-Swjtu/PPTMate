@@ -24,6 +24,11 @@ class User(UserBase):
     username: Mapped[str] = mapped_column(
         String(128), unique=True, index=True, nullable=False
     )
+    oidc_subject: Mapped[Optional[str]] = mapped_column(
+        String(128), unique=True, index=True, nullable=True
+    )
+    email: Mapped[Optional[str]] = mapped_column(String(320), nullable=True)
+    display_name: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
     admin_slot: Mapped[Optional[str]] = mapped_column(
         String(32), unique=True, nullable=True
     )

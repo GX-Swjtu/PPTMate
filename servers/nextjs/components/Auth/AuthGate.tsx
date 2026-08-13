@@ -18,6 +18,8 @@ type AuthStatus = {
   authenticated: boolean;
   username: string | null;
   role?: "admin" | "user" | null;
+  auth_mode?: "local" | "oidc";
+  login_url?: string;
 };
 
 const initialStatus: AuthStatus = {
@@ -65,6 +67,23 @@ export default function AuthGate() {
 
     void refreshStatus();
   }, []);
+
+  useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      isLoading ||
+      status.authenticated ||
+      status.auth_mode !== "oidc" ||
+      isRedirecting
+    ) {
+      return;
+    }
+    setIsRedirecting(true);
+    const returnTo = `${window.location.pathname}${window.location.search}`;
+    window.location.assign(
+      `${status.login_url || "/api/v1/auth/oidc/login"}?returnTo=${encodeURIComponent(returnTo)}`
+    );
+  }, [isLoading, isRedirecting, status]);
 
   useEffect(() => {
     if (
@@ -125,6 +144,8 @@ export default function AuthGate() {
         authenticated: Boolean(data.authenticated),
         username: data.username ?? null,
         role: data.role ?? null,
+        auth_mode: data.auth_mode,
+        login_url: data.login_url,
       });
     } catch (fetchError) {
       console.error(fetchError);
@@ -326,6 +347,7 @@ export default function AuthGate() {
     isLoading ||
     isRedirecting ||
     status.authenticated ||
+    status.auth_mode === "oidc" ||
     !hasMetSplashDuration
   ) {
     return <PresentonSplashLoader message="Preparing your workspace..." />;
