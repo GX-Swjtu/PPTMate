@@ -6,14 +6,13 @@ import shutil
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-from sqlmodel import select
-
 from models.sql.template_v2 import TemplateV2
 from services.database import async_session_maker
-from templates.v2.models.layouts import MergedComponents, SlideLayouts
+from sqlmodel import select
 from utils.get_env import get_app_data_directory_env
 from utils.icon_weights import extract_icon_type_from_settings
 
+from templates.v2.models.layouts import MergedComponents, SlideLayouts
 
 LOGGER = logging.getLogger(__name__)
 
@@ -301,6 +300,17 @@ def _copy_default_template_static_assets(template_dir: Path, template_id: str) -
     shutil.rmtree(destination, ignore_errors=True)
     if source.is_dir():
         shutil.copytree(source, destination)
+        _make_static_tree_readable(destination)
+
+
+def _make_static_tree_readable(root: Path) -> None:
+    """Allow the unprivileged static-file worker to traverse bundled assets."""
+    root.chmod(root.stat().st_mode | 0o055)
+    for path in root.rglob("*"):
+        if path.is_dir():
+            path.chmod(path.stat().st_mode | 0o055)
+        elif path.is_file():
+            path.chmod(path.stat().st_mode | 0o044)
 
 
 def _remove_default_template_assets(template_id: str) -> None:

@@ -135,6 +135,9 @@ COPY --from=fastapi-builder /app/servers/fastapi /app/servers/fastapi
 COPY --from=fastapi-builder /root/.cache/huggingface /root/.cache/huggingface
 COPY --from=fastapi-builder /root/.cache/presenton/fastembed-icons /root/.cache/presenton/fastembed-icons
 COPY templates /app/templates
+# Docker preserves the build context's umask-derived permissions. Nginx serves
+# these public assets as www-data, so make them traversable and readable here.
+RUN chmod -R a+rX /app/servers/fastapi/static /app/templates
 
 COPY --from=assets-builder /app/package.json /app/package.json
 COPY --from=assets-builder /app/document-extraction-liteparse /app/document-extraction-liteparse

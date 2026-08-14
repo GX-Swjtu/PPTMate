@@ -1,10 +1,12 @@
 import asyncio
 import json
 import shutil
+import stat
 from pathlib import Path
 from typing import Any
 
 from models.sql.template_v2 import TemplateV2
+
 from templates import default_templates
 
 
@@ -201,6 +203,27 @@ def test_default_template_import_force_replaces_static_assets(tmp_path, monkeypa
 
     assert (old_static_dir / "image.png").read_bytes() == b"image"
     assert not (old_static_dir / "removed-from-bundle.png").exists()
+
+
+def test_default_template_import_makes_shared_assets_world_readable(
+    tmp_path,
+    monkeypatch,
+):
+    templates_root = tmp_path / "templates"
+    template_dir = _write_template_bundle(templates_root)
+    source_static_dir = template_dir / "static"
+    source_static_dir.chmod(0o700)
+    for source_file in source_static_dir.iterdir():
+        source_file.chmod(0o600)
+
+    app_data_dir = tmp_path / "app_data"
+    monkeypatch.setenv("APP_DATA_DIRECTORY", str(app_data_dir))
+
+    default_templates._copy_default_template_static_assets(template_dir, "general")
+
+    destination = app_data_dir / "templates/general/static"
+    assert stat.S_IMODE(destination.stat().st_mode) == 0o755
+    assert stat.S_IMODE((destination / "thumbnail.png").stat().st_mode) == 0o644
 
 
 def test_default_template_import_removes_static_directory_removed_from_bundle(
