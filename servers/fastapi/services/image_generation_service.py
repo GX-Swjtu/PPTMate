@@ -861,7 +861,7 @@ class ImageGenerationService:
         parsed = urlparse(base_url)
         origin = f"{parsed.scheme}://{parsed.netloc}"
 
-        client = AsyncOpenAI(base_url=base_url, api_key=api_key)
+        client = AsyncOpenAI(base_url=base_url, api_key=api_key, max_retries=0)
 
         response = await client.images.generate(
             model=model,

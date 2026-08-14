@@ -95,7 +95,9 @@ class TestImageGenerationOpenAICompatible:
 
                         # Verify client initialization
                         MockClient.assert_called_with(
-                            base_url="https://api.example.com/v1", api_key="sk-test-key"
+                            base_url="https://api.example.com/v1",
+                            api_key="sk-test-key",
+                            max_retries=0,
                         )
 
                         # Ask the gateway to absorb the provider's temporary URL
