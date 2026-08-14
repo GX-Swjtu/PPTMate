@@ -8,9 +8,14 @@ export const dynamic = "force-dynamic";
 
 const SECRET_FIELD = /(API_KEY|ACCESS_KEY|SECRET|TOKEN|PASSWORD)/i;
 
-function configFromEnvironment(): LLMConfig {
+export function configFromEnvironment(): LLMConfig {
   return normalizeLLMConfig({
     LLM: process.env.LLM,
+    LITELLM_BASE_URL: process.env.LITELLM_BASE_URL,
+    LITELLM_MODEL: process.env.LITELLM_MODEL,
+    LITELLM_API_KEY: process.env.LITELLM_API_KEY
+      ? "__configured__"
+      : "",
     CUSTOM_LLM_URL: process.env.CUSTOM_LLM_URL,
     CUSTOM_MODEL: process.env.CUSTOM_MODEL,
     CUSTOM_LLM_API_KEY: process.env.CUSTOM_LLM_API_KEY
@@ -29,6 +34,11 @@ function configFromEnvironment(): LLMConfig {
   });
 }
 
+export function runtimeConfigStatusFromEnvironment() {
+  const config = configFromEnvironment();
+  return { configured: hasValidLLMConfig(config), config };
+}
+
 export async function GET(request: Request) {
   const auth = await authStatusForRequest(request);
   if (!auth.authenticated) {
@@ -36,9 +46,8 @@ export async function GET(request: Request) {
   }
   const path = process.env.USER_CONFIG_PATH;
   if (!path) {
-    const config = configFromEnvironment();
     return NextResponse.json(
-      { configured: hasValidLLMConfig(config), config },
+      runtimeConfigStatusFromEnvironment(),
       { status: 200 }
     );
   }
