@@ -1508,10 +1508,10 @@ async def create_presentation(
     )
 
     normalized_community_ids = normalize_community_ids(community_design_ids)
-    if is_platform_mode() and (web_search or normalized_community_ids):
+    if is_platform_mode() and normalized_community_ids:
         raise HTTPException(
             status_code=400,
-            detail="Web search and community references are disabled in platform mode",
+            detail="Community references are disabled in platform mode",
         )
     if generation_mode != "smart" and normalized_community_ids:
         raise HTTPException(

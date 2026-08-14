@@ -297,6 +297,45 @@ def test_create_presentation_stores_current_version(fake_async_session):
     assert fake_async_session.commit_count == 1
 
 
+def test_create_presentation_allows_platform_web_search(
+    monkeypatch, fake_async_session
+):
+    monkeypatch.setenv("PLATFORM_MODE", "true")
+
+    presentation = _run(
+        presentation_endpoint.create_presentation(
+            content="Create a current market update.",
+            web_search=True,
+            sql_session=fake_async_session,
+        )
+    )
+
+    assert presentation.web_search is True
+    assert fake_async_session.added == [presentation]
+    assert fake_async_session.commit_count == 1
+
+
+def test_create_presentation_rejects_platform_community_reference(
+    monkeypatch, fake_async_session
+):
+    monkeypatch.setenv("PLATFORM_MODE", "true")
+
+    with pytest.raises(HTTPException) as exc_info:
+        _run(
+            presentation_endpoint.create_presentation(
+                content="Create a deck from this design.",
+                generation_mode="smart",
+                community_design_ids=[1],
+                sql_session=fake_async_session,
+            )
+        )
+
+    assert exc_info.value.status_code == 400
+    assert exc_info.value.detail == "Community references are disabled in platform mode"
+    assert fake_async_session.added == []
+    assert fake_async_session.commit_count == 0
+
+
 def test_create_blank_presentation_is_template_free_and_editable():
     class BlankPresentationSession(FakeAsyncSession):
         async def refresh(self, obj):
