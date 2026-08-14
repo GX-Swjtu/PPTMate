@@ -50,7 +50,7 @@ export function EditorActionBar({
         onClick={onReconstruct}
         type="button"
       >
-        <span className="whitespace-nowrap">Re-Construct</span>
+        <span className="whitespace-nowrap">重新生成</span>
         <RefreshCw
           className={cn(
             "h-[14px] w-[14px] shrink-0",
@@ -62,10 +62,10 @@ export function EditorActionBar({
       <button
         className="flex h-[33px] shrink-0 items-center justify-center gap-[7px] whitespace-nowrap rounded-[48px] px-[10px] py-[8px] text-[14px] font-medium text-[#101323] transition-colors hover:bg-[#F7F6F9]"
         onClick={onAddBlank}
-        title="Add blank slide"
+        title="添加空白幻灯片"
         type="button"
       >
-        <span>Blank</span>
+        <span>空白页</span>
         <Plus className="h-4 w-4 shrink-0" />
       </button>
       <div className="h-[20px] w-0 shrink-0 border-l border-[#EDEEEF]" />
@@ -74,7 +74,7 @@ export function EditorActionBar({
         onClick={onCopy}
         type="button"
       >
-        <span className="whitespace-nowrap">Copy ID</span>
+        <span className="whitespace-nowrap">复制 ID</span>
         <Copy className="h-4 w-4 shrink-0" />
       </button>
       <div className="h-[20px] w-0 shrink-0 border-l border-[#EDEEEF]" />
@@ -82,7 +82,7 @@ export function EditorActionBar({
         <DropdownMenu.Trigger asChild>
           <button
             className="flex h-[33px] w-9 shrink-0 items-center justify-center rounded-[6px] text-[#191919] transition-colors hover:bg-[#F7F6F9]"
-            title="Slide actions"
+            title="幻灯片操作"
             type="button"
           >
             <EllipsisVertical className="h-4 w-4" />
@@ -99,7 +99,7 @@ export function EditorActionBar({
               onSelect={onDuplicate}
             >
               <Copy className="h-4 w-4" />
-              Duplicate Slide
+              复制幻灯片
             </DropdownMenu.Item>
             <DropdownMenu.Item
               className={slideMenuItemClass}
@@ -107,7 +107,7 @@ export function EditorActionBar({
               onSelect={onMoveRight}
             >
               <MoveRight className="h-4 w-4" />
-              Move Right
+              向右移动
             </DropdownMenu.Item>
             <DropdownMenu.Item
               className={slideMenuItemClass}
@@ -115,7 +115,7 @@ export function EditorActionBar({
               onSelect={onMoveLeft}
             >
               <MoveLeft className="h-4 w-4" />
-              Move Left
+              向左移动
             </DropdownMenu.Item>
             <DropdownMenu.Separator className="my-2 h-px bg-[#EDEEEF]" />
             <DropdownMenu.Item
@@ -124,7 +124,7 @@ export function EditorActionBar({
               onSelect={onDelete}
             >
               <Trash2 className="h-4 w-4" />
-              Delete Slide
+              删除幻灯片
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Portal>

@@ -198,59 +198,59 @@ function presentationActionsUiReducer(
 }
 
 const insertActions: ActionItem[] = [
-  { id: "texts", label: "Texts", icon: Type },
-  { id: "charts", label: "Charts", icon: BarChart3 },
-  { id: "tables", label: "Tables", icon: Rows3 },
-  { id: "images", label: "Images", icon: Image },
-  { id: "elements", label: "Elements", icon: Shapes },
+  { id: "texts", label: "文本", icon: Type },
+  { id: "charts", label: "图表", icon: BarChart3 },
+  { id: "tables", label: "表格", icon: Rows3 },
+  { id: "images", label: "图片", icon: Image },
+  { id: "elements", label: "元素", icon: Shapes },
 ];
 
 export const textItems = [
-  { id: "equation", label: "Equation", icon: Sigma },
-  { id: "equation-quadratic", label: "Quadratic", icon: Sigma },
-  { id: "equation-summation", label: "Summation", icon: Sigma },
-  { id: "equation-integral", label: "Integral", icon: Sigma },
-  { id: "equation-matrix", label: "Matrix", icon: Sigma },
-  { id: "title-block", label: "Title Block", icon: AlignCenter },
-  { id: "subtitle", label: "Subtitle", icon: AlignCenter },
-  { id: "bullet-list", label: "Bullet List", icon: List },
-  { id: "numbered-list", label: "Order List", icon: ListOrdered },
-  { id: "list-item", label: "List Item", icon: ListMinus },
-  { id: "quote", label: "Quote", icon: Quote },
-  { id: "body-text", label: "Body Text", icon: Columns2 },
+  { id: "equation", label: "公式", icon: Sigma },
+  { id: "equation-quadratic", label: "二次方程", icon: Sigma },
+  { id: "equation-summation", label: "求和公式", icon: Sigma },
+  { id: "equation-integral", label: "积分公式", icon: Sigma },
+  { id: "equation-matrix", label: "矩阵", icon: Sigma },
+  { id: "title-block", label: "标题块", icon: AlignCenter },
+  { id: "subtitle", label: "副标题", icon: AlignCenter },
+  { id: "bullet-list", label: "项目符号列表", icon: List },
+  { id: "numbered-list", label: "编号列表", icon: ListOrdered },
+  { id: "list-item", label: "列表项", icon: ListMinus },
+  { id: "quote", label: "引用", icon: Quote },
+  { id: "body-text", label: "正文", icon: Columns2 },
 ] satisfies PaletteItem[];
 
 export const chartTypeItems = [
-  { id: "bar", label: "Bar Chart", icon: BarChart3 },
-  { id: "horizontal_bar", label: "Horizontal Bar", icon: BarChart3 },
-  { id: "stacked_bar", label: "Stacked Bar", icon: BarChart3 },
+  { id: "bar", label: "柱状图", icon: BarChart3 },
+  { id: "horizontal_bar", label: "横向条形图", icon: BarChart3 },
+  { id: "stacked_bar", label: "堆叠柱状图", icon: BarChart3 },
   {
     id: "horizontal_stacked_bar",
-    label: "Horizontal Stack Bar",
+    label: "横向堆叠条形图",
     icon: BarChart3,
   },
-  { id: "line", label: "Line Chart", icon: LineChart },
-  { id: "pie", label: "Pie Chart", icon: PieChart },
-  { id: "area", label: "Area Chart", icon: AreaChart },
-  { id: "donut", label: "Donut Chart", icon: PieChart },
-  { id: "scatter", label: "Scatter Chart", icon: Circle },
-  { id: "radar", label: "Radar Chart", icon: PieChart },
-  { id: "polar_area", label: "Polar Area", icon: PieChart },
+  { id: "line", label: "折线图", icon: LineChart },
+  { id: "pie", label: "饼图", icon: PieChart },
+  { id: "area", label: "面积图", icon: AreaChart },
+  { id: "donut", label: "环形图", icon: PieChart },
+  { id: "scatter", label: "散点图", icon: Circle },
+  { id: "radar", label: "雷达图", icon: PieChart },
+  { id: "polar_area", label: "极坐标面积图", icon: PieChart },
 ] satisfies PaletteItem[];
 
 export const infographicItems = [
-  { id: "progress_bar", label: "Progress Bar", icon: ChartNoAxesGantt },
-  { id: "gauge", label: "Gauge Chart", icon: Gauge },
+  { id: "progress_bar", label: "进度条", icon: ChartNoAxesGantt },
+  { id: "gauge", label: "仪表盘", icon: Gauge },
 ] satisfies PaletteItem[];
 
 export const tableTypeItems = [
-  { id: "simple-table", label: "Simple Table", icon: Table2 },
+  { id: "simple-table", label: "基础表格", icon: Table2 },
 ] satisfies PaletteItem[];
 
 export const imageItems = [
-  { id: "image", label: "Image", icon: Image },
-  { id: "image-text", label: "Image + Text", icon: Columns2 },
-  { id: "image-grid", label: "Image Grid", icon: Grid3X3 },
+  { id: "image", label: "图片", icon: Image },
+  { id: "image-text", label: "图片 + 文本", icon: Columns2 },
+  { id: "image-grid", label: "图片网格", icon: Grid3X3 },
 ] satisfies PaletteItem[];
 
 const elementIconById: Record<ElementInsertKind, LucideIcon> = {
@@ -303,10 +303,68 @@ const elementIconById: Record<ElementInsertKind, LucideIcon> = {
   "vector-play": Play,
 };
 
+const elementGroupLabels: Record<string, string> = {
+  "Basic Shapes": "基础形状",
+  "Lines & Arrows": "线条与箭头",
+  "Block Arrows": "块箭头",
+  Symbols: "符号",
+};
+
+const elementLabels: Record<ElementInsertKind, string> = {
+  "vector-rectangle": "矩形",
+  "vector-rounded-rectangle": "圆角矩形",
+  "vector-capsule": "胶囊形",
+  "vector-circle": "圆形",
+  "vector-ellipse": "椭圆",
+  "vector-triangle": "三角形",
+  "vector-right-triangle": "直角三角形",
+  "vector-diamond": "菱形",
+  "vector-parallelogram": "平行四边形",
+  "vector-trapezoid": "梯形",
+  "vector-pentagon": "五边形",
+  "vector-hexagon": "六边形",
+  "vector-octagon": "八边形",
+  "vector-teardrop": "水滴形",
+  "vector-line": "直线",
+  "vector-line-arrow": "右开口箭头",
+  "vector-line-arrow-left": "左开口箭头",
+  "vector-line-arrow-up": "上开口箭头",
+  "vector-line-arrow-down": "下开口箭头",
+  "vector-arrowhead-filled-right": "右实心箭头",
+  "vector-arrowhead-filled-left": "左实心箭头",
+  "vector-arrowhead-filled-up": "上实心箭头",
+  "vector-arrowhead-filled-down": "下实心箭头",
+  "vector-arrow": "右箭头",
+  "vector-arrow-left": "左箭头",
+  "vector-arrow-up": "上箭头",
+  "vector-arrow-down": "下箭头",
+  "vector-arrow-left-right": "左右箭头",
+  "vector-arrow-up-down": "上下箭头",
+  "vector-chevron-right": "右折箭头",
+  "vector-notched-arrow": "凹口箭头",
+  "vector-bent-arrow": "弯箭头",
+  "vector-four-way-arrow": "四向箭头",
+  "vector-plus": "加号",
+  "vector-cross": "叉号",
+  "vector-lightning": "闪电",
+  "vector-home": "主页",
+  "vector-speech-bubble": "对话气泡",
+  "vector-cloud": "云朵",
+  "vector-heart": "爱心",
+  "vector-star": "星形",
+  "vector-bookmark": "书签",
+  "vector-shield": "盾牌",
+  "vector-flag": "旗帜",
+  "vector-moon": "月亮",
+  "vector-sun": "太阳",
+  "vector-play": "播放",
+};
+
 export const elementItemGroups = ELEMENT_INSERT_GROUPS.map((group) => ({
-  label: group.label,
+  label: elementGroupLabels[group.label] ?? group.label,
   items: group.items.map((item) => ({
     ...item,
+    label: elementLabels[item.id],
     icon: elementIconById[item.id],
   })),
 }));
@@ -496,7 +554,7 @@ function templateBlockFromComponent(
   const title =
     readRecordString(raw, "name") ??
     readRecordString(raw, "title") ??
-    (id ? humanizeIdentifier(id) : `Component ${index + 1}`);
+    (id ? humanizeIdentifier(id) : `组件 ${index + 1}`);
   const description = readRecordString(raw, "description") ?? "";
   const elementCount = readRecordArray(raw, "elements").length;
   const keyBase = id ?? title;
@@ -840,7 +898,7 @@ function BlockVariantButton({
       onClick={() => {
         if (!disabled) onInsertBlock(block);
       }}
-      aria-label={`Insert ${block.title}`}
+      aria-label={`插入 ${block.title}`}
     >
       <div className="relative">
         <BlockThumbnail block={block} />
@@ -918,7 +976,7 @@ function BlockGroupCard({
           onClick={toggleExpanded}
         >
           <span className="shrink-0 rounded-full border border-[#D6BBFB] bg-[#FAF8FF] px-3 py-1.5 text-[11px] font-medium leading-4 text-[#7F00FF]">
-            {variantCount} Layouts
+            {variantCount} 个版式
           </span>
           <ChevronDown
             className={cn(
@@ -1000,7 +1058,7 @@ export const BlocksPanel = ({
         if (cancelled) return;
         dispatchBlockState({
           type: "failed",
-          message: "Could not load template components.",
+          message: "无法加载模板组件。",
         });
         trackEvent(MixpanelEvent.Editor_Template_Blocks_Load_Failed, {
           presentation_id: presentationId,
@@ -1033,14 +1091,14 @@ export const BlocksPanel = ({
         }
       `}</style>
       <h3 className="mb-3 text-[clamp(13px,0.95vw,15px)] font-semibold leading-5 text-[#101323]">
-        Blocks
+        内容块
       </h3>
 
       <div className="mb-7 flex h-[clamp(46px,3.6vw,52px)] items-center rounded-[10px] border border-[#EDEEF0] bg-white pl-[clamp(10px,0.9vw,12px)] pr-[clamp(6px,0.6vw,8px)] shadow-[0_10px_26px_rgba(17,24,39,0.08)]">
         <input
           value={blockPrompt}
           onChange={(event) => setBlockPrompt(event.target.value)}
-          placeholder="Search blocks"
+          placeholder="搜索内容块"
           className="min-w-0 flex-1 bg-transparent text-[clamp(10px,0.75vw,12px)] text-[#101323] outline-none placeholder:text-[#9CA3AF]"
         />
         <button
@@ -1051,7 +1109,7 @@ export const BlocksPanel = ({
             background:
               "linear-gradient(270deg, #D5CAFC 2.4%, #E3D2EB 35%, #FDE4C2 100%)",
           }}
-          aria-label="Create block"
+          aria-label="创建内容块"
         >
           <Search
             className="h-[clamp(12px,0.9vw,14px)] w-[clamp(12px,0.9vw,14px)] text-[#101323]"
@@ -1060,12 +1118,12 @@ export const BlocksPanel = ({
         </button>
       </div>
 
-      <SectionLabel>Content</SectionLabel>
+      <SectionLabel>内容</SectionLabel>
 
       <div className="space-y-3">
         {loading && (
           <p className="rounded-[8px] border border-[#E5E7EB] bg-[#F9FAFB] p-4 text-[11px] leading-4 text-[#667085]">
-            Loading template components...
+            正在加载模板组件……
           </p>
         )}
         {!loading && error && (
@@ -1075,7 +1133,7 @@ export const BlocksPanel = ({
         )}
         {!loading && !error && visibleBlocks.length === 0 && (
           <p className="rounded-[8px] border border-dashed border-[#D0D5DD] bg-[#F9FAFB] p-4 text-[11px] leading-4 text-[#667085]">
-            No template components found.
+            未找到模板组件。
           </p>
         )}
         {!loading &&
@@ -1225,9 +1283,9 @@ function ActionsSidebar({
             <PrimaryActionButton
               active={activeAction === "blocks"}
               disabled={blocksUnavailable}
-              disabledReason="Blocks require a presentation template"
+              disabledReason="内容块需要演示文稿模板"
               icon={<BlocksIcon />}
-              label="Blocks"
+              label="内容块"
               onClick={() => onActionSelect("blocks")}
             />
           </>
@@ -1305,18 +1363,18 @@ function ActionsPanel({
       {!aiOnly && activeAction === "texts" && (
         <InsertPanel
           disabled={editingDisabled}
-          title="Texts"
-          groups={[{ label: "Add", items: textItems }]}
+          title="文本"
+          groups={[{ label: "添加", items: textItems }]}
           onItemSelect={onTextItemSelect}
         />
       )}
       {!aiOnly && activeAction === "charts" && (
         <InsertPanel
           disabled={editingDisabled}
-          title="Charts"
+          title="图表"
           groups={[
-            { label: "Chart Type", items: chartTypeItems },
-            { label: "Infographics", items: infographicItems },
+            { label: "图表类型", items: chartTypeItems },
+            { label: "信息图", items: infographicItems },
           ]}
           onItemSelect={onChartItemSelect}
         />
@@ -1324,23 +1382,23 @@ function ActionsPanel({
       {!aiOnly && activeAction === "tables" && (
         <InsertPanel
           disabled={editingDisabled}
-          title="Tables"
-          groups={[{ label: "Table Type", items: tableTypeItems }]}
+          title="表格"
+          groups={[{ label: "表格类型", items: tableTypeItems }]}
           onItemSelect={onTableItemSelect}
         />
       )}
       {!aiOnly && activeAction === "images" && (
         <InsertPanel
           disabled={editingDisabled}
-          title="Images"
-          groups={[{ label: "Add", items: imageItems }]}
+          title="图片"
+          groups={[{ label: "添加", items: imageItems }]}
           onItemSelect={onImageItemSelect}
         />
       )}
       {!aiOnly && activeAction === "elements" && (
         <InsertPanel
           disabled={editingDisabled}
-          title="Elements"
+          title="元素"
           groups={elementItemGroups}
           onItemSelect={onElementItemSelect}
         />
@@ -1456,7 +1514,7 @@ const PresentationActions = (props: PresentationActionsProps) => {
     if (editingDisabled) return false;
     if (typeof window === "undefined") return false;
     if (typeof props.currentSlide !== "number") {
-      notify.warning("Select a slide", "Choose a slide before adding content.");
+      notify.warning("请选择幻灯片", "请先选择一张幻灯片，再添加内容。");
       return false;
     }
     if (
@@ -1478,8 +1536,8 @@ const PresentationActions = (props: PresentationActionsProps) => {
 
     if (!detail.handled) {
       notify.warning(
-        "Insert unavailable",
-        "Content can be added only to slides imported through the slide editor.",
+        "无法插入",
+        "只能向通过幻灯片编辑器导入的幻灯片添加内容。",
       );
       return false;
     }
@@ -1599,8 +1657,8 @@ const PresentationActions = (props: PresentationActionsProps) => {
     const element = adaptTemplateV2ComponentToElement(block.raw, block.index);
     if (!element) {
       notify.warning(
-        "Component unavailable",
-        "This template component cannot be inserted yet.",
+        "组件不可用",
+        "暂时无法插入此模板组件。",
       );
       return;
     }

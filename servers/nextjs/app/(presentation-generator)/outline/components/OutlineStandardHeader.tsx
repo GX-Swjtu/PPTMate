@@ -18,11 +18,11 @@ const OutlineStandardHeader = ({
       <div className="flex min-w-0 items-center gap-3">
         <Link
           href="/dashboard"
-          aria-label="Go to dashboard"
+          aria-label="返回工作台"
           className="shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A5AF8]/30"
         >
           <Image
-            src="/logo-with-bg.png"
+            src="/pptmate-mark.svg"
             alt=""
             width={32}
             height={33}
@@ -40,7 +40,7 @@ const OutlineStandardHeader = ({
         className="flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.96px] text-[#333333] transition-colors hover:text-[#7A5AF8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A5AF8]/30"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-        Back
+        返回
       </button>
     </div>
   </header>

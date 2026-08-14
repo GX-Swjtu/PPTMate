@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title id="title">PPTMate</title>
+  <rect x="28" y="49" width="104" height="68" rx="17" fill="#FFFFFF"/>
+  <rect x="39" y="60" width="82" height="46" rx="10" fill="#7A5AF8" fill-opacity="0.14"/>
+  <path fill="#09CCFE" d="M123 19c2.1 12.7 7.9 19.7 19.7 23.9C130.9 47.1 125.1 54 123 66.8c-2.1-12.8-7.9-19.7-19.7-23.9C115.1 38.7 120.9 31.7 123 19Z"/>
+</svg>

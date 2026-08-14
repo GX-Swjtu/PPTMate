@@ -65,11 +65,11 @@ type ContentDensity = Exclude<Density, "">;
 const MAX_PREVIEW_ITEMS = 24;
 const MAX_PREVIEW_TEXT_LENGTH = 10_000;
 const DENSE_CONTENT_SENTENCES = [
-  "Strategic teams need clear context, measurable progress, and practical next steps for every decision.",
-  "This expanded sample copy demonstrates how the layout behaves when a field receives dense presentation content.",
-  "Use this mock content to inspect wrapping, alignment, overflow, spacing, and visual balance across the slide.",
-  "Each sentence adds realistic business language so longer text blocks feel close to generated presentation output.",
-  "The preview fills the schema allowance to expose layout pressure before export.",
+  "战略团队需要清晰的背景、可衡量的进展，以及每项决策对应的可执行下一步。",
+  "这段扩展示例用于展示字段承载较多演示内容时的版式表现。",
+  "可通过这些模拟内容检查幻灯片中的换行、对齐、溢出、间距和视觉平衡。",
+  "每句话都采用接近真实业务演示的表达，使长文本块更贴近实际生成结果。",
+  "预览会填充结构允许的内容长度，以便在导出前发现版式压力。",
 ];
 
 /**
@@ -414,24 +414,24 @@ function exactDensityText(
   if (targetLength <= 0) return "";
 
   const title = sentenceCase(
-    label.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim() || "content",
+    label.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim() || "内容",
   );
   const candidates =
     density === "Low"
       ? [
-          `${title}.`,
-          `${title} is ready.`,
-          `${title} is clear.`,
-          "Clear next step.",
-          "Teams have a clear next step.",
-          "The plan is ready for review.",
-          "This section has enough content to validate spacing.",
+          `${title}。`,
+          `${title}已就绪。`,
+          `${title}表达清晰。`,
+          "下一步清晰明确。",
+          "团队已有明确的下一步。",
+          "方案已准备好，可供审阅。",
+          "本节内容足以验证间距。",
         ]
       : [
-          `${title} summary shows steady progress and a clear next step.`,
+          `${title}摘要展示了稳定进展和清晰的下一步。`,
           ...DENSE_CONTENT_SENTENCES,
-          "Stakeholders can compare options, spot risks, and align on the strongest path forward.",
-          "The final wording stays deterministic while still resembling natural presentation copy.",
+          "相关方可以比较选项、识别风险，并就最合适的推进路径达成一致。",
+          "最终文字保持确定性，同时贴近自然的演示文稿表达。",
         ];
   const seed = candidates.join(" ").replace(/\s+/g, " ").trim();
   if (seed.length >= targetLength) return seed.slice(0, targetLength);
@@ -661,7 +661,7 @@ export function collectSchemaFields(layout: TemplateV2Layout) {
     const decorative = element.decorative !== false;
     const label = schemaLabelForElement(
       element,
-      `${type || "Field"} ${fields.length + 1}`,
+      `${type || "字段"} ${fields.length + 1}`,
       parentLabel,
     );
 

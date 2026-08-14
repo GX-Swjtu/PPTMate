@@ -64,14 +64,14 @@ export function LegacyPresentationsTable({
     if (deletedIds.length > 0) {
       onPresentationsDeleted(deletedIds);
       notify.success(
-        "Legacy presentations deleted",
-        `${deletedIds.length} presentation${deletedIds.length === 1 ? " was" : "s were"} removed.`
+        "旧版演示文稿已删除",
+        `已删除 ${deletedIds.length} 份演示文稿。`
       );
     }
     if (deletedIds.length !== presentations.length) {
       notify.error(
-        "Some presentations could not be deleted",
-        "Please try again."
+        "部分演示文稿无法删除",
+        "请重试。"
       );
     }
     setIsDeleting(false);
@@ -85,15 +85,15 @@ export function LegacyPresentationsTable({
           id="legacy-presentations-heading"
           className="font-syne text-base font-medium text-[#191919]"
         >
-          Legacy Presentation
+          旧版演示文稿
         </h2>
         <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={() => setShowDeleteDialog(true)}
             disabled={isDeleting}
-            aria-label="Delete all legacy presentations"
-            title="Delete all legacy presentations"
+            aria-label="删除全部旧版演示文稿"
+            title="删除全部旧版演示文稿"
             className="flex h-[35px] min-w-[51px] items-center justify-center rounded-full border border-[#EDEEEF] bg-white px-3 text-[#191919] transition-colors hover:bg-[#F6F6F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A5AF8] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isDeleting ? (
@@ -112,15 +112,14 @@ export function LegacyPresentationsTable({
           aria-hidden="true"
         />
         <p className="text-[#4C4C4C]">
-          These presentations were created in an older format and can&apos;t be
-          opened in Presenton 0.9.2-beta. {" "}
+          这些演示文稿使用旧版格式创建，当前版本无法打开。{" "}
           <a
             href={LEGACY_RELEASE_URL}
             target="_blank"
             rel="noreferrer"
             className="text-[#C4320A] underline decoration-[#C4320A] underline-offset-2"
           >
-            Download Presenton v0.8.10-beta to access them
+            下载兼容版本以访问
           </a>
           .
         </p>
@@ -129,9 +128,9 @@ export function LegacyPresentationsTable({
       <div className="w-full overflow-x-auto border-t border-[#EDEEEF]">
         <div className="min-w-[760px]">
           <div className="grid min-h-[56px] grid-cols-[minmax(280px,1fr)_272px_272px] border-b border-[#EDEEEF] text-sm font-semibold tracking-[0.14px] text-[#333333]">
-            <div className="flex items-center px-[14px]">Name</div>
-            <div className="flex items-center px-[14px]">Created on</div>
-            <div className="flex items-center px-[14px]">Format</div>
+            <div className="flex items-center px-[14px]">名称</div>
+            <div className="flex items-center px-[14px]">创建日期</div>
+            <div className="flex items-center px-[14px]">格式</div>
           </div>
           {presentations.map((presentation) => (
             <div
@@ -139,7 +138,7 @@ export function LegacyPresentationsTable({
               className="grid h-[50px] grid-cols-[minmax(280px,1fr)_272px_272px] border-b border-[#EDEEEF] text-sm text-[#333333]"
             >
               <div className="flex min-w-0 items-center px-4 font-syne font-medium">
-                <span className="truncate">{presentation.title || "Untitled presentation"}</span>
+                <span className="truncate">{presentation.title || "未命名演示文稿"}</span>
               </div>
               <div className="flex items-center px-4 font-medium">
                 {formatLegacyDate(presentation.created_at)}
@@ -147,7 +146,7 @@ export function LegacyPresentationsTable({
               <div className="flex items-center px-4">
                 <span className="flex items-center gap-1.5 text-xs font-medium text-[#C4320A]">
                   <LockKeyhole className="h-3 w-3" strokeWidth={1.5} aria-hidden="true" />
-                  Not Accessible
+                  无法访问
                 </span>
               </div>
             </div>
@@ -174,15 +173,13 @@ export function LegacyPresentationsTable({
               id="delete-legacy-title"
               className="font-syne text-[24px] font-medium leading-[30px] tracking-[-0.02em] text-[#191919]"
             >
-              Delete legacy presentations?
+              删除旧版演示文稿？
             </DialogTitle>
             <DialogDescription
               id="delete-legacy-description"
               className="max-w-[296px] pt-1 text-[15px] leading-6 text-[#667085]"
             >
-              This will permanently delete all {presentations.length} legacy
-              presentation{presentations.length === 1 ? "" : "s"}. This action
-              cannot be undone.
+              将永久删除全部 {presentations.length} 份旧版演示文稿，此操作无法撤销。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row border-t border-[#EAECF0] p-0 sm:space-x-0">
@@ -192,7 +189,7 @@ export function LegacyPresentationsTable({
               disabled={isDeleting}
               className="h-[56px] flex-1 rounded-none rounded-bl-[24px] px-4 text-sm font-medium text-[#344054] transition-colors hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Cancel
+              取消
             </button>
             <button
               type="button"
@@ -206,10 +203,10 @@ export function LegacyPresentationsTable({
                     className="h-4 w-4 animate-spin"
                     aria-hidden="true"
                   />
-                  Deleting...
+                  正在删除……
                 </>
               ) : (
-                "Delete"
+                "删除"
               )}
             </button>
           </DialogFooter>

@@ -228,9 +228,9 @@ export function ShapeToolbar({
       <div className="relative">
         <button
           type="button"
-          aria-label="Shape fill"
+          aria-label="形状填充"
           aria-expanded={openPanel === "fill"}
-          title="Shape fill"
+          title="形状填充"
           onClick={() => togglePanel("fill")}
           className={cn(
             "grid h-[22px] w-[22px] place-items-center rounded-[999px] border border-[#D7DAE3] hover:bg-[#F8F8FA]",
@@ -249,19 +249,19 @@ export function ShapeToolbar({
         {openPanel === "fill" ? (
           <Panel className="w-[220px] space-y-3 p-3">
             <ToggleRow
-              label="Fill"
+              label="填充"
               enabled={fillEnabled}
               onToggle={() => setFillEnabled(!fillEnabled)}
             />
             {fillEnabled ? (
               <>
                 <ColorField
-                  label="Fill color"
+                  label="填充颜色"
                   color={fill.color}
                   onCommit={(color) => update({ fill: { ...fill, color } })}
                 />
                 <SliderField
-                  label="Fill opacity"
+                  label="填充不透明度"
                   value={fill.opacity ?? 1}
                   min={0}
                   max={1}
@@ -279,7 +279,7 @@ export function ShapeToolbar({
 
       <div className="relative">
         <ToolbarButton
-          title="Shape border"
+          title="形状边框"
           pressed={openPanel === "stroke" || strokeEnabled}
           onClick={() => togglePanel("stroke")}
         >
@@ -288,19 +288,19 @@ export function ShapeToolbar({
         {openPanel === "stroke" ? (
           <Panel className="w-[220px] space-y-3 p-3">
             <ToggleRow
-              label="Stroke"
+              label="描边"
               enabled={strokeEnabled}
               onToggle={() => setStrokeEnabled(!strokeEnabled)}
             />
             {strokeEnabled ? (
               <>
                 <ColorField
-                  label="Border color"
+                  label="边框颜色"
                   color={stroke.color}
                   onCommit={(color) => update({ stroke: { ...stroke, color } })}
                 />
                 <SliderField
-                  label="Border width"
+                  label="边框宽度"
                   value={stroke.width ?? DEFAULT_SHAPE_STROKE.width}
                   min={0}
                   max={16}
@@ -309,7 +309,7 @@ export function ShapeToolbar({
                   onCommit={(width) => update({ stroke: { ...stroke, width } })}
                 />
                 <SliderField
-                  label="Border opacity"
+                  label="边框不透明度"
                   value={stroke.opacity ?? 1}
                   min={0}
                   max={1}
@@ -328,7 +328,7 @@ export function ShapeToolbar({
       {canRoundCorners ? (
         <div className="relative">
           <ToolbarButton
-            title="Border radius"
+            title="圆角"
             pressed={openPanel === "radius"}
             onClick={() => togglePanel("radius")}
           >
@@ -337,7 +337,7 @@ export function ShapeToolbar({
           {openPanel === "radius" ? (
             <Panel className="w-[252px] space-y-3 p-3">
               <SliderField
-                label="Border radius"
+                label="圆角"
                 value={radius}
                 min={0}
                 max={maxRadius}
@@ -349,7 +349,7 @@ export function ShapeToolbar({
               />
               {vectorElement && vectorCornerRadii.length === 4 ? (
                 <div className="grid grid-cols-2 gap-2">
-                  {["TL", "TR", "BR", "BL"].map((label, cornerIndex) => (
+                  {["左上", "右上", "右下", "左下"].map((label, cornerIndex) => (
                     <NumberField
                       key={label}
                       label={label}
@@ -369,7 +369,7 @@ export function ShapeToolbar({
 
       <div className="relative">
         <ToolbarButton
-          title="Vector path"
+          title="矢量路径"
           pressed={openPanel === "vector"}
           onClick={() => togglePanel("vector")}
         >
@@ -395,7 +395,7 @@ export function ShapeToolbar({
                     ) : (
                       <Circle size={14} aria-hidden="true" />
                     )}
-                    {shape}
+                    {shape === "polygon" ? "多边形" : "椭圆"}
                   </button>
                 ))}
               </div>
@@ -408,20 +408,20 @@ export function ShapeToolbar({
                     onClick={() => updateVector({ closed: !vectorClosed })}
                     className="flex w-full items-center justify-between rounded-md border border-[#EDEEEF] px-3 py-2 text-left text-xs text-[#4B5563] hover:bg-[#F8F8FA]"
                   >
-                    <span className="font-medium text-[#191919]">Closed path</span>
+                    <span className="font-medium text-[#191919]">闭合路径</span>
                     <span className="flex items-center gap-1 text-[#7A5AF8]">
                       {vectorClosed ? (
                         <ToggleRight size={17} aria-hidden="true" />
                       ) : (
                         <ToggleLeft size={17} aria-hidden="true" />
                       )}
-                      {vectorClosed ? "On" : "Off"}
+                      {vectorClosed ? "开启" : "关闭"}
                     </span>
                   </button>
 
                   <div className="space-y-2">
                     <div className="text-[12px] font-medium text-[#4B5563]">
-                      Curve
+                      曲线
                     </div>
                     <div className="grid grid-cols-2 gap-1 rounded-md bg-[#F6F6F9] p-1">
                       {(["none", "smooth"] as const).map((mode) => (
@@ -436,7 +436,7 @@ export function ShapeToolbar({
                               "bg-white text-[#7A5AF8] shadow-sm",
                           )}
                         >
-                          {mode === "none" ? "Straight" : mode}
+                          {mode === "none" ? "直线" : "平滑"}
                         </button>
                       ))}
                     </div>
@@ -445,7 +445,7 @@ export function ShapeToolbar({
                   {vectorCurveMode === "smooth" ? (
                     <div className="space-y-3">
                       <SliderField
-                        label="Tension"
+                        label="张力"
                         value={vectorTension}
                         min={0}
                         max={1}
@@ -454,7 +454,7 @@ export function ShapeToolbar({
                         onCommit={(tension) => updateCurve({ tension })}
                       />
                       <SliderField
-                        label="Smoothness"
+                        label="平滑度"
                         value={vectorSegments}
                         min={1}
                         max={96}
@@ -477,7 +477,7 @@ export function ShapeToolbar({
 
       <div className="relative">
         <ToolbarButton
-          title="Shape shadow"
+          title="形状阴影"
           pressed={openPanel === "shadow" || shadowEnabled}
           onClick={() => togglePanel("shadow")}
         >
@@ -496,7 +496,7 @@ export function ShapeToolbar({
 
       <div className="relative">
         <ToolbarButton
-          title="Shape opacity"
+          title="形状不透明度"
           pressed={openPanel === "opacity"}
           onClick={() => togglePanel("opacity")}
         >
@@ -505,7 +505,7 @@ export function ShapeToolbar({
         {openPanel === "opacity" ? (
           <Panel className="left-auto right-0 w-[220px] translate-x-0 p-3">
             <SliderField
-              label="Shape opacity"
+              label="形状不透明度"
               value={element.opacity ?? 1}
               min={0}
               max={1}
@@ -603,7 +603,7 @@ export function ToggleRow({
         ) : (
           <ToggleLeft size={17} aria-hidden="true" />
         )}
-        {enabled ? "On" : "Off"}
+        {enabled ? "开启" : "关闭"}
       </span>
     </button>
   );
@@ -625,13 +625,13 @@ export function ShadowPanel({
   return (
     <Panel className="left-auto right-0 w-[282px] translate-x-0 space-y-4 p-4">
       {onToggle ? (
-        <ToggleRow label="Shadow" enabled={enabled} onToggle={onToggle} />
+        <ToggleRow label="阴影" enabled={enabled} onToggle={onToggle} />
       ) : null}
 
       {enabled ? (
         <>
           <div className="space-y-2">
-            <div className="text-[12px] font-medium text-[#4B5563]">Position</div>
+            <div className="text-[12px] font-medium text-[#4B5563]">位置</div>
             <div className="grid grid-cols-2 gap-2">
               <NumberField
                 label="X"
@@ -655,9 +655,9 @@ export function ShadowPanel({
           </div>
 
           <div className="space-y-2">
-            <div className="text-[12px] font-medium text-[#4B5563]">Blur</div>
+            <div className="text-[12px] font-medium text-[#4B5563]">模糊</div>
             <NumberField
-              label="Amount"
+              label="程度"
               value={shadow.blur ?? fallback.blur}
               min={0}
               max={100}
@@ -667,16 +667,16 @@ export function ShadowPanel({
           </div>
 
           <div className="space-y-2">
-            <div className="text-[12px] font-medium text-[#4B5563]">Color</div>
+            <div className="text-[12px] font-medium text-[#4B5563]">颜色</div>
             <ColorField
-              label="Color"
+              label="颜色"
               color={shadow.color ?? fallback.color}
               onCommit={(color) => onChange({ color })}
             />
           </div>
 
           <SliderField
-            label="Opacity"
+            label="不透明度"
             value={shadow.opacity ?? fallback.opacity}
             min={0}
             max={1}

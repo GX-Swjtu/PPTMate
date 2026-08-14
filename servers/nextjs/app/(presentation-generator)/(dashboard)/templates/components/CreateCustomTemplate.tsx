@@ -96,7 +96,7 @@ const CreateCustomTemplate = ({
                 </div>
                 <div className="flex min-w-0 flex-col gap-1">
                     <h4 className="text-sm font-semibold tracking-[0.14px] text-[#191919]">
-                      {selectionPage ? "Build Templates" : "Build Template"}
+                      {selectionPage ? "创建模板" : "创建模板"}
                     </h4>
                     <p
                       className={cn(
@@ -107,8 +107,8 @@ const CreateCustomTemplate = ({
                       )}
                     >
                       {selectionPage
-                        ? "Build Your Template"
-                        : "Build Your Own Template"}
+                        ? "创建你的专属模板"
+                        : "创建你的专属模板"}
                     </p>
                 </div>
             </div>

@@ -47,26 +47,26 @@ import { ChartColorPaletteCard } from "@/components/slide-editor/charts/ChartCol
 import { TemplateV2ChartJsElement } from "@/components/slide-editor/charts/TemplateV2ChartJsElement";
 
 const CHART_TYPES: Array<{ label: string; value: ChartType }> = [
-  { label: "Bar Chart", value: "bar" },
-  { label: "Horizontal Bar", value: "horizontal_bar" },
-  { label: "Stacked Bar", value: "stacked_bar" },
-  { label: "Horizontal Stack Bar", value: "horizontal_stacked_bar" },
-  { label: "Line Chart", value: "line" },
-  { label: "Area Chart", value: "area" },
-  { label: "Pie Chart", value: "pie" },
-  { label: "Donut Chart", value: "donut" },
-  { label: "Scatter Chart", value: "scatter" },
-  { label: "Radar Chart", value: "radar" },
-  { label: "Polar Area", value: "polar_area" },
+  { label: "柱状图", value: "bar" },
+  { label: "横向条形图", value: "horizontal_bar" },
+  { label: "堆叠柱状图", value: "stacked_bar" },
+  { label: "横向堆叠条形图", value: "horizontal_stacked_bar" },
+  { label: "折线图", value: "line" },
+  { label: "面积图", value: "area" },
+  { label: "饼图", value: "pie" },
+  { label: "环形图", value: "donut" },
+  { label: "散点图", value: "scatter" },
+  { label: "雷达图", value: "radar" },
+  { label: "极坐标面积图", value: "polar_area" },
 ];
 const DATA_LABEL_TABS: Array<{
   label: string;
   value: DataLabelPosition;
 }> = [
-  { label: "Base", value: "base" },
-  { label: "Middle", value: "mid" },
-  { label: "Top", value: "top" },
-  { label: "Outside", value: "outside" },
+  { label: "底部", value: "base" },
+  { label: "中间", value: "mid" },
+  { label: "顶部", value: "top" },
+  { label: "外侧", value: "outside" },
 ];
 const DATA_MODAL_CHART_PREVIEW_WIDTH = 215;
 const DATA_MODAL_CHART_PREVIEW_HEIGHT = 180;
@@ -100,7 +100,7 @@ export function ChartEditorContent({
           {onClose ? (
             <button
               type="button"
-              aria-label="Close chart editor"
+              aria-label="关闭图表编辑器"
               className="grid h-8 w-8 place-items-center rounded-full text-[#191919] transition hover:bg-[#F5F5F7]"
               onClick={onClose}
             >
@@ -179,7 +179,7 @@ function ChartTypeSelect({
     <div className="relative">
       <BarChart3 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#191919]" />
       <select
-        aria-label="Chart type"
+        aria-label="图表类型"
         className={`${compact ? "h-9 rounded-lg pl-10 pr-9 text-[12px]" : "h-12 rounded-xl pl-11 pr-10 text-[13px]"} w-full appearance-none border border-[#E6E6EA] bg-white font-medium text-[#191919] outline-none transition focus:border-[#7C51F8]`}
         value={value}
         onChange={(event) => onChange(event.target.value as ChartType)}
@@ -226,16 +226,16 @@ function DataLabelsControl({
   return (
     <div className="space-y-2">
       <div className="flex min-h-6 items-center justify-between gap-3 text-[12px] font-medium text-[#191919]">
-        <span>Data labels</span>
+        <span>数据标签</span>
         <CompactSwitch
           checked={enabled}
-          label="Data labels"
+          label="数据标签"
           onChange={setEnabled}
         />
       </div>
       <div
         role="tablist"
-        aria-label="Data label position"
+        aria-label="数据标签位置"
         className={`grid grid-cols-4 rounded-lg bg-[#F3F4F7] p-1 transition ${enabled ? "" : "opacity-55"}`}
       >
         {DATA_LABEL_TABS.map((item) => {
@@ -370,16 +370,16 @@ function ChartCustomizePanel({
         compact={compact}
         defaultOpen={defaultTextOpen}
         icon={<Type size={17} />}
-        label="Text"
+        label="文本"
       >
         <TextField
-          label="Title"
-          placeholder="Chart title"
+          label="标题"
+          placeholder="图表标题"
           value={chart.title ?? ""}
           onChange={(title) => onChange({ ...chart, title: title || null })}
         />
         <ColorRow
-          label="Title color"
+          label="标题颜色"
           value={chart.title_color ?? "344054"}
           onChange={(titleColor) =>
             onChange({ ...chart, title_color: titleColor })
@@ -398,16 +398,16 @@ function ChartCustomizePanel({
           <AccordionSection
             compact={compact}
             icon={<BarChart3 size={17} />}
-            label="X Axis"
+            label="X 轴"
           >
             <ToggleRow
               checked={chart.x_axis ?? true}
-              label="Show axis"
+              label="显示坐标轴"
               onChange={(xAxis) => onChange({ ...chart, x_axis: xAxis })}
             />
             <TextField
-              label="Title"
-              placeholder="X-axis title"
+              label="标题"
+              placeholder="X 轴标题"
               value={chart.x_axis_title ?? ""}
               onChange={(xAxisTitle) =>
                 onChange({ ...chart, x_axis_title: xAxisTitle || null })
@@ -415,7 +415,7 @@ function ChartCustomizePanel({
             />
             <ToggleRow
               checked={chart.x_axis_grid ?? true}
-              label="Show grid"
+              label="显示网格"
               onChange={(xAxisGrid) =>
                 onChange({ ...chart, x_axis_grid: xAxisGrid })
               }
@@ -424,16 +424,16 @@ function ChartCustomizePanel({
           <AccordionSection
             compact={compact}
             icon={<BarChart3 size={17} />}
-            label="Y Axis"
+            label="Y 轴"
           >
             <ToggleRow
               checked={chart.y_axis ?? true}
-              label="Show axis"
+              label="显示坐标轴"
               onChange={(yAxis) => onChange({ ...chart, y_axis: yAxis })}
             />
             <TextField
-              label="Title"
-              placeholder="Y-axis title"
+              label="标题"
+              placeholder="Y 轴标题"
               value={chart.y_axis_title ?? ""}
               onChange={(yAxisTitle) =>
                 onChange({ ...chart, y_axis_title: yAxisTitle || null })
@@ -441,7 +441,7 @@ function ChartCustomizePanel({
             />
             <ToggleRow
               checked={chart.y_axis_grid ?? true}
-              label="Show grid"
+              label="显示网格"
               onChange={(yAxisGrid) =>
                 onChange({ ...chart, y_axis_grid: yAxisGrid })
               }
@@ -455,16 +455,16 @@ function ChartCustomizePanel({
           <AccordionSection
             compact={compact}
             icon={<BarChart3 size={17} />}
-            label="X Axis"
+            label="X 轴"
           >
             <ToggleRow
               checked={chart.x_axis ?? true}
-              label="Category labels"
+              label="分类标签"
               onChange={(xAxis) => onChange({ ...chart, x_axis: xAxis })}
             />
             <ToggleRow
               checked={chart.x_axis_grid ?? true}
-              label="Spokes"
+              label="辐射轴"
               onChange={(xAxisGrid) =>
                 onChange({ ...chart, x_axis_grid: xAxisGrid })
               }
@@ -473,16 +473,16 @@ function ChartCustomizePanel({
           <AccordionSection
             compact={compact}
             icon={<BarChart3 size={17} />}
-            label="Y Axis"
+            label="Y 轴"
           >
             <ToggleRow
               checked={chart.y_axis ?? true}
-              label="Value labels"
+              label="数值标签"
               onChange={(yAxis) => onChange({ ...chart, y_axis: yAxis })}
             />
             <ToggleRow
               checked={chart.y_axis_grid ?? true}
-              label="Rings"
+              label="环形网格"
               onChange={(yAxisGrid) =>
                 onChange({ ...chart, y_axis_grid: yAxisGrid })
               }
@@ -494,16 +494,16 @@ function ChartCustomizePanel({
       <AccordionSection
         compact={compact}
         icon={<Settings size={17} />}
-        label="Settings"
+        label="设置"
       >
         <ToggleRow
           checked={showLegend}
-          label="Show legend"
+          label="显示图例"
           onChange={(legend) => onChange({ ...chart, legend })}
         />
         {showLegend ? (
           <ColorRow
-            label="Legend color"
+            label="图例颜色"
             value={chart.legend_color ?? "475467"}
             onChange={(legendColor) =>
               onChange({ ...chart, legend_color: legendColor })
@@ -514,14 +514,14 @@ function ChartCustomizePanel({
         {hasAxes ? (
           <>
             <ColorRow
-              label="Axis color"
+              label="坐标轴颜色"
               value={chart.axis_color ?? "9AA7BD"}
               onChange={(axisColor) =>
                 onChange({ ...chart, axis_color: axisColor })
               }
             />
             <ColorRow
-              label="Grid color"
+              label="网格颜色"
               value={chart.grid_color ?? chart.axis_color ?? "D0D5DD"}
               onChange={(gridColor) =>
                 onChange({ ...chart, grid_color: gridColor })
@@ -568,7 +568,7 @@ function ChartSeriesColorControls({
           <button
             type="button"
             key={`${target.mode}-${target.index}`}
-            aria-label={`Change chart color ${target.index + 1}`}
+            aria-label={`更改第 ${target.index + 1} 个图表颜色`}
             className={`grid h-8 w-8 place-items-center rounded-full border bg-white p-1 transition ${paletteAnchor?.index === target.index
               ? "border-[#7C51F8] ring-2 ring-[#E9E2FF]"
               : "border-[#E6E6EA] hover:border-[#B8A3F8]"
@@ -580,7 +580,7 @@ function ChartSeriesColorControls({
                 swatchRefs.current.delete(target.index);
               }
             }}
-            title={`Chart color ${target.index + 1}`}
+            title={`第 ${target.index + 1} 个图表颜色`}
             onClick={() =>
               setPaletteAnchor((current) => {
                 if (current?.index === target.index) return null;
@@ -601,9 +601,9 @@ function ChartSeriesColorControls({
         {targets.length < 12 ? (
           <button
             type="button"
-            aria-label="Add chart color"
+            aria-label="添加图表颜色"
             className="grid h-8 w-8 place-items-center rounded-full border border-dashed border-[#B8A3F8] bg-white text-[#7C51F8] transition hover:bg-[#F7F3FF]"
-            title="Add chart color"
+            title="添加图表颜色"
             onClick={() => onChange(appendChartColorTarget(chart))}
           >
             <Plus size={15} strokeWidth={2.2} />
@@ -1034,7 +1034,7 @@ function ChartDataModal({
         </div>
         <button
           type="button"
-          aria-label="Close data editor"
+          aria-label="关闭数据编辑器"
           className="absolute -right-14 top-0 grid h-11 w-11 place-items-center rounded-full bg-white text-[#191919] shadow-sm transition hover:bg-[#F7F7FA]"
           onClick={onClose}
         >
@@ -1269,7 +1269,7 @@ function EditableDataTable({
           />
           <button
             type="button"
-            aria-label="Delete selected series"
+            aria-label="删除所选数据系列"
             className="grid h-7 w-7 shrink-0 place-items-center border-l border-[#ECECF1] text-[#191919] disabled:cursor-not-allowed disabled:opacity-30"
             disabled={safeSeries.length <= 1}
             onClick={() => deleteSeries(selectedSeriesIndex)}
@@ -1279,7 +1279,7 @@ function EditableDataTable({
           <button
             type="button"
             aria-expanded={columnMenuOpen}
-            aria-label="More column actions"
+            aria-label="更多列操作"
             className="grid h-7 w-5 shrink-0 place-items-center text-[#191919]"
             onClick={() => setColumnMenuOpen((current) => !current)}
           >
@@ -1295,7 +1295,7 @@ function EditableDataTable({
         >
           <ColumnMenuItem
             icon={<Trash2 size={16} />}
-            label="Delete Row"
+            label="删除行"
             disabled={safeCategories.length <= 1}
             onClick={() => {
               deleteRow(selectedRowIndex);
@@ -1304,13 +1304,13 @@ function EditableDataTable({
           />
           <ColumnMenuItem
             icon={<Trash2 size={16} />}
-            label="Delete Column"
+            label="删除列"
             disabled={safeSeries.length <= 1}
             onClick={() => deleteSeries(selectedSeriesIndex)}
           />
           <ColumnMenuItem
             icon={<Plus size={16} />}
-            label="Add Row"
+            label="添加行"
             onClick={() => {
               addRow();
               setColumnMenuOpen(false);
@@ -1318,7 +1318,7 @@ function EditableDataTable({
           />
           <ColumnMenuItem
             icon={<Plus size={16} />}
-            label="Add Column"
+            label="添加列"
             disabled={!allowMultipleSeries}
             onClick={() => {
               addSeries();
@@ -1328,13 +1328,13 @@ function EditableDataTable({
           <div className="my-2 h-px bg-[#ECECF1]" />
           <ColumnMenuItem
             icon={<ChevronRight size={16} />}
-            label="Move Column Right"
+            label="右移列"
             disabled={selectedSeriesIndex >= safeSeries.length - 1}
             onClick={() => moveSeries(selectedSeriesIndex, 1)}
           />
           <ColumnMenuItem
             icon={<ChevronLeft size={16} />}
-            label="Move Column Left"
+            label="左移列"
             disabled={selectedSeriesIndex <= 0}
             onClick={() => moveSeries(selectedSeriesIndex, -1)}
           />
@@ -1476,7 +1476,7 @@ function EditableDataTable({
                 <div className="sticky right-0 grid place-items-center border-b border-[#E8E8EC] bg-[#F3F4F6] px-1">
                   <button
                     type="button"
-                    aria-label={`Delete ${category || `row ${rowIndex + 1}`}`}
+                    aria-label={`删除${category || `第 ${rowIndex + 1} 行`}`}
                     className="grid h-7 w-7 place-items-center rounded-md text-[#8E8E98] transition hover:bg-white hover:text-[#191919] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#8E8E98]"
                     disabled={safeCategories.length <= 1}
                     onClick={() => deleteRow(rowIndex)}

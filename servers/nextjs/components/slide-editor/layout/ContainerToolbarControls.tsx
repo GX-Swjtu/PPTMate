@@ -221,7 +221,7 @@ export function TemplateV2ContainerToolbarControls({
     <>
       <div className="relative">
         <ContainerControlButton
-          title="Fill"
+          title="填充"
           open={openPanel === "fill"}
           onClick={() => onToggle("fill")}
           className="w-7 px-0"
@@ -235,12 +235,12 @@ export function TemplateV2ContainerToolbarControls({
         {openPanel === "fill" ? (
           <Panel className="flex w-[250px] flex-col items-start gap-[14px] rounded-[12px] border border-[#E8E9EE] p-3 font-manrope text-[12px] font-medium leading-6 text-[#191919] shadow-[0_8px_24px_rgba(16,24,40,0.12)]">
             <ColorField
-              label="Color"
+              label="颜色"
               color={fillColor}
               onCommit={(color) => onChange({ fill: { ...fill, color } })}
             />
             <NumberField
-              label="Opacity"
+              label="不透明度"
               value={readNumber(fill.opacity, 1)}
               min={0}
               max={1}
@@ -253,7 +253,7 @@ export function TemplateV2ContainerToolbarControls({
 
       <div className="relative">
         <ContainerControlButton
-          title="Stroke"
+          title="描边"
           open={openPanel === "stroke"}
           onClick={() => onToggle("stroke")}
           className="w-7 px-0"
@@ -263,12 +263,12 @@ export function TemplateV2ContainerToolbarControls({
         {openPanel === "stroke" ? (
           <Panel className="flex w-[250px] flex-col items-start gap-[14px] rounded-[12px] border border-[#E8E9EE] p-3 font-manrope text-[12px] font-medium leading-6 text-[#191919] shadow-[0_8px_24px_rgba(16,24,40,0.12)]">
             <ColorField
-              label="Color"
+              label="颜色"
               color={strokeColor}
               onCommit={(color) => onChange({ stroke: { ...stroke, color } })}
             />
             <NumberField
-              label="Width"
+              label="宽度"
               value={readNumber(stroke.width)}
               min={0}
               max={32}
@@ -277,7 +277,7 @@ export function TemplateV2ContainerToolbarControls({
               onCommit={(width) => onChange({ stroke: { ...stroke, width } })}
             />
             <NumberField
-              label="Opacity"
+              label="不透明度"
               value={readNumber(stroke.opacity, 1)}
               min={0}
               max={1}
@@ -290,7 +290,7 @@ export function TemplateV2ContainerToolbarControls({
 
       <div className="relative">
         <ContainerControlButton
-          title="Corner Radius"
+          title="圆角"
           open={openPanel === "radius"}
           onClick={() => onToggle("radius")}
           className="w-7 px-0"
@@ -310,7 +310,7 @@ export function TemplateV2ContainerToolbarControls({
               />
             </div>
             <CompactNumberInput
-              label="Radius"
+              label="半径"
               marker="R"
               value={radius}
               min={0}
@@ -349,7 +349,7 @@ export function TemplateV2ContainerToolbarControls({
 
       <div className="relative">
         <ContainerControlButton
-          title="Shadow"
+          title="阴影"
           open={openPanel === "shadow"}
           onClick={() => onToggle("shadow")}
           className="px-3"
@@ -359,7 +359,7 @@ export function TemplateV2ContainerToolbarControls({
         {openPanel === "shadow" ? (
           <Panel className="flex w-[320px] flex-col items-start gap-[14px] rounded-[12px] border border-[#E8E9EE] p-3 font-manrope text-[12px] font-medium leading-6 text-[#191919] shadow-[0_8px_24px_rgba(16,24,40,0.12)]">
             <CompactNumberInput
-              label="Position"
+              label="位置"
               marker="X"
               value={readNumber(shadow.offset_x)}
               step={0.5}
@@ -374,7 +374,7 @@ export function TemplateV2ContainerToolbarControls({
               }
             />
             <CompactNumberInput
-              label="Position"
+              label="位置"
               marker="Y"
               value={readNumber(shadow.offset_y)}
               step={0.5}
@@ -389,7 +389,7 @@ export function TemplateV2ContainerToolbarControls({
               }
             />
             <CompactNumberInput
-              label="Blur"
+              label="模糊"
               marker="X"
               min={0}
               max={100}
@@ -398,12 +398,12 @@ export function TemplateV2ContainerToolbarControls({
               onCommit={(blur) => onChange({ shadow: { ...shadow, blur } })}
             />
             <ColorField
-              label="Color"
+              label="颜色"
               color={readColor(shadow.color, "#4A6FF3")}
               onCommit={(color) => onChange({ shadow: { ...shadow, color } })}
             />
             <NumberField
-              label="Opacity"
+              label="不透明度"
               value={clampNumber(readNumber(shadow.opacity, 0.24), 0, 1) * 100}
               min={0}
               max={100}
@@ -424,7 +424,7 @@ export function TemplateV2ContainerToolbarControls({
 
       <div className="relative">
         <ContainerControlButton
-          title="Layout Settings"
+          title="版式设置"
           open={openPanel === "padding"}
           onClick={() => onToggle("padding")}
           className="w-7 px-0"
@@ -473,7 +473,7 @@ export function TemplateV2ContainerToolbarControls({
               </div>
             </div>
             <CompactNumberInput
-              label="Position"
+              label="位置"
               marker="X"
               min={0}
               value={paddingX}
@@ -481,7 +481,7 @@ export function TemplateV2ContainerToolbarControls({
               onCommit={updatePaddingX}
             />
             <CompactNumberInput
-              label="Position"
+              label="位置"
               marker="Y"
               min={0}
               value={paddingY}

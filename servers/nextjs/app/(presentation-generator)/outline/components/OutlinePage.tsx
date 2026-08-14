@@ -156,7 +156,7 @@ const OutlinePage: React.FC = () => {
   const outlineStreamFinished =
     !isTemplateStage &&
     !outlineControlsBusy &&
-    (outlines.length > 0 || streamState.statusMessage === "Outline ready");
+    (outlines.length > 0 || streamState.statusMessage === "大纲已就绪");
 
   useEffect(() => {
     if (queryPresentationId && queryPresentationId !== storedPresentationId) {
@@ -226,7 +226,7 @@ const OutlinePage: React.FC = () => {
     }
 
     if (!hasSelectedTemplate) {
-      toast.error("Please select a template first");
+      toast.error("请先选择模板");
       return;
     }
 
@@ -235,17 +235,17 @@ const OutlinePage: React.FC = () => {
     }
 
     if (!draftConfig.language) {
-      toast.error("Please select language");
+      toast.error("请选择语言");
       return;
     }
 
     if (documentPaths.length > 0 && draftConfig.language === LanguageType.Auto) {
-      toast.error("Please choose a language before regenerating from documents");
+      toast.error("从文档重新生成前请选择语言");
       return;
     }
 
     if (!draftConfig.prompt.trim() && documentPaths.length === 0) {
-      toast.error("No Prompt or Document Provided");
+      toast.error("请提供生成要求或文档");
       return;
     }
 
@@ -298,11 +298,11 @@ const OutlinePage: React.FC = () => {
           "Failed to regenerate outline"
         ),
       });
-      toast.error("Outline Error", {
+      toast.error("大纲生成失败", {
         description:
           error instanceof Error
             ? error.message
-            : "Failed to regenerate outline.",
+            : "无法重新生成大纲。",
       });
     } finally {
       setIsRegeneratingOutline(false);
@@ -360,7 +360,7 @@ const OutlinePage: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#FEFEFF]">
         <OutlineStandardHeader
-          title="Outline Generation"
+          title="大纲生成"
           onBack={() => router.push("/dashboard")}
         />
         <EmptyStateView />
@@ -383,7 +383,7 @@ const OutlinePage: React.FC = () => {
       />
 
       <OutlineStandardHeader
-        title={isTemplateStage ? "Select Template" : "Outline Generation"}
+        title={isTemplateStage ? "选择模板" : "大纲生成"}
         onBack={() => {
           if (isTemplateStage) {
             router.push("/dashboard");
@@ -438,7 +438,7 @@ const OutlinePage: React.FC = () => {
             <aside className="mx-auto mb-28 mt-8 flex h-[600px] w-[calc(100%-2.5rem)] overflow-hidden border border-[#EDEEEF] bg-[#FEFEFF] sm:w-[calc(100%-5rem)] lg:fixed lg:bottom-0 lg:right-0 lg:top-[68px] lg:z-40 lg:mx-0 lg:mb-0 lg:mt-0 lg:h-auto lg:w-[369px] lg:border-0">
               <nav
                 className="flex w-[70px] shrink-0 flex-col items-center gap-5 px-1.5 py-2"
-                aria-label="Outline tools"
+                aria-label="大纲工具"
               >
                 <div className="flex w-full flex-col items-center rounded-[10px] bg-[#F4F3FF]/60 py-7">
                   <div className="flex rounded-[10px] border border-[#EDEEEF] bg-white p-1.5 shadow-[0_6.6px_6.6px_rgba(124,81,248,0.14)]">

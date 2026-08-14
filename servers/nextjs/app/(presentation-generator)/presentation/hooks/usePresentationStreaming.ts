@@ -165,7 +165,7 @@ export const usePresentationStreaming = (
       dispatch(setStreaming(false));
       setError(true);
       if (options.showToast !== false) {
-        notify.error("Presentation streaming failed", description);
+        notify.error("演示文稿生成中断", description);
       }
     };
 
@@ -281,7 +281,7 @@ export const usePresentationStreaming = (
           data = JSON.parse(event.data);
         } catch {
           if (!scheduleRetry("invalid SSE payload")) {
-            finalizeFailure("Failed to parse stream response.");
+            finalizeFailure("无法解析演示文稿生成响应。");
           }
           return;
         }
@@ -314,7 +314,7 @@ export const usePresentationStreaming = (
                     index: slideIndex,
                     layout: "smart-html",
                     layout_group: "smart-html",
-                    content: { title: `Slide ${slideIndex + 1}` },
+                    content: { title: `第 ${slideIndex + 1} 张幻灯片` },
                     html_content: html,
                   };
             const normalizedSlide = normalizeBackendAssetUrls(incomingSlide);
@@ -429,7 +429,7 @@ export const usePresentationStreaming = (
                   continue;
                 }
                 shownAssetWarnings.add(detail);
-                notify.warning("Some images could not be generated", detail, {
+                notify.warning("部分图片生成失败", detail, {
                   duration: 12_000,
                 });
               }
@@ -461,7 +461,7 @@ export const usePresentationStreaming = (
               window.history.replaceState({}, "", newUrl.toString());
             } catch {
               if (!scheduleRetry("failed to parse complete payload")) {
-                finalizeFailure("Failed to parse final presentation payload.");
+                finalizeFailure("无法解析最终演示文稿数据。");
               }
             }
             accumulatedChunks = "";
@@ -497,7 +497,7 @@ export const usePresentationStreaming = (
               });
               finalizeFailure(
                 data.detail ||
-                  "Your ChatGPT session expired. Please sign in again from Settings.",
+                  "ChatGPT 会话已过期，请重新登录。",
                 { showToast: false }
               );
               break;
@@ -509,7 +509,7 @@ export const usePresentationStreaming = (
             ) {
               finalizeFailure(
                 data.detail ||
-                  "Failed to connect to the server. Please try again."
+                  "无法连接服务器，请重试。"
               );
             }
             break;
@@ -519,7 +519,7 @@ export const usePresentationStreaming = (
       eventSource.onerror = (error) => {
         console.error("EventSource failed:", error);
         if (!scheduleRetry("connection lost")) {
-          finalizeFailure("Failed to connect to the server. Please try again.");
+          finalizeFailure("无法连接服务器，请重试。");
         }
       };
     };

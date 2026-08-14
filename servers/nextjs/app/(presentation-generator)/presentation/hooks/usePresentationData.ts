@@ -26,8 +26,8 @@ export const usePresentationData = (
 
       if (data?.version === "v1-standard") {
         notify.warning(
-          "Unsupported presentation",
-          "This deck was created in an older Presenton version. Downgrade to a compatible version to open it."
+          "不支持此演示文稿",
+          "此演示文稿由较旧版本的 PPTMate 创建，请使用兼容版本打开。"
         );
         setLoading(false);
         router.replace("/dashboard");
@@ -54,7 +54,7 @@ export const usePresentationData = (
       return normalizedData;
     } catch (error) {
       setError(true);
-      notify.error("Failed to load presentation", "The presentation could not be loaded. Please try again.");
+      notify.error("演示文稿加载失败", "无法加载演示文稿，请重试。");
       console.error("Error fetching user slides:", error);
       setLoading(false);
       return undefined;

@@ -246,7 +246,7 @@ export default function SmartHtmlSlide({
   html,
   fonts,
   fixedSize = false,
-  title = "Smart presentation slide",
+  title = "智能演示幻灯片",
   executeScripts = true,
 }: {
   html: string;

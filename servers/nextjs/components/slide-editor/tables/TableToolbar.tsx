@@ -231,8 +231,8 @@ export function TableToolbarControls({
     <div ref={toolbarRef} style={tableControlsStyle}>
       <button
         type="button"
-        aria-label="Cell background color"
-        title="Cell background"
+        aria-label="单元格背景颜色"
+        title="单元格背景"
         style={iconButtonStyle}
         onClick={() => colorInputRef.current?.click()}
       >
@@ -256,8 +256,8 @@ export function TableToolbarControls({
       <Divider />
       <button
         type="button"
-        aria-label="Table alignment"
-        title={`Align ${nextAlignmentLabel(activeCellAlignment)}`}
+        aria-label="表格对齐"
+        title={`对齐方式：${nextAlignmentLabel(activeCellAlignment)}`}
         style={iconButtonStyle}
         onClick={cycleActiveCellAlignment}
       >
@@ -266,8 +266,8 @@ export function TableToolbarControls({
       <Divider />
       <button
         type="button"
-        aria-label="Delete row"
-        title="Delete row"
+        aria-label="删除行"
+        title="删除行"
         disabled={!canDeleteRow}
         style={{
           ...iconButtonStyle,
@@ -281,9 +281,9 @@ export function TableToolbarControls({
       <Divider />
       <button
         type="button"
-        aria-label="Table cell actions"
+        aria-label="表格单元格操作"
         aria-expanded={tableMenuOpen}
-        title="Table cell actions"
+        title="表格单元格操作"
         style={{
           ...iconButtonStyle,
           ...(tableMenuOpen ? activeButtonStyle : null),
@@ -389,38 +389,38 @@ function TableToolbarMenu({
       <MenuItem
         disabled={!canDeleteRow}
         icon={<Rows3 size={20} strokeWidth={2.2} />}
-        label="Delete Row"
+        label="删除行"
         onClick={onDeleteRow}
       />
       <MenuItem
         disabled={!canDeleteColumn}
         icon={<Columns3 size={20} strokeWidth={2.2} />}
-        label="Delete Column"
+        label="删除列"
         onClick={onDeleteColumn}
       />
       <MenuItem
         disabled={!canAddRow}
         icon={<Plus size={20} strokeWidth={2.4} />}
-        label="Add Row"
+        label="添加行"
         onClick={onAddRow}
       />
       <MenuItem
         disabled={!canAddColumn}
         icon={<Plus size={20} strokeWidth={2.4} />}
-        label="Add Column"
+        label="添加列"
         onClick={onAddColumn}
       />
       <div style={menuDividerStyle} />
       <MenuItem
         disabled={!canMoveColumnRight}
         icon={<ChevronRight size={20} strokeWidth={2.4} />}
-        label="Move Column Right"
+        label="右移列"
         onClick={onMoveColumnRight}
       />
       <MenuItem
         disabled={!canMoveColumnLeft}
         icon={<ChevronLeft size={20} strokeWidth={2.4} />}
-        label="Move Column Left"
+        label="左移列"
         onClick={onMoveColumnLeft}
       />
     </FloatingToolbarPanel>

@@ -29,12 +29,12 @@ const ICON_WEIGHT_PATTERN = ICON_WEIGHTS.join("|");
 const ICON_SEARCH_DEBOUNCE_MS = 500;
 
 const ICON_WEIGHT_LABELS: Record<IconWeight, string> = {
-  thin: "Thin",
-  light: "Light",
-  regular: "Regular",
-  bold: "Bold",
-  fill: "Fill",
-  duotone: "Duotone",
+  thin: "纤细",
+  light: "细体",
+  regular: "常规",
+  bold: "粗体",
+  fill: "填充",
+  duotone: "双色",
 };
 
 const normalizeIconWeight = (weight?: string | null): IconWeight => {
@@ -191,10 +191,10 @@ const IconsEditor = ({
         if (requestIdRef.current === requestId) {
           console.error("Error fetching icons:", error);
           notify.error(
-            "Could not load icons",
+            "无法加载图标",
             error instanceof Error
               ? error.message
-              : "Failed to fetch icons. Please try again."
+              : "获取图标失败，请重试。"
           );
           setIcons([]);
         }
@@ -230,7 +230,7 @@ const IconsEditor = ({
     );
 
     if (!replacementIcon) {
-      notify.warning("Icon required", "Select an icon before replacing.");
+      notify.warning("请选择图标", "请先选择一个图标再进行替换。");
       return;
     }
 
@@ -269,10 +269,10 @@ const IconsEditor = ({
             <header className="flex h-[85px] flex-none items-center border-b border-[#EDEEEF] bg-white px-6 shadow-[0_4px_7px_rgba(0,0,0,0.04)]">
               <div>
                 <DialogPrimitive.Title className="text-[18px] font-normal leading-normal">
-                  Change Icon
+                  更改图标
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Description className="mt-0.5 text-[14px] font-normal tracking-[-0.42px] text-[#808080]">
-                  Find a similar icon and customize its visual weight.
+                  查找相似图标并调整其视觉粗细。
                 </DialogPrimitive.Description>
               </div>
             </header>
@@ -282,7 +282,7 @@ const IconsEditor = ({
                 <div className="flex items-center gap-4 sm:block">
                   <div>
                     <p className="mb-2 text-[12px] font-medium text-[#666]">
-                      Selected icon
+                      已选图标
                     </p>
                     <div className="flex size-[78px] items-center justify-center rounded-[14px] border border-[#E1E1E5] bg-white shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
                       {previewIconSource ? (
@@ -304,12 +304,12 @@ const IconsEditor = ({
                   <div className="min-w-0 flex-1 sm:mt-5">
                     <div className="mb-2.5 flex items-center gap-1.5">
                       <p className="text-[12px] font-medium text-[#666]">
-                        Icon weight
+                        图标粗细
                       </p>
                       <span
                         role="img"
-                        aria-label="Choose the visual weight used for icon search and replacement."
-                        title="Choose the visual weight used for icon search and replacement."
+                        aria-label="选择用于图标搜索和替换的视觉粗细。"
+                        title="选择用于图标搜索和替换的视觉粗细。"
                         className="inline-flex size-4 items-center justify-center text-[#A1A1AA]"
                       >
                         <Info className="size-3" />
@@ -366,14 +366,14 @@ const IconsEditor = ({
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#E1E1E5] pt-4">
                   <div>
                     <p className="text-[12px] font-medium text-[#191919]">
-                      Apply to presentation
+                      应用于演示文稿
                     </p>
                     <p className="mt-0.5 text-[10px] leading-4 text-[#808080]">
-                      Use this weight for every icon.
+                      将此粗细应用于所有图标。
                     </p>
                   </div>
                   <Switch
-                    aria-label="Apply icon weight to entire presentation"
+                    aria-label="将图标粗细应用到整个演示文稿"
                     checked={applyStylesToPresentation}
                     onCheckedChange={setApplyStylesToPresentation}
                     className="h-5 w-9 flex-none data-[state=checked]:bg-[#7C3AED] data-[state=unchecked]:bg-[#DDDEE3]"
@@ -400,13 +400,13 @@ const IconsEditor = ({
                         autoFocus
                         value={searchQuery}
                         onChange={(event) => setSearchQuery(event.target.value)}
-                        placeholder="Search similar icons"
+                        placeholder="搜索相似图标"
                         className="h-full min-w-0 flex-1 bg-transparent text-[14px] font-normal outline-none placeholder:text-[#999]"
                       />
                     </label>
                     <button
                       type="submit"
-                      aria-label="Search icons"
+                      aria-label="搜索图标"
                       disabled={!activeQuery || loading}
                       className="flex w-[104px] items-center justify-center gap-1.5 rounded-[38.4px] bg-[#EDEEEF] px-3 text-[12px] text-[#191919] transition hover:bg-[#E1E1E5] disabled:cursor-not-allowed disabled:text-[#999]"
                     >
@@ -415,7 +415,7 @@ const IconsEditor = ({
                       ) : (
                         <Search className="size-3.5" />
                       )}
-                      Search
+                      搜索
                     </button>
                   </form>
                 </div>
@@ -423,11 +423,11 @@ const IconsEditor = ({
                 <div className="flex min-h-0 flex-1 flex-col px-4 sm:px-5">
                   <div className="mb-2 flex flex-none items-center justify-between">
                     <p className="text-[12px] font-medium text-[#666]">
-                      Similar icons
+                      相似图标
                     </p>
                     {!loading && icons.length > 0 ? (
                       <p className="text-[11px] text-[#999]">
-                        {icons.length} results
+                        {icons.length} 个结果
                       </p>
                     ) : null}
                   </div>
@@ -451,7 +451,7 @@ const IconsEditor = ({
                             <button
                               key={`${iconSrc}-${index}`}
                               type="button"
-                              aria-label={`Select icon ${index + 1}`}
+                              aria-label={`选择第 ${index + 1} 个图标`}
                               aria-pressed={isSelected}
                               onClick={() => setSelectedIconUrl(iconSrc)}
                               className={cn(
@@ -485,10 +485,10 @@ const IconsEditor = ({
                         <div>
                           <Search className="mx-auto mb-3 size-7 text-[#B7B8BE]" />
                           <p className="text-[13px] font-medium text-[#666]">
-                            No icons found
+                            未找到图标
                           </p>
                           <p className="mt-1 text-[12px] text-[#808080]">
-                            Try a different search term.
+                            请尝试其他搜索词。
                           </p>
                         </div>
                       </div>
@@ -499,8 +499,8 @@ const IconsEditor = ({
                 <footer className="mt-3 flex h-[66px] flex-none items-center justify-between gap-3 border-t border-[#EDEEEF] px-4 sm:px-5">
                   <p className="hidden text-[11px] leading-4 text-[#808080] sm:block">
                     {applyStylesToPresentation
-                      ? "The selected weight will be applied to every icon."
-                      : "Only the selected icon will be replaced."}
+                      ? "所选粗细将应用到所有图标。"
+                      : "仅替换所选图标。"}
                   </p>
                   <button
                     type="button"
@@ -512,7 +512,7 @@ const IconsEditor = ({
                     }}
                     className="ml-auto flex h-10 items-center justify-center gap-1.5 rounded-full px-5 text-[13px] font-semibold text-[#101323] shadow-none transition hover:brightness-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    Replace icon
+                    替换图标
                     <ChevronRight className="size-4" aria-hidden="true" />
                   </button>
                 </footer>
@@ -521,7 +521,7 @@ const IconsEditor = ({
           </div>
 
           <DialogPrimitive.Close
-            aria-label="Close icon editor"
+            aria-label="关闭图标编辑器"
             className="absolute right-3 top-3 flex size-11 items-center justify-center rounded-full bg-white text-[#191919] shadow-sm transition hover:bg-[#F6F6F9] sm:-right-[68px] sm:top-0 sm:size-[52px]"
           >
             <X className="size-5" strokeWidth={1.5} aria-hidden="true" />

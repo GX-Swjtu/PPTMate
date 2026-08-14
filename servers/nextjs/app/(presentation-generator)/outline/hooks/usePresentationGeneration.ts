@@ -36,24 +36,24 @@ export const usePresentationGeneration = (
     (currentOutlines: { content: string }[] | null) => {
       if (!currentOutlines || currentOutlines.length === 0) {
         notify.warning(
-          "Outlines not ready",
-          "Please wait for your outlines to finish generating before continuing."
+          "大纲尚未就绪",
+          "请等待大纲生成完成后再继续。"
         );
         return false;
       }
 
       if (!selectedTemplateId) {
         notify.warning(
-          "Template not selected",
-          "Choose a template before generating your presentation."
+          "尚未选择模板",
+          "生成演示文稿前请选择模板。"
         );
         return false;
       }
 
       if (currentOutlines.length > MAX_NUMBER_OF_SLIDES) {
         notify.warning(
-          "Slide limit reached",
-          `Use ${MAX_NUMBER_OF_SLIDES} or fewer outline slides before generating.`
+          "已达到幻灯片数量上限",
+          `生成前请将大纲控制在 ${MAX_NUMBER_OF_SLIDES} 张以内。`
         );
         return false;
       }
@@ -97,7 +97,7 @@ export const usePresentationGeneration = (
     });
 
     setLoadingState({
-      message: "Generating presentation data...",
+      message: "正在生成演示文稿数据……",
       isLoading: true,
       showProgress: true,
       duration: 30,
@@ -134,8 +134,8 @@ export const usePresentationGeneration = (
         ),
       });
       notify.error(
-        "Generation error",
-        error.message || "Error in presentation generation."
+        "生成失败",
+        error.message || "生成演示文稿时出现问题。"
       );
     } finally {
       setLoadingState(DEFAULT_LOADING_STATE);

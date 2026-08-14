@@ -53,8 +53,8 @@ export function IconToolbar({
       className="inline-flex items-center gap-2 rounded-[6px] bg-white px-[10px] py-[6px] font-syne text-[#191919] shadow-[0_0_4px_rgba(0,0,0,0.15)]"
     >
       <label
-        title="Icon color"
-        aria-label="Icon color"
+        title="图标颜色"
+        aria-label="图标颜色"
         className="relative flex h-8 cursor-pointer items-center gap-2 rounded-[6px] px-2 text-[13px] font-medium hover:bg-[#F6F6F9]"
       >
         <span
@@ -62,9 +62,9 @@ export function IconToolbar({
           className="size-4 rounded-full border border-black/10"
           style={{ backgroundColor: iconColor }}
         />
-        <span>Color</span>
+        <span>颜色</span>
         <DeferredColorInput
-          aria-label="Icon color"
+          aria-label="图标颜色"
           value={iconColor}
           onCommit={(color) => update({ color })}
           className="absolute inset-0 size-full cursor-pointer opacity-0"
@@ -75,13 +75,13 @@ export function IconToolbar({
 
       <button
         type="button"
-        title="Change icon"
-        aria-label="Change icon"
+        title="更换图标"
+        aria-label="更换图标"
         onClick={onEditIcon}
         className="flex h-8 items-center gap-2 rounded-[6px] px-2 text-[13px] font-medium hover:bg-[#F6F6F9]"
       >
         <Replace size={16} strokeWidth={1.7} aria-hidden="true" />
-        <span>Change icon</span>
+        <span>更换图标</span>
       </button>
 
       {componentActions ? (

@@ -27,11 +27,7 @@ const Header = () => {
   const backToTemplates = pathMatches(pathname, "/template-preview");
 
   const backHref = backToUpload ? "/upload" : backToTemplates ? "/templates" : "/dashboard";
-  const backLabel = backToUpload
-    ? "BACK"
-    : backToTemplates
-      ? "BACK"
-      : "BACK";
+  const backLabel = "返回";
 
   return (
     <div className="w-full   sticky top-0 z-50 py-7 "
@@ -45,8 +41,8 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <Link href="/dashboard" onClick={() => trackEvent(MixpanelEvent.Navigation, { from: pathname, to: "/dashboard" })}>
               <img
-                src="/logo-with-bg.png"
-                alt="Presentation logo"
+                src="/pptmate-mark.svg"
+                alt="PPTMate"
                 className="h-[40px] w-[40px]"
               />
             </Link>

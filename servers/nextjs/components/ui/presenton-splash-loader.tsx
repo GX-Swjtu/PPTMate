@@ -11,10 +11,7 @@ interface PresentonSplashLoaderProps {
 export const PRESENTON_SPLASH_MIN_DURATION_MS = 3000;
 
 const SPLASH_ANIMATION_MS = 2600;
-const SPLASH_MASK_SRC = "/Presenton_Splash.png";
-
 let splashSessionStartedAt: number | null = null;
-let splashMaskReadyPromise: Promise<void> | null = null;
 
 function markSplashSessionStart(): number {
   if (splashSessionStartedAt === null) {
@@ -28,48 +25,14 @@ function getSplashAnimationDelayMs(): number {
   return -Math.min(elapsed, SPLASH_ANIMATION_MS);
 }
 
-function ensureSplashMaskReady(): Promise<void> {
-  if (typeof window === "undefined") {
-    return Promise.resolve();
-  }
-
-  if (!splashMaskReadyPromise) {
-    splashMaskReadyPromise = new Promise((resolve) => {
-      const img = new Image();
-      img.decoding = "async";
-      const finish = () => resolve();
-      img.onload = finish;
-      img.onerror = finish;
-      img.src = SPLASH_MASK_SRC;
-      if (img.complete) {
-        finish();
-      }
-    });
-  }
-
-  return splashMaskReadyPromise;
-}
-
 export function PresentonSplashLoader({
-  message = "Preparing your workspace",
+  message = "正在准备工作区",
   className,
 }: PresentonSplashLoaderProps) {
-  const [isWordmarkReady, setIsWordmarkReady] = useState(false);
   const [animationDelayMs, setAnimationDelayMs] = useState(0);
 
   useLayoutEffect(() => {
     setAnimationDelayMs(getSplashAnimationDelayMs());
-
-    let cancelled = false;
-    void ensureSplashMaskReady().then(() => {
-      if (!cancelled) {
-        setIsWordmarkReady(true);
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   const containerStyle: CSSProperties = {
@@ -102,22 +65,8 @@ export function PresentonSplashLoader({
     position: "relative",
     zIndex: 1,
     transform: "translateZ(0)",
-    width: "min(56vw, 511.5px)",
-    aspectRatio: "1023 / 342",
-    visibility: isWordmarkReady ? "visible" : "hidden",
-  };
-
-  const wordmarkLayerStyle: CSSProperties = {
-    position: "absolute",
-    inset: 0,
-    maskImage: `url('${SPLASH_MASK_SRC}')`,
-    maskRepeat: "no-repeat",
-    maskPosition: "center",
-    maskSize: "contain",
-    WebkitMaskImage: `url('${SPLASH_MASK_SRC}')`,
-    WebkitMaskRepeat: "no-repeat",
-    WebkitMaskPosition: "center",
-    WebkitMaskSize: "contain",
+    animation: `presenton-splash-text-reveal ${SPLASH_ANIMATION_MS}ms linear ${animationDelayMs}ms both`,
+    willChange: "clip-path",
   };
 
   return (
@@ -134,27 +83,23 @@ export function PresentonSplashLoader({
         style={surfaceStyle}
       />
       <div
-        className="presenton-splash-wordmark"
+        className="presenton-splash-wordmark presenton-splash-wordmark-reveal flex items-center gap-4 px-6 text-white sm:gap-5"
         aria-hidden="true"
         style={wordmarkStyle}
       >
-        <span
-          className="presenton-splash-wordmark-layer presenton-splash-wordmark-base"
-          style={{
-            ...wordmarkLayerStyle,
-            background: "#7a5af8",
-          }}
+        <img
+          src="/pptmate-mark-reverse.svg"
+          alt=""
+          className="h-16 w-16 shrink-0 sm:h-20 sm:w-20"
         />
-        <span
-          className="presenton-splash-wordmark-layer presenton-splash-wordmark-reveal"
-          style={{
-            ...wordmarkLayerStyle,
-            background: "#ffffff",
-            clipPath: "circle(0 at 50% 50%)",
-            animation: `presenton-splash-text-reveal ${SPLASH_ANIMATION_MS}ms linear ${animationDelayMs}ms both`,
-            willChange: "clip-path",
-          }}
-        />
+        <div className="min-w-0">
+          <p className="font-unbounded text-2xl font-semibold tracking-[-0.04em] sm:text-4xl">
+            PPTMate
+          </p>
+          <p className="mt-1 whitespace-nowrap font-syne text-sm tracking-[0.08em] text-white/85 sm:text-lg">
+            智能演示生产平台
+          </p>
+        </div>
       </div>
     </main>
   );

@@ -109,7 +109,7 @@ export default function AuthGate() {
         trackEvent(MixpanelEvent.Auth_Unauthorized_Redirect, {
           configured: true,
         });
-        notify.error("Unauthorized", "Sign in to view this page.", {
+        notify.error("无权访问", "请登录后查看此页面。", {
           id: "auth-unauthorized-redirect",
           duration: 5000,
         });
@@ -159,8 +159,8 @@ export default function AuthGate() {
         ),
       });
       notify.error(
-        "Could not load login",
-        "We could not connect to the login service. Please refresh and try again."
+        "无法加载登录状态",
+        "无法连接登录服务，请刷新页面后重试。"
       );
     } finally {
       setIsLoading(false);
@@ -350,7 +350,7 @@ export default function AuthGate() {
     status.auth_mode === "oidc" ||
     !hasMetSplashDuration
   ) {
-    return <PresentonSplashLoader message="Preparing your workspace..." />;
+    return <PresentonSplashLoader message="正在准备工作区……" />;
   }
 
   return (
@@ -360,7 +360,7 @@ export default function AuthGate() {
           <div className="flex items-center gap-4">
             <div className="flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-[4px] bg-[#F4F3FF] p-3">
               <Image
-                src="/logo-with-bg.png"
+                src="/pptmate-mark.svg"
                 alt=""
                 width={161}
                 height={166}

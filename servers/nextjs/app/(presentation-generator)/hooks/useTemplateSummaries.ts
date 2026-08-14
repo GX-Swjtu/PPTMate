@@ -106,7 +106,7 @@ export function useTemplateSummaries({
       } catch (error) {
         console.error("Failed to load templates", error);
         if (!cancelled) {
-          toast.error("Failed to load templates");
+          toast.error("模板加载失败");
         }
       } finally {
         if (!cancelled) {

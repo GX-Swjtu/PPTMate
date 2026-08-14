@@ -2,29 +2,29 @@ import type { ChatStreamTrace } from "../../../services/api/chat";
 import type { AssistantActivity } from "./chat-types";
 
 const TOOL_LABELS: Record<string, string> = {
-  addOutline: "Outline adder",
-  updateOutline: "Outline editor",
-  deleteOutline: "Outline remover",
-  addNewSlide: "Blank slide adder",
-  addNewSlideLayout: "Layout slide adder",
-  getAvailableLayouts: "Layout finder",
-  getTemplateSummary: "Template reader",
-  readSourceDocuments: "Source document reader",
-  searchSlide: "Slide search",
-  getSlideAtIndex: "Slide reader",
-  saveSlide: "Slide saver",
-  updateSlide: "Slide updater",
-  deleteSlide: "Slide remover",
-  addElement: "Element adder",
-  updateElement: "Element updater",
-  deleteElement: "Element remover",
-  addComponent: "Component adder",
-  createComponent: "Component creator",
-  updateComponent: "Component updater",
-  deleteComponent: "Component remover",
-  getPresentationTheme: "Theme reader",
-  setPresentationTheme: "Theme applier",
-  generateAssets: "Asset generator",
+  addOutline: "添加大纲",
+  updateOutline: "编辑大纲",
+  deleteOutline: "删除大纲",
+  addNewSlide: "添加空白幻灯片",
+  addNewSlideLayout: "添加版式幻灯片",
+  getAvailableLayouts: "查找版式",
+  getTemplateSummary: "读取模板",
+  readSourceDocuments: "读取来源文档",
+  searchSlide: "搜索幻灯片",
+  getSlideAtIndex: "读取幻灯片",
+  saveSlide: "保存幻灯片",
+  updateSlide: "更新幻灯片",
+  deleteSlide: "删除幻灯片",
+  addElement: "添加元素",
+  updateElement: "更新元素",
+  deleteElement: "删除元素",
+  addComponent: "添加组件",
+  createComponent: "创建组件",
+  updateComponent: "更新组件",
+  deleteComponent: "删除组件",
+  getPresentationTheme: "读取主题",
+  setPresentationTheme: "应用主题",
+  generateAssets: "生成素材",
 };
 
 export const MUTATING_TOOLS = new Set([
@@ -76,30 +76,30 @@ const humanizeTraceMessage = (message: string, tool?: string) => {
 
   const lower = trimmed.toLowerCase();
   const exactMessages: Record<string, string> = {
-    "reading deck context": "Reviewing your presentation context.",
-    "reading the presentation outline": "Reading the presentation outline.",
-    "reading the outline draft": "Reading the outline draft.",
-    "adding an outline slide": "Adding an outline slide.",
-    "updating the outline slide": "Updating the outline slide.",
-    "deleting the outline slide": "Deleting the outline slide.",
-    "reordering outline slides": "Reordering outline slides.",
-    "searching relevant slides": "Searching slides for relevant content.",
-    "opening the requested slide": "Opening the selected slide.",
-    "checking available themes": "Checking available color themes.",
-    "checking available layouts": "Checking available layouts.",
-    "checking the layout schema": "Validating the slide schema.",
-    "generating slide assets": "Generating images and icons.",
-    "saving the slide": "Saving slide updates.",
-    "deleting the slide": "Deleting the slide.",
-    "applying presentation theme": "Applying the selected theme.",
-    "reading template structure": "Reading the template structure.",
-    "reading source documents": "Reading the source documents.",
-    "opening the requested template slide": "Opening the selected template slide.",
-    "searching template content": "Searching template content.",
-    "finding editable elements": "Finding editable elements.",
-    "updating template content": "Updating template content.",
-    "deleting the template component": "Deleting the selected component.",
-    "swapping component variant": "Swapping the component variant.",
+    "reading deck context": "正在查看演示文稿上下文。",
+    "reading the presentation outline": "正在读取演示文稿大纲。",
+    "reading the outline draft": "正在读取大纲草稿。",
+    "adding an outline slide": "正在添加大纲幻灯片。",
+    "updating the outline slide": "正在更新大纲幻灯片。",
+    "deleting the outline slide": "正在删除大纲幻灯片。",
+    "reordering outline slides": "正在调整大纲幻灯片顺序。",
+    "searching relevant slides": "正在搜索相关幻灯片内容。",
+    "opening the requested slide": "正在打开所选幻灯片。",
+    "checking available themes": "正在检查可用配色主题。",
+    "checking available layouts": "正在检查可用版式。",
+    "checking the layout schema": "正在验证幻灯片结构。",
+    "generating slide assets": "正在生成图片和图标。",
+    "saving the slide": "正在保存幻灯片更新。",
+    "deleting the slide": "正在删除幻灯片。",
+    "applying presentation theme": "正在应用所选主题。",
+    "reading template structure": "正在读取模板结构。",
+    "reading source documents": "正在读取来源文档。",
+    "opening the requested template slide": "正在打开所选模板幻灯片。",
+    "searching template content": "正在搜索模板内容。",
+    "finding editable elements": "正在查找可编辑元素。",
+    "updating template content": "正在更新模板内容。",
+    "deleting the template component": "正在删除所选组件。",
+    "swapping component variant": "正在切换组件变体。",
   };
   if (exactMessages[lower]) return exactMessages[lower];
 
@@ -111,13 +111,13 @@ const humanizeTraceMessage = (message: string, tool?: string) => {
       .filter(Boolean)
       .map((entry) => getToolLabel(entry));
     return toolNames.length === 0
-      ? "Planning the next step."
-      : "Choosing the best way to help.";
+      ? "正在规划下一步。"
+      : "正在选择合适的处理方式。";
   }
   if (lower.includes("found requested data")) {
     return tool === "getSlideAtIndex"
-      ? "Found the requested slide details."
-      : "Found the requested information.";
+      ? "已找到所需的幻灯片详情。"
+      : "已找到所需信息。";
   }
   return trimmed;
 };
@@ -168,10 +168,10 @@ const humanActivityForTool = (
   switch (tool) {
     case "searchSlide":
       return isDone
-        ? "Found the relevant content."
-        : "Looking through the content.";
+        ? "已找到相关内容。"
+        : "正在查看内容。";
     case "getSlideAtIndex":
-      return isDone ? "Checked the slide." : "Checking the slide.";
+      return isDone ? "已检查幻灯片。" : "正在检查幻灯片。";
     case "addNewSlide":
     case "addNewSlideLayout":
     case "updateElement":
@@ -181,21 +181,21 @@ const humanActivityForTool = (
     case "createComponent":
     case "updateSlide":
     case "saveSlide":
-      return isDone ? "Applied the change." : "Applying the change.";
+      return isDone ? "已应用更改。" : "正在应用更改。";
     case "deleteComponent":
     case "deleteElement":
     case "deleteSlide":
       return isDone
-        ? "Removed the selected item."
-        : "Removing the selected item.";
+        ? "已移除所选项目。"
+        : "正在移除所选项目。";
     case "generateAssets":
       return isDone
-        ? "Prepared the visual assets."
-        : "Preparing visual assets.";
+        ? "已准备视觉素材。"
+        : "正在准备视觉素材。";
     case "setPresentationTheme":
-      return isDone ? "Updated the theme." : "Updating the theme.";
+      return isDone ? "已更新主题。" : "正在更新主题。";
     default:
-      return isDone ? "Finished that step." : "Working on it.";
+      return isDone ? "已完成此步骤。" : "正在处理。";
   }
 };
 
@@ -238,7 +238,7 @@ export const formatTraceActivity = (
   }
   if (trace.tool && trace.status === "error") {
     return {
-      label: "I could not finish that step.",
+      label: "无法完成此步骤。",
       kind: trace.kind,
       round: trace.round,
       tool: trace.tool,
@@ -247,7 +247,7 @@ export const formatTraceActivity = (
   }
   if (trace.kind === "tool_plan" && Array.isArray(trace.tools) && trace.tools.length) {
     return {
-      label: "Planning the next step.",
+      label: "正在规划下一步。",
       kind: trace.kind,
       round: trace.round,
       state: "info",

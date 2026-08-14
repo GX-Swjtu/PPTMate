@@ -157,12 +157,12 @@ function GapControl({
 
   return (
     <label className="flex  items-center gap-2.5 px-1 text-[14px] font-medium font-manrope text-[#191919]">
-      <span>Gap</span>
+      <span>间距</span>
       <span className="flex gap-2  items-center rounded-md bg-white">
         <input
           type="text"
           inputMode={numericInputMode(numericInputOptions)}
-          aria-label="Gap"
+          aria-label="间距"
           value={formatGapValue(value)}
           onKeyDown={(event) => {
             if (preventInvalidNumberInput(event, numericInputOptions)) return;
@@ -184,8 +184,8 @@ function GapControl({
         <span className="flex   flex-col items-center justify-center">
           <button
             type="button"
-            title="Increase gap"
-            aria-label="Increase gap"
+            title="增大间距"
+            aria-label="增大间距"
             onClick={() => commit(value + 1)}
             className="grid  place-items-center rounded-sm text-[#05070A] hover:bg-[#F8F8FA]"
           >
@@ -193,8 +193,8 @@ function GapControl({
           </button>
           <button
             type="button"
-            title="Decrease gap"
-            aria-label="Decrease gap"
+            title="减小间距"
+            aria-label="减小间距"
             onClick={() => commit(value - 1)}
             className="grid   place-items-center rounded-sm text-[#05070A] hover:bg-[#F8F8FA]"
           >
@@ -230,8 +230,8 @@ function ItemsControl({
     <div className="relative">
       <button
         type="button"
-        title="Items"
-        aria-label="Items"
+        title="项目"
+        aria-label="项目"
         aria-expanded={open}
         onClick={() => onToggle("items")}
         className={cn(
@@ -254,7 +254,7 @@ function ItemsControl({
             )}
           >
             <Plus size={16} strokeWidth={1} aria-hidden />
-            <span>Add Item</span>
+            <span>添加项目</span>
           </button>
           <div className="h-px my-1 bg-[#E7E8EC]" aria-hidden />
           <button
@@ -268,7 +268,7 @@ function ItemsControl({
             )}
           >
             <Trash2 size={16} strokeWidth={1} aria-hidden />
-            <span>Last Item</span>
+            <span>最后一项</span>
             <span className="ml-auto text-[11px] text-[#8A8D96]">
               {children.length}
             </span>
@@ -359,10 +359,10 @@ export function TemplateV2LayoutToolbar({
           <>
             <div
               className="inline-flex h-7 items-center gap-1 rounded-[6px] px-2 hover:bg-[#F6F6F9] cursor-pointer text-[14px] font-manrope font-medium leading-4 text-[#191919]"
-              title="Ungroup"
+              title="取消组合"
               onClick={ungroupAction.onUngroup}
             >
-              <span>Ungroup</span>
+              <span>取消组合</span>
             </div>
             <ToolbarDivider />
           </>

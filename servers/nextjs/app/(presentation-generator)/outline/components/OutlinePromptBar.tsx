@@ -58,15 +58,15 @@ const OutlinePromptBar: React.FC<OutlinePromptBarProps> = ({
               onRegenerate();
             }
           }}
-          placeholder="Describe the presentation you want to generate"
+          placeholder="描述你想生成的演示文稿"
           className="h-[69px] min-h-[69px] resize-none border-0 bg-transparent px-6 py-[23px] pr-16 text-base font-normal leading-[22px] text-[#191919] shadow-none outline-none placeholder:text-[#8C8C8C] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed"
         />
         <button
           type="button"
           onClick={onRegenerate}
           disabled={isRegenerateDisabled}
-          aria-label="Regenerate outline"
-          title="Regenerate outline"
+          aria-label="重新生成大纲"
+          title="重新生成大纲"
           className={cn(
             "absolute right-6 top-1/2 flex h-[21px] w-[26px] -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#191919] transition hover:bg-[#F7F7FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A00FF]/25",
             isRegenerateDisabled && "cursor-not-allowed opacity-70"

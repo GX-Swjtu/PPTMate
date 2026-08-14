@@ -8,7 +8,7 @@ export function TemplatePreviewLoadingState() {
     <div className="flex min-h-screen items-center justify-center bg-[#FAFAFB]">
       <Loader2 className="h-8 w-8 animate-spin text-[#7A5AF8]" />
       <span className="ml-3 text-sm font-medium text-[#696969]">
-        Loading template...
+        正在加载模板...
       </span>
     </div>
   );
@@ -24,12 +24,12 @@ export function TemplatePreviewErrorState({
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#FAFAFB] px-6 text-center">
       <h2 className="mb-3 text-2xl font-semibold text-[#191919]">
-        Error loading template
+        加载模板失败
       </h2>
       <p className="mb-6 max-w-lg text-sm text-[#696969]">{error}</p>
       <Button onClick={onBack} variant="outline">
         <ArrowLeft className="h-4 w-4" />
-        Back to Templates
+        返回模板列表
       </Button>
     </div>
   );
@@ -43,11 +43,11 @@ export function TemplatePreviewNotFoundState({
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#FAFAFB] px-6 text-center">
       <h2 className="mb-6 text-2xl font-semibold text-[#191919]">
-        Template not found
+        未找到模板
       </h2>
       <Button onClick={onBack} variant="outline">
         <ArrowLeft className="h-4 w-4" />
-        Back to Templates
+        返回模板列表
       </Button>
     </div>
   );

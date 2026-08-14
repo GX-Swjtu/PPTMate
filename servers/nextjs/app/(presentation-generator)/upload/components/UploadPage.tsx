@@ -41,6 +41,11 @@ import {
 
 type GenerationMode = "smart" | "standard";
 
+const DEFAULT_LANGUAGE =
+  process.env.NEXT_PUBLIC_PLATFORM_MODE === "true"
+    ? LanguageType.ChineseSimplified
+    : LanguageType.Auto;
+
 const STOCK_IMAGE_PROVIDERS = new Set(["pexels", "pixabay"]);
 const FILE_TYPE_WORD = new Set([".doc", ".docx", ".docm", ".odt", ".rtf"]);
 const FILE_TYPE_PRESENTATION = new Set([".ppt", ".pptx", ".pptm", ".odp"]);
@@ -150,7 +155,7 @@ const UploadPage = () => {
     useState<CommunityPresentation | null>(null);
   const [config, setConfig] = useState<PresentationConfig>({
     slides: null,
-    language: LanguageType.Auto,
+    language: DEFAULT_LANGUAGE,
     prompt: "",
     tone: ToneType.Default,
     verbosity: VerbosityType.Standard,
@@ -186,7 +191,7 @@ const UploadPage = () => {
         .catch((loadError) => {
           if (!active) return;
           notify.error(
-            "Could not select the community design",
+            "无法选择社区设计",
             loadError instanceof Error ? loadError.message : undefined
           );
         });
@@ -334,9 +339,9 @@ const UploadPage = () => {
       return true;
     } catch (error: any) {
       notify.error(
-        "Image provider unavailable",
+        "图片服务不可用",
         error?.message ||
-        `Unable to reach ${selectedProvider} right now. Please check your API key/settings and try again.`
+        `暂时无法连接 ${selectedProvider}，请检查 API 密钥或设置后重试。`
       );
       return false;
     }
@@ -349,13 +354,13 @@ const UploadPage = () => {
   const validateConfiguration = (): boolean => {
     if (!config.language) {
       trackUploadValidationFailure("language_missing");
-      notify.warning("Language required", "Please select a language.");
+      notify.warning("请选择语言", "请选择演示文稿语言。");
       return false;
     }
 
     if (files.length > 0 && config.language === LanguageType.Auto) {
       trackUploadValidationFailure("language_auto_with_documents");
-      notify.warning("Language required", "Please choose a language before processing uploaded documents.");
+      notify.warning("请选择语言", "处理上传文档前，请先选择语言。");
       return false;
     }
 
@@ -366,8 +371,8 @@ const UploadPage = () => {
     ) {
       trackUploadValidationFailure("prompt_or_document_missing");
       notify.warning(
-        "Input required",
-        "Provide a prompt, upload a document, or select a community reference."
+        "请提供生成内容",
+        "请输入要求、上传文档或选择一项社区参考。"
       );
       return false;
     }
@@ -414,10 +419,10 @@ const UploadPage = () => {
   const handleDocumentProcessing = async () => {
     setLoadingState({
       isLoading: true,
-      message: "Processing documents...",
+      message: "正在处理文档……",
       showProgress: true,
       duration: 90,
-      extra_info: files.length > 0 ? "It might take a few minutes for large documents." : "",
+      extra_info: files.length > 0 ? "较大的文档可能需要几分钟。" : "",
     });
 
     let documents = [];
@@ -446,8 +451,8 @@ const UploadPage = () => {
       isLoading: true,
       message:
         generationMode === "smart"
-          ? "Starting Smart presentation..."
-          : "Generating presentation outline...",
+          ? "正在启动智能演示生成……"
+          : "正在生成演示大纲……",
       showProgress: true,
       duration: 40,
       extra_info: "",
@@ -507,8 +512,8 @@ const UploadPage = () => {
       isLoading: true,
       message:
         generationMode === "smart"
-          ? "Starting Smart presentation..."
-          : "Preparing outline generation...",
+          ? "正在启动智能演示生成……"
+          : "正在准备大纲生成……",
       showProgress: true,
       duration: 30,
     });
@@ -571,8 +576,8 @@ const UploadPage = () => {
       showProgress: false,
     });
     notify.error(
-      "Generation failed",
-      error.message || "Something went wrong while starting your presentation."
+      "生成失败",
+      error.message || "启动演示文稿生成时出现问题。"
     );
   };
 
@@ -595,7 +600,7 @@ const UploadPage = () => {
             <div
               className="inline-flex items-center rounded-lg border border-[#EDEEEF] bg-white p-1 font-syne"
               role="tablist"
-              aria-label="Generation mode"
+              aria-label="生成模式"
             >
               {(["smart", "standard"] as GenerationMode[]).map((mode) => (
                 <button
@@ -608,7 +613,7 @@ const UploadPage = () => {
                     generationMode === mode ? "bg-[#F6F6F9]" : "hover:bg-[#FAFAFC]"
                   }`}
                 >
-                  {mode}
+                  {mode === "smart" ? "智能模式" : "标准模式"}
                 </button>
               ))}
             </div>
@@ -626,7 +631,7 @@ const UploadPage = () => {
           variant={generationMode}
           references={
             generationMode === "smart" && communityReference
-              ? [{ id: String(communityReference.id), label: communityReference.title || "Community design" }]
+              ? [{ id: String(communityReference.id), label: communityReference.title || "社区设计" }]
               : []
           }
           onRemoveReference={() =>

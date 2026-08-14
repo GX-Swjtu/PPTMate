@@ -13,7 +13,7 @@ import {
 
 const MAX_STREAM_RETRIES = 3;
 const STREAM_RETRY_DELAY_MS = 1_000;
-const DEFAULT_STATUS_MESSAGE = "Preparing your presentation outline";
+const DEFAULT_STATUS_MESSAGE = "正在准备演示大纲";
 
 export const useOutlineStreaming = (
   presentationId: string | null,
@@ -91,7 +91,7 @@ export const useOutlineStreaming = (
       prevSlidesRef.current = [];
       activeIndexRef.current = -1;
       highestIndexRef.current = -1;
-      setStatusMessage("Reconnecting to outline stream");
+      setStatusMessage("正在重新连接大纲生成服务");
 
       retryTimer = setTimeout(() => {
         if (!isClosed) {
@@ -116,8 +116,8 @@ export const useOutlineStreaming = (
           if (!scheduleRetry("invalid SSE payload")) {
             resetStreamingState();
             notify.error(
-              "Stream parse failed",
-              "Failed to parse outline stream response."
+              "无法解析生成结果",
+              "无法解析大纲生成响应。"
             );
           }
           return;
@@ -182,7 +182,7 @@ export const useOutlineStreaming = (
               setIsLoading(false);
               setActiveSlideIndex(null);
               setHighestActiveIndex(-1);
-              setStatusMessage("Outline ready");
+              setStatusMessage("大纲已就绪");
               prevSlidesRef.current = outlinesData;
               activeIndexRef.current = -1;
               highestIndexRef.current = -1;
@@ -193,14 +193,14 @@ export const useOutlineStreaming = (
             } catch {
               if (!scheduleRetry("failed to parse complete payload")) {
                 resetStreamingState();
-                notify.error("Parse failed", "Failed to parse presentation data.");
+                notify.error("解析失败", "无法解析演示文稿数据。");
               }
             }
             accumulatedChunks = "";
             break;
 
           case "closing":
-            resetStreamingState("Outline ready");
+            resetStreamingState("大纲已就绪");
             isClosed = true;
             closeEventSource();
             clearRetryTimer();
@@ -221,9 +221,9 @@ export const useOutlineStreaming = (
               resetStreamingState();
               closeEventSource();
               notify.error(
-                "Outline streaming failed",
+                "大纲生成失败",
                 data.detail ||
-                  "Failed to connect to the server. Please try again."
+                  "无法连接服务器，请重试。"
               );
             }
             break;
@@ -235,8 +235,8 @@ export const useOutlineStreaming = (
           resetStreamingState();
           closeEventSource();
           notify.error(
-            "Connection failed",
-            "Failed to connect to the server. Please try again."
+            "连接失败",
+            "无法连接服务器，请重试。"
           );
         }
       };

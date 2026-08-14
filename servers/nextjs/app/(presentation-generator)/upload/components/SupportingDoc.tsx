@@ -34,8 +34,8 @@ export default function SupportingDoc({
     const rejected = candidates.length - allowed.length;
     if (rejected > 0) {
       notify.error(
-        "Some files are not supported",
-        "Supported: Word, PowerPoint, spreadsheets, PDF/TXT, and image files.",
+        "部分文件格式不受支持",
+        "支持 Word、PowerPoint、电子表格、PDF/TXT 和图片文件。",
       );
     }
 
@@ -43,14 +43,14 @@ export default function SupportingDoc({
     const limited = next.slice(0, MAX_SUPPORTED_FILES);
     if (next.length > MAX_SUPPORTED_FILES) {
       notify.warning(
-        "Maximum file limit reached",
-        `You can upload up to ${MAX_SUPPORTED_FILES} documents only.`,
+        "已达到文件数量上限",
+        `最多可上传 ${MAX_SUPPORTED_FILES} 个文件。`,
       );
     }
     if (limited.length > files.length) {
       notify.success(
-        "Files selected",
-        `${limited.length - files.length} file(s) have been added.`,
+        "文件已添加",
+        `已添加 ${limited.length - files.length} 个文件。`,
       );
     }
     onFilesChange(limited);
@@ -77,7 +77,7 @@ export default function SupportingDoc({
         <ul
           className="flex flex-wrap items-center gap-2"
           data-testid="file-list"
-          aria-label="Attached files"
+          aria-label="已附加文件"
         >
           {files.map((file, index) => (
             <li
@@ -94,7 +94,7 @@ export default function SupportingDoc({
                 onClick={() =>
                   onFilesChange(files.filter((_, fileIndex) => fileIndex !== index))
                 }
-                aria-label={`Remove ${file.name}`}
+                aria-label={`移除 ${file.name}`}
                 data-testid="remove-file-button"
                 className="rounded-full text-[#777777] hover:bg-[#E6E6E9] hover:text-[#191919]"
               >
@@ -108,7 +108,7 @@ export default function SupportingDoc({
       <div className="flex items-center justify-between gap-3">
         <label className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-full px-2.5 font-manrope text-xs font-medium text-[#4C4C4C] transition hover:bg-[#F6F6F9]">
           <Paperclip className="h-3.5 w-3.5" />
-          <span>{files.length ? `Attach more (${files.length})` : "Attach files"}</span>
+          <span>{files.length ? `继续添加（已选 ${files.length} 个）` : "添加文件"}</span>
           <input
             type="file"
             className="hidden"
@@ -124,7 +124,7 @@ export default function SupportingDoc({
           type="button"
           onClick={onSubmit}
           disabled={disabled}
-          aria-label="Generate presentation"
+          aria-label="生成演示文稿"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7A5AF8] text-white shadow-sm transition hover:bg-[#6938EF] disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ArrowUp className="h-4 w-4" strokeWidth={2} />

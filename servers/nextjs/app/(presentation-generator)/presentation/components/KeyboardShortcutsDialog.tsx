@@ -82,16 +82,15 @@ export function KeyboardShortcutsDialog({
               </span>
               <div>
                 <DialogTitle className="text-[18px] font-semibold leading-6 text-[#101323]">
-                  Keyboard shortcuts
+                  键盘快捷键
                 </DialogTitle>
                 <DialogDescription className="mt-1 text-[13px] leading-5 text-[#667085]">
-                  Work faster while the slide canvas is active. Shortcuts pause
-                  while you are typing in a text field.
+                  在幻灯片画布中使用快捷键提升编辑效率；输入文字时快捷键会暂停响应。
                 </DialogDescription>
               </div>
             </div>
             <div
-              aria-label="Shortcut platform"
+              aria-label="快捷键平台"
               className="inline-flex w-fit shrink-0 rounded-[9px] border border-[#E1E3E9] bg-[#F6F6F9] p-1"
               role="group"
             >
@@ -161,7 +160,7 @@ export function KeyboardShortcutsDialog({
         </div>
 
         <div className="border-t border-[#EAECF0] bg-[#FCFCFD] px-6 py-3 text-center text-[11px] text-[#7A8295]">
-          Showing shortcuts for {applePlatform ? "macOS" : "Windows and Linux"}.
+          当前显示 {applePlatform ? "macOS" : "Windows 和 Linux"} 快捷键。
         </div>
       </DialogContent>
     </Dialog>

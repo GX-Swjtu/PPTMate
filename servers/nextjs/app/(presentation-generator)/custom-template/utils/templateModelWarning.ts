@@ -72,14 +72,14 @@ export function showTemplateV2ModelWarningIfNeeded(config: LLMConfig) {
     if (isSotaTemplateModel(config) || hasDismissedNonSotaToast()) return;
 
     notify.warning(
-        "Template model warning",
-        "Template V2 works best with vision-capable models. Use a recent OpenAI vision model or Claude Opus/Sonnet for reliable template generation.",
+        "模板模型提示",
+        "模板 V2 更适合使用支持视觉理解的模型。建议使用较新的 OpenAI 视觉模型或 Claude Opus/Sonnet，以获得更可靠的模板生成效果。",
         {
             id: NON_SOTA_TEMPLATE_TOAST_ID,
             duration: Infinity,
             className: "template-v2-model-warning-toast",
             action: {
-                label: "Don't show again",
+                label: "不再提示",
                 onClick: () => {
                     rememberNonSotaToastDismissed();
                     dismissTemplateV2ModelWarning();

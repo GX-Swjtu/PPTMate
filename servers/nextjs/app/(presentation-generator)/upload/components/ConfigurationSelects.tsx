@@ -2,8 +2,6 @@ import { LanguageType, PresentationConfig } from "../type";
 import { useEffect, useRef, useState } from "react";
 import {
   Check,
-  ChevronDown,
-  ChevronRight,
   ChevronUp,
   Languages,
   Monitor,
@@ -28,6 +26,7 @@ import {
   clampSlideCountValue,
   MAX_NUMBER_OF_SLIDES,
 } from "@/utils/presentationLimits";
+import { languageLabel } from "../labels";
 
 // Types
 interface ConfigurationSelectsProps {
@@ -111,7 +110,7 @@ const SlideCountSelect: React.FC<{
     }
   };
 
-  const displayLabel = value ? `${value} slides` : "Auto slides";
+  const displayLabel = value ? `${value} 张幻灯片` : "自动确定页数";
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
@@ -171,7 +170,7 @@ const SlideCountSelect: React.FC<{
                   : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base"
               )}
             >
-              {compact && value ? `Slides ${value}` : displayLabel}
+              {compact && value ? `${value} 张` : displayLabel}
             </span>
             {compact && (
               <ChevronUp
@@ -224,7 +223,7 @@ const SlideCountSelect: React.FC<{
               placeholder="--"
               className="h-8 w-16 px-2 text-sm min-[1800px]:h-9 min-[1800px]:w-20 min-[1800px]:text-base"
             />
-            <span className="text-sm font-medium min-[1800px]:text-base">slides</span>
+            <span className="text-sm font-medium min-[1800px]:text-base">张</span>
           </div>
         </div>
         <Command>
@@ -233,7 +232,7 @@ const SlideCountSelect: React.FC<{
               {SLIDE_OPTIONS.map((option) => (
                 <CommandItem
                   key={option}
-                  value={`${option} slides`}
+                  value={`${option} 张幻灯片`}
                   role="option"
                   onPointerDownCapture={() => {
                     isSelectingPresetRef.current = true;
@@ -255,7 +254,7 @@ const SlideCountSelect: React.FC<{
                       value === option ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {option} slides
+                  {option} 张幻灯片
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -315,7 +314,7 @@ const LanguageSelect: React.FC<{
                 : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base"
             )}
           >
-            {value || "Select language"}
+            {languageLabel(value)}
           </span>
           {compact && (
             <ChevronUp
@@ -337,11 +336,11 @@ const LanguageSelect: React.FC<{
     >
       <Command>
         <CommandInput
-          placeholder="Search language..."
+          placeholder="搜索语言……"
           className="font-instrument_sans"
         />
         <CommandList>
-          <CommandEmpty>No language found.</CommandEmpty>
+          <CommandEmpty>未找到语言。</CommandEmpty>
           <CommandGroup>
             {Object.values(LanguageType).map((language) => (
               <CommandItem
@@ -360,7 +359,7 @@ const LanguageSelect: React.FC<{
                     value === language ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {language}
+                {languageLabel(language)}
               </CommandItem>
             ))}
           </CommandGroup>

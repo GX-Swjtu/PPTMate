@@ -46,7 +46,7 @@ export function TemplateV2MultiSelectionToolbar({
         onClick={onGroup}
       >
         <Group aria-hidden="true" className="size-4" strokeWidth={1.8} />
-        <span>Group</span>
+        <span>组合</span>
         <ShortcutKeys
           applePlatform={applePlatform}
           compact

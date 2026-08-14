@@ -24,9 +24,9 @@ const GenerateButton: React.FC<GenerateButtonProps> = ({
 
   const getButtonText = () => {
     if (loadingState.isLoading) return loadingState.message;
-    if (streamState.isLoading || streamState.isStreaming) return "Loading...";
-    if (!selectedTemplateId) return "Select a Template";
-    return "Continue";
+    if (streamState.isLoading || streamState.isStreaming) return "正在加载……";
+    if (!selectedTemplateId) return "请选择模板";
+    return "继续";
   };
 
   return (

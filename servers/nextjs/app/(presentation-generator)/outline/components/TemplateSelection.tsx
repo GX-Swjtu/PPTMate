@@ -127,7 +127,7 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
 
     const suggestionNotice = suggestedTemplate && selectedTemplateId && (
       <div className="mb-5 rounded-xl border border-[#E4E0FF] bg-[#F7F5FF] px-4 py-3 font-syne text-xs font-medium text-[#5141E5]">
-        <strong className="font-semibold">Suggested template selected.</strong>{" "}
+        <strong className="font-semibold">已选择推荐模板。</strong>{" "}
         Click the highlighted template to continue.
       </div>
     );
@@ -136,7 +136,7 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
       return (
         <div className="mb-8">
           {suggestionNotice}
-          <TemplateListSection label="Templates" selectionPage>
+          <TemplateListSection label="模板" selectionPage>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               <CreateCustomTemplate
                 selectionPage
@@ -154,7 +154,7 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
     return (
       <div className="mb-8 space-y-[30px]">
         {suggestionNotice}
-        <TemplateListSection label="Custom" selectionPage>
+        <TemplateListSection label="自定义模板" selectionPage>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <CreateCustomTemplate
               selectionPage
@@ -166,9 +166,9 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
           </div>
         </TemplateListSection>
 
-        <TemplateListSection label="Built-In" selectionPage>
+        <TemplateListSection label="内置模板" selectionPage>
           {defaultTemplates.length === 0 ? (
-            <TemplateListEmptyState message="No built-in templates available." />
+            <TemplateListEmptyState message="暂无可用的内置模板。" />
           ) : (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {defaultTemplates.map((template, index) =>

@@ -22,8 +22,8 @@ const INFOGRAPHIC_TYPE_OPTIONS: Array<{
   label: string;
   value: InfographicType;
 }> = [
-  { label: "Progress Bar", value: "progress_bar" },
-  { label: "Gauge", value: "gauge" },
+  { label: "进度条", value: "progress_bar" },
+  { label: "仪表盘", value: "gauge" },
 ];
 
 export type TemplateV2InfographicToolbarElement = RawRecord & {
@@ -72,8 +72,8 @@ export function TemplateV2InfographicToolbarControls({
       <div className="inline-flex h-7 items-center gap-1.5 rounded-[6px] px-1.5 text-[#191919]">
         <SlidersHorizontal size={16} strokeWidth={1.6} aria-hidden />
         <select
-          aria-label="Infographic type"
-          title="Infographic type"
+          aria-label="信息图类型"
+          title="信息图类型"
           value={infographicType}
           onChange={(event) =>
             commitDataChange({
@@ -91,14 +91,14 @@ export function TemplateV2InfographicToolbarControls({
       </div>
 
       <InlineNumberInput
-        label="Value"
+        label="数值"
         value={value}
         onCommit={(nextValue) => commitDataChange({ value: nextValue })}
       />
 
       <div className="relative">
         <ToolbarIconButton
-          title="Range"
+          title="范围"
           open={openPanel === "infographic-range"}
           onClick={() => onToggle("infographic-range")}
         >
@@ -109,13 +109,13 @@ export function TemplateV2InfographicToolbarControls({
         {openPanel === "infographic-range" ? (
           <Panel className="w-[230px] space-y-3 p-3">
             <NumberField
-              label="Min"
+              label="最小值"
               value={minValue}
               step={1}
               onCommit={(min_value) => commitDataChange({ min_value })}
             />
             <NumberField
-              label="Max"
+              label="最大值"
               value={maxValue}
               step={1}
               onCommit={(max_value) => commitDataChange({ max_value })}
@@ -126,7 +126,7 @@ export function TemplateV2InfographicToolbarControls({
 
       <div className="relative">
         <ToolbarIconButton
-          title="Colors"
+          title="颜色"
           open={openPanel === "infographic-colors"}
           onClick={() => onToggle("infographic-colors")}
         >
@@ -135,12 +135,12 @@ export function TemplateV2InfographicToolbarControls({
         {openPanel === "infographic-colors" ? (
           <Panel className="w-[230px] space-y-3 p-3">
             <ColorField
-              label="Base"
+              label="基础色"
               color={baseColor}
               onCommit={(baseColor) => commitColorChange(0, baseColor)}
             />
             <ColorField
-              label="Highlight"
+              label="强调色"
               color={highlightColor}
               onCommit={(highlightColor) => commitColorChange(1, highlightColor)}
             />

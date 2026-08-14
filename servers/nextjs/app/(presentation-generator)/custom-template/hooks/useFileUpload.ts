@@ -8,13 +8,13 @@ export const useFileUpload = () => {
     const lowerName = file.name.toLowerCase();
     const isPptx = lowerName.endsWith(".pptx");
     if (!isPptx) {
-      notify.error("Invalid file", "Please select a valid PPTX file.");
+      notify.error("文件格式无效", "请选择有效的 PPTX 文件。");
       return;
     }
 
     const maxSize = 100 * 1024 * 1024;
     if (file.size > maxSize) {
-      notify.error("File too large", "File size must be less than 100MB.");
+      notify.error("文件过大", "文件大小必须小于 100MB。");
       return;
     }
 

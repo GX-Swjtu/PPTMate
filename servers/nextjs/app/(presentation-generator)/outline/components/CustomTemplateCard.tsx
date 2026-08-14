@@ -43,7 +43,7 @@ export const CustomTemplateCard = memo(function CustomTemplateCard({
             role="button"
             tabIndex={0}
             aria-pressed={isSelected}
-            aria-label={`Select ${template.name} template`}
+            aria-label={`选择模板 ${template.name}`}
             className={cn(
                 "font-syne cursor-pointer flex flex-col justify-between relative transition-all duration-200 group overflow-hidden rounded-[22px] bg-white border outline-none",
                 "hover:-translate-y-1 hover:border-[#7A5AF8] hover:ring-2 hover:ring-[#7A5AF8]/20 hover:shadow-[0_18px_40px_rgba(34,31,54,0.12)]",

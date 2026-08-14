@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-  <rect width="160" height="160" rx="34" fill="#F4F3FF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title id="title">PPTMate</title>
   <defs>
     <linearGradient id="markGradient" x1="28" y1="48" x2="132" y2="116" gradientUnits="userSpaceOnUse">
       <stop stop-color="#8B68FF"/>

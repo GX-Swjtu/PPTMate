@@ -80,10 +80,10 @@ export function TemplateEditorHeader({
   return (
     <header className="flex h-[68px] shrink-0 items-center justify-between border-b border-[#EDEEEF] bg-white">
       <div className="flex h-full min-w-0 flex-1 items-center gap-[12px] px-5 text-left sm:w-[347px] sm:flex-none sm:px-[24px]">
-        <button onClick={onBack} aria-label="Dashboard" type="button">
+        <button onClick={onBack} aria-label="工作台" type="button">
           <img
-            src="/logo-with-bg.png"
-            alt="Presenton"
+            src="/pptmate-mark.svg"
+            alt="PPTMate"
             className="h-10 w-10 cursor-pointer object-contain"
           />
         </button>
@@ -94,10 +94,10 @@ export function TemplateEditorHeader({
               ? "cursor-text hover:border-[#EDEEEF] hover:bg-[#FAFAFB] focus-within:border-[#B99CFF] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(124,81,248,0.10)]"
               : "cursor-default",
           )}
-          title={canEdit ? "Edit template name" : "Default template"}
+          title={canEdit ? "编辑模板名称" : "默认模板"}
         >
           <input
-            aria-label="Template name"
+            aria-label="模板名称"
             className="h-[24px] min-w-0 flex-1 truncate bg-transparent p-0 text-[16px] font-semibold leading-normal tracking-[0.16px] text-[#101323] outline-none placeholder:text-[#9B9B9B] disabled:opacity-60"
             aria-readonly={!canEdit}
             onBlur={() => {
@@ -124,7 +124,7 @@ export function TemplateEditorHeader({
                 event.currentTarget.blur();
               }
             }}
-            placeholder="Untitled Template"
+            placeholder="未命名模板"
             readOnly={!canEdit}
             spellCheck={false}
             tabIndex={canEdit ? 0 : -1}
@@ -146,7 +146,7 @@ export function TemplateEditorHeader({
           title={activeLayoutToken}
           type="button"
         >
-          Copy ID
+          复制 ID
           <Copy className="h-4 w-4" />
         </button>
         <div className="hidden h-[16.5px] w-px bg-[#EDEEEF] sm:block" />
@@ -155,7 +155,7 @@ export function TemplateEditorHeader({
             className="flex h-[34px] w-[24px] items-center justify-center rounded-full text-[#101323] transition-colors hover:bg-[#F7F6F9] disabled:text-[#B9B9B9]"
             disabled={!canEdit || !canUndo}
             onClick={onUndo}
-            title="Undo"
+            title="撤销"
             type="button"
           >
             <Undo2 className="h-[14px] w-[14px]" />
@@ -164,7 +164,7 @@ export function TemplateEditorHeader({
             className="flex h-[34px] w-[24px] items-center justify-center rounded-full text-[#101323] transition-colors hover:bg-[#F7F6F9] disabled:text-[#B9B9B9]"
             disabled={!canEdit || !canRedo}
             onClick={onRedo}
-            title="Redo"
+            title="重做"
             type="button"
           >
             <Redo2 className="h-[14px] w-[14px]" />
@@ -176,11 +176,11 @@ export function TemplateEditorHeader({
             <button
               className="hidden h-[33px] items-center gap-[6px] rounded-[48px] px-[10px] py-[8px] text-[14px] font-medium text-red-600 transition-colors hover:bg-red-50 md:flex"
               onClick={onDelete}
-              title="Delete template"
+              title="删除模板"
               type="button"
             >
               <Trash2 className="h-4 w-4" />
-              <span className="hidden xl:inline">Delete Template</span>
+              <span className="hidden xl:inline">删除模板</span>
             </button>
             <div className="hidden h-[16.5px] w-px bg-[#EDEEEF] md:block" />
           </>
@@ -189,9 +189,9 @@ export function TemplateEditorHeader({
           <GradientActionButton
             onClick={onSave}
             disabled={isSaving}
-            title={hasUnsavedChanges ? "Save changes" : "Save template"}
+            title={hasUnsavedChanges ? "保存更改" : "保存模板"}
           >
-            {isSaving ? "Saving" : "Save"}
+            {isSaving ? "保存中" : "保存"}
             {isSaving ? (
               <Loader2 className="h-[15.4px] w-[15.4px] animate-spin" />
             ) : (

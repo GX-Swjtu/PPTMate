@@ -13,9 +13,9 @@ import {
 type ObjectFitMode = "cover" | "contain" | "fill";
 
 const FIT_OPTIONS: Array<{ value: ObjectFitMode; label: string }> = [
-  { value: "cover", label: "Fill" },
-  { value: "contain", label: "Contain" },
-  { value: "fill", label: "Stretch" },
+  { value: "cover", label: "填充" },
+  { value: "contain", label: "完整显示" },
+  { value: "fill", label: "拉伸" },
 ];
 
 function PatternIcon() {
@@ -52,7 +52,7 @@ export function ImageEditorToolbar({
   onToggleFocusPoint: () => void;
   onReplaceImage: () => void;
 }) {
-  const fitLabel = FIT_OPTIONS.find((item) => item.value === objectFit)?.label ?? "Fill";
+  const fitLabel = FIT_OPTIONS.find((item) => item.value === objectFit)?.label ?? "填充";
 
   return (
     <div className="inline-flex items-center gap-3 rounded-[6px] bg-white px-[10px] py-[6px] shadow-[0_0_4px_rgba(0,0,0,0.15)]">
@@ -90,8 +90,8 @@ export function ImageEditorToolbar({
 
       <button
         type="button"
-        title="Replace image"
-        aria-label="Replace image"
+        title="替换图片"
+        aria-label="替换图片"
         onClick={onReplaceImage}
         className="rounded-[2px] p-1 text-[#191919] hover:bg-[#F8F8FA]"
       >
@@ -111,8 +111,8 @@ export function ImageEditorToolbar({
       <div className="inline-flex items-center gap-3">
         <button
           type="button"
-          title="Fill"
-          aria-label="Fill"
+          title="填充"
+          aria-label="填充"
           onClick={() => onObjectFitChange("cover")}
           className={cn(
             "rounded-[2px] p-1 text-[#191919] hover:bg-[#F8F8FA]",
@@ -123,8 +123,8 @@ export function ImageEditorToolbar({
         </button>
         <button
           type="button"
-          title="Contain"
-          aria-label="Contain"
+          title="完整显示"
+          aria-label="完整显示"
           onClick={() => onObjectFitChange("contain")}
           className={cn(
             "rounded-[2px] p-1 text-[#191919] hover:bg-[#F8F8FA]",
@@ -135,8 +135,8 @@ export function ImageEditorToolbar({
         </button>
         <button
           type="button"
-          title="Stretch"
-          aria-label="Stretch"
+          title="拉伸"
+          aria-label="拉伸"
           onClick={() => onObjectFitChange("fill")}
           className={cn(
             "rounded-[2px] p-1 text-[#191919] hover:bg-[#F8F8FA]",
@@ -151,8 +151,8 @@ export function ImageEditorToolbar({
 
       <button
         type="button"
-        title="Focus point"
-        aria-label="Focus point"
+        title="焦点位置"
+        aria-label="焦点位置"
         onClick={onToggleFocusPoint}
         className={cn(
           "rounded-[2px] p-1 text-[#191919] hover:bg-[#F8F8FA]",

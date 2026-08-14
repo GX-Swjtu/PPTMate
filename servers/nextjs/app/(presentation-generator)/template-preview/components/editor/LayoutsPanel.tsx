@@ -81,16 +81,16 @@ export function LayoutsPanel({
     <aside className="hidden w-[299px] shrink-0 bg-[#FEFEFF] lg:flex lg:flex-col">
       <div className="flex min-h-0 flex-1 flex-col px-3 pb-6 pt-8">
         <h2 className="text-[16px] font-medium leading-5 text-[#101828]">
-          Deck Layouts
+          幻灯片版式
         </h2>
 
         <label className="relative mt-5 block">
           <Search className="pointer-events-none absolute left-[10px] top-1/2 h-[14px] w-[14px] -translate-y-1/2 text-[#4C4C4C]" />
           <Input
-            aria-label="Search slides"
+            aria-label="搜索幻灯片"
             className="h-[30px] rounded-[8px] border-[rgba(219,219,219,0.6)] bg-white pl-[30px] pr-3 text-[12px] font-normal text-[#191919] shadow-none placeholder:text-[#4C4C4C] focus-visible:ring-0"
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search Slides"
+            placeholder="搜索幻灯片"
             value={searchQuery}
           />
         </label>
@@ -98,7 +98,7 @@ export function LayoutsPanel({
         <div className="mt-7 min-h-0 flex-1 overflow-y-auto pr-0.5">
           {filteredLayouts.length === 0 ? (
             <div className="rounded-[8px] border border-dashed border-[#DCDCE1] px-4 py-8 text-center text-[13px] text-[#808080]">
-              No layouts found.
+              未找到版式。
             </div>
           ) : (
             <div className="flex flex-col gap-0 rounded-[12px]">
@@ -176,19 +176,19 @@ function LayoutRow({
 
         <div className="flex shrink-0 items-center gap-[10px]">
           <button
-            aria-label={`Copy layout ${index + 1} ID`}
+            aria-label={`复制第 ${index + 1} 个版式的 ID`}
             className="flex h-[18px] w-[18px] items-center justify-center rounded-[4px] text-[#191919] transition-colors hover:bg-[#F7F6F9] hover:text-[#7A5AF8]"
             onClick={(event) => {
               event.stopPropagation();
               onCopy();
             }}
-            title="Copy ID"
+            title="复制 ID"
             type="button"
           >
             <Copy className="h-[14px] w-[14px]" />
           </button>
           <button
-            aria-label={`Select layout ${index + 1}`}
+            aria-label={`选择第 ${index + 1} 个版式`}
             className="flex h-[18px] w-[18px] items-center justify-center rounded-[4px] text-[#191919] transition-colors hover:bg-[#F7F6F9]"
             onClick={onSelect}
             type="button"
@@ -206,13 +206,13 @@ function LayoutRow({
       {isActive ? (
         <div className="mt-5 flex flex-col gap-[14px]">
           <label className="flex flex-col gap-2 text-[14px] font-normal text-[#333333]">
-            Slide ID
+            幻灯片 ID
             <div className="relative min-h-[52px] rounded-[8px] border border-[rgba(219,219,219,0.6)] bg-white px-[10px] pb-[20px] pt-[10px]">
               <input
                 className="w-full bg-transparent pr-[48px] text-[14px] font-normal leading-normal text-[#191919] outline-none placeholder:text-[#191919]"
                 maxLength={LAYOUT_ID_MAX_LENGTH}
                 onChange={(event) => onIdChange(event.target.value)}
-                placeholder="Add Slide ID"
+                placeholder="添加幻灯片 ID"
                 type="text"
                 value={idValue}
               />
@@ -223,13 +223,13 @@ function LayoutRow({
           </label>
 
           <label className="flex flex-col gap-2 text-[14px] font-normal text-[#333333]">
-            Slide Description
+            幻灯片说明
             <div className="relative">
               <Textarea
                 className="min-h-[70px] resize-none rounded-[8px] border-[rgba(219,219,219,0.6)] bg-white px-[10px] pb-[22px] pt-[10px] text-[14px] font-normal leading-[18px] text-[#191919] shadow-none placeholder:text-[#191919] focus-visible:ring-0"
                 maxLength={LAYOUT_DESCRIPTION_MAX_LENGTH}
                 onChange={(event) => onDescriptionChange(event.target.value)}
-                placeholder="Add Source Text"
+                placeholder="添加说明文字"
                 value={description}
               />
               <span className="pointer-events-none absolute bottom-[8px] right-[10px] text-[10px] leading-none text-[#666666]">

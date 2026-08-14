@@ -20,17 +20,17 @@ const CHART_TYPE_OPTIONS: Array<{
   label: string;
   value: ChartSlideElement["chart_type"];
 }> = [
-    { value: "bar", label: "Bar Chart" },
-    { value: "horizontal_bar", label: "Horizontal Bar" },
-    { value: "stacked_bar", label: "Stacked Bar" },
-    { value: "horizontal_stacked_bar", label: "Horizontal Stack Bar" },
-    { value: "line", label: "Line Chart" },
-    { value: "area", label: "Area Chart" },
-    { value: "pie", label: "Pie Chart" },
-    { value: "donut", label: "Donut Chart" },
-    { value: "scatter", label: "Scatter Chart" },
-    { value: "radar", label: "Radar Chart" },
-    { value: "polar_area", label: "Polar Area" },
+    { value: "bar", label: "柱状图" },
+    { value: "horizontal_bar", label: "横向条形图" },
+    { value: "stacked_bar", label: "堆叠柱状图" },
+    { value: "horizontal_stacked_bar", label: "横向堆叠条形图" },
+    { value: "line", label: "折线图" },
+    { value: "area", label: "面积图" },
+    { value: "pie", label: "饼图" },
+    { value: "donut", label: "环形图" },
+    { value: "scatter", label: "散点图" },
+    { value: "radar", label: "雷达图" },
+    { value: "polar_area", label: "极坐标面积图" },
   ];
 
 export function ChartToolbarControls({
@@ -75,8 +75,8 @@ export function ChartToolbarControls({
       >
         <BarChart3 size={16} strokeWidth={2} />
         <select
-          aria-label="Chart type"
-          title="Chart type"
+          aria-label="图表类型"
+          title="图表类型"
           value={element.chart_type}
           onChange={(event) =>
             onChange({
@@ -103,8 +103,8 @@ export function ChartToolbarControls({
       {onEdit ? (
         <button
           type="button"
-          aria-label="Edit chart data"
-          title="Edit data"
+          aria-label="编辑图表数据"
+          title="编辑数据"
           onClick={() => {
             setPaletteOpen(false);
             onEdit();
@@ -119,8 +119,8 @@ export function ChartToolbarControls({
         <button
           type="button"
           aria-expanded={paletteOpen}
-          aria-label="Chart colors"
-          title="Chart colors"
+          aria-label="图表颜色"
+          title="图表颜色"
           onClick={() => setPaletteOpen(!paletteOpen)}
           style={{
             ...inlineStyles.iconButton,

@@ -32,22 +32,22 @@ const COMPONENT_LAYER_ACTIONS: Array<{
 }> = [
   {
     action: "bring-to-front",
-    label: "Bring to Front",
+    label: "置于顶层",
     shortcut: "Shift+Alt+K",
   },
   {
     action: "bring-forward",
-    label: "Bring Forward",
+    label: "上移一层",
     shortcut: "Alt+K",
   },
   {
     action: "send-backward",
-    label: "Send Backward",
+    label: "下移一层",
     shortcut: "Alt+J",
   },
   {
     action: "send-to-back",
-    label: "Send Back",
+    label: "置于底层",
     shortcut: "Shift+Alt+J",
   },
 ];
@@ -70,8 +70,8 @@ export function ComponentActionsMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          title="More"
-          aria-label="More"
+          title="更多"
+          aria-label="更多"
           className={cn(
             "grid h-8 w-8 place-items-center rounded-[4px] border-0 bg-transparent font-manrope text-black hover:bg-[#F6F6F9]",
             menuOpen && "bg-[#F6F6F9]",
@@ -98,7 +98,7 @@ export function ComponentActionsMenu({
         <ComponentActionsMenuItem
           strong
           icon={Copy}
-          label="Duplicate"
+          label="复制"
           onClick={actions.onDuplicate}
         />
         {COMPONENT_LAYER_ACTIONS.map(({ action, label, shortcut }) => {
@@ -121,7 +121,7 @@ export function ComponentActionsMenu({
         <ComponentActionsMenuItem
           strong
           icon={Trash2}
-          label="Delete Component"
+          label="删除组件"
           onClick={actions.onDelete}
         />
       </DropdownMenuContent>
@@ -138,11 +138,11 @@ export function ComponentUngroupButton({
   return (
     <button
       type="button"
-      title="Ungroup"
+      title="取消组合"
       onClick={actions.onUngroup}
       className="inline-flex h-7 cursor-pointer items-center gap-1 rounded-[6px] px-2 font-manrope text-[14px] font-medium leading-4 text-[#191919] hover:bg-[#F6F6F9]"
     >
-      <span>Ungroup</span>
+      <span>取消组合</span>
     </button>
   );
 }

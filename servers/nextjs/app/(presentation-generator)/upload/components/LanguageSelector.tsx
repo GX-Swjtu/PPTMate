@@ -6,6 +6,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import React, { useState } from 'react'
 import { LanguageType } from '../type';
 import { cn } from '@/lib/utils';
+import { languageLabel } from '../labels';
 
 
 export const LanguageSelector: React.FC<{
@@ -26,7 +27,7 @@ export const LanguageSelector: React.FC<{
                     className="px-3.5 py-1 justify-between rounded-[48px] font-instrument_sans font-semibold overflow-hidden bg-[#F7F6F9] border-[#EDEEEF] focus-visible:ring-[#5141E5] border-none"
                 >
                     <p className="text-sm font-medium truncate">
-                        {value || "Select language"}
+                        {languageLabel(value)}
                     </p>
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -34,11 +35,11 @@ export const LanguageSelector: React.FC<{
             <PopoverContent className="w-[300px] p-0" align="end">
                 <Command>
                     <CommandInput
-                        placeholder="Search language..."
+                        placeholder="搜索语言……"
                         className="font-instrument_sans"
                     />
                     <CommandList>
-                        <CommandEmpty>No language found.</CommandEmpty>
+                        <CommandEmpty>未找到语言。</CommandEmpty>
                         <CommandGroup>
                             {Object.values(LanguageType).map((language) => (
                                 <CommandItem
@@ -57,7 +58,7 @@ export const LanguageSelector: React.FC<{
                                             value === language ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {language}
+                                    {languageLabel(language)}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

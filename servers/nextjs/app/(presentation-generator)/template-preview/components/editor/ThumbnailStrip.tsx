@@ -44,7 +44,7 @@ const SlideThumbnail = memo(function SlideThumbnail({
   return (
     <button
       aria-current={active ? "true" : undefined}
-      aria-label={`Slide ${index + 1}: ${readLayoutId(layout, index)}`}
+      aria-label={`第 ${index + 1} 张幻灯片：${readLayoutId(layout, index)}`}
       className={cn(
         "group relative shrink-0 rounded-[11px] p-[5px] text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#7A5AF8] focus-visible:ring-offset-2",
         active && "bg-[#EFEDFF]",
@@ -218,12 +218,12 @@ export function ThumbnailStrip({
   return (
     <div className="relative overflow-hidden bg-[#FBFBFA] px-[52px] pb-[20px] pt-0">
       <button
-        aria-label="Previous slide"
+        aria-label="上一张幻灯片"
         className="absolute left-[24px] top-[24%] z-20 flex h-7 w-7 items-center justify-center rounded-full border border-[#EDEEEF] bg-white text-[#101323] shadow-sm transition-colors hover:bg-[#F7F6F9] disabled:pointer-events-none disabled:opacity-35"
         disabled={activeLayoutIndex === 0}
         onClick={() => selectByOffset(-1)}
         type="button"
-        title="Previous slide"
+        title="上一张幻灯片"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -231,7 +231,7 @@ export function ThumbnailStrip({
       <div
         ref={scrollerRef}
         data-template-preview-thumbnail-scroll="true"
-        aria-label="Slide thumbnails. Use the left and right arrow keys to change slides."
+        aria-label="幻灯片缩略图，可使用左右方向键切换。"
         className="hide-scrollbar flex h-[84px] cursor-grab items-center gap-[12px] overflow-x-auto overflow-y-hidden pl-2 pr-[72px] active:cursor-grabbing [-webkit-overflow-scrolling:touch]"
         onPointerDown={(event) => {
           if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -290,12 +290,12 @@ export function ThumbnailStrip({
       </div>
 
       <button
-        aria-label="Next slide"
+        aria-label="下一张幻灯片"
         className="absolute right-[24px] top-[24%] z-20 flex h-7 w-7 items-center justify-center rounded-full border border-[#EDEEEF] bg-white text-[#101323] shadow-sm transition-colors hover:bg-[#F7F6F9] disabled:pointer-events-none disabled:opacity-35"
         disabled={activeLayoutIndex >= layouts.length - 1}
         onClick={() => selectByOffset(1)}
         type="button"
-        title="Next slide"
+        title="下一张幻灯片"
       >
         <ChevronRight className="h-4 w-4" />
       </button>

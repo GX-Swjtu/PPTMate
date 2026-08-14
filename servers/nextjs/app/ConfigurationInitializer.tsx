@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { setCanChangeKeys, setLLMConfig } from '@/store/slices/userConfig';
 import { hasValidLLMConfig, normalizeLLMConfig } from '@/utils/storeHelpers';
 import { usePathname, useRouter } from 'next/navigation';
@@ -22,7 +21,7 @@ function ConfigurationLoadingScreen() {
       <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-7 whitespace-nowrap">
         <div aria-hidden="true" className="configuration-loader" />
         <p className="font-syne text-[18px] font-normal leading-normal tracking-[-0.54px] text-[#191919]">
-          Loading Presenton...
+          正在加载 PPTMate……
         </p>
       </div>
 
@@ -194,8 +193,8 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
           dispatch(setLLMConfig(runtimeConfig));
           if (!runtime.configured) {
             notify.error(
-              "Instance not configured",
-              "Ask the administrator to configure the AI providers in Settings."
+              "实例尚未完成配置",
+              "请联系管理员检查 AI 服务配置。"
             );
             setIsLoading(false);
             return;
