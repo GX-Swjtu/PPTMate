@@ -1,7 +1,7 @@
 {
   "id": "modern",
-  "name": "Modern",
-  "description": "Clean, contemporary layouts with generous whitespace, confident typography, and bold visual accents for a polished presentation.",
+  "name": "现代",
+  "description": "现代简洁的版面、充足留白与鲜明视觉重点，适合专业演示。",
   "thumbnail": "static/thumbnail.png",
   "icon_type": "bold",
   "merged_components": [
@@ -268,10 +268,11 @@
                   },
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 0.8
+                    "line_height": 1,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -279,13 +280,14 @@
                   },
                   "runs": [
                     {
-                      "text": "Pitch Deck",
+                      "text": "商业计划书",
                       "font": {
                         "size": 48,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 0.8
+                        "line_height": 1,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -347,9 +349,10 @@
                   },
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -357,12 +360,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Add a short subtitle or description here. Add a short subtitle or description here. Add a short subtitle or description here. Add a short subtitle or description here.",
+                      "text": "以灵活架构、统一数据和智能能力支撑业务创新，帮助组织快速响应不断变化的需求。",
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -482,10 +486,11 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -493,13 +498,14 @@
                       },
                       "runs": [
                         {
-                          "text": "JD",
+                          "text": "张",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -529,9 +535,10 @@
                         },
                         "font": {
                           "size": 16,
-                          "family": "Montserrat",
+                          "family": "Noto Sans CJK SC",
                           "color": "#234CD9",
-                          "line_height": 1.2
+                          "line_height": 1.2,
+                          "letter_spacing": 0
                         },
                         "alignment": {
                           "horizontal": "left",
@@ -539,12 +546,13 @@
                         },
                         "runs": [
                           {
-                            "text": "John Doe",
+                            "text": "张明",
                             "font": {
                               "size": 16,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.2
+                              "line_height": 1.2,
+                              "letter_spacing": 0
                             }
                           }
                         ],
@@ -567,9 +575,10 @@
                         },
                         "font": {
                           "size": 14,
-                          "family": "Montserrat",
+                          "family": "Noto Sans CJK SC",
                           "color": "#234CD9",
-                          "line_height": 1.2
+                          "line_height": 1.2,
+                          "letter_spacing": 0
                         },
                         "alignment": {
                           "horizontal": "left",
@@ -577,12 +586,13 @@
                         },
                         "runs": [
                           {
-                            "text": "December 2025",
+                            "text": "2025 年 12 月",
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.2
+                              "line_height": 1.2,
+                              "letter_spacing": 0
                             }
                           }
                         ],
@@ -967,10 +977,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#1E4CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -978,13 +989,14 @@
               },
               "runs": [
                 {
-                  "text": "Businesses struggle",
+                  "text": "数字化解决方案",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1006,9 +1018,10 @@
               },
               "font": {
                 "size": 18,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#334155",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -1016,12 +1029,13 @@
               },
               "runs": [
                 {
-                  "text": "Show that we offer a solution that solves the problems previously described and identified. Make sure that the solutions we offer uphold the values of effectiveness, efficiency, and are highly relevant to the market situation and society is here and what is hsd sdksdf klfdslkf lkflkfsldkf.",
+                  "text": "我们提供可落地的解决方案，针对已识别的问题持续创造业务价值。",
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#334155",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1052,10 +1066,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -1063,13 +1078,14 @@
               },
               "runs": [
                 {
-                  "text": "Problem",
+                  "text": "问题",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1091,9 +1107,10 @@
               },
               "font": {
                 "size": 18,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -1101,12 +1118,13 @@
               },
               "runs": [
                 {
-                  "text": "A problem needs to be discussed further and in detail because this problem is the main foundation in the initial development of a product, service, and decision making. Without a well-defined problem, it will have an impact on a job that is unfocused, unmanaged, and less relevant.",
+                  "text": "以灵活架构、统一数据和智能能力支撑业务创新，帮助组织快速响应不断变化的需求。",
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1137,10 +1155,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -1148,13 +1167,14 @@
               },
               "runs": [
                 {
-                  "text": "Data Table or Chart",
+                  "text": "数据表或图表",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1175,9 +1195,10 @@
               },
               "font": {
                 "size": 16,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -1185,12 +1206,13 @@
               },
               "runs": [
                 {
-                  "text": "Present structured information in a flexible table or visualize it with a chart.",
+                  "text": "通过可扩展技术与良好体验连接业务场景，为持续增长提供可靠支撑。",
                   "font": {
                     "size": 16,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -1234,10 +1256,11 @@
                   },
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -1245,13 +1268,14 @@
                   },
                   "runs": [
                     {
-                      "text": "Image With Description",
+                      "text": "图文说明",
                       "font": {
                         "size": 48,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1
+                        "line_height": 1,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -1274,9 +1298,10 @@
                   },
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#334155",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -1284,12 +1309,13 @@
                   },
                   "runs": [
                     {
-                      "text": "In the presentation session, the background/introduction can be filled with information that is arranged systematically and effectively with respect to an interesting topic to be used as material for discussion at the opening of the presentation session. The introduction can provide a general overview for those who are listening to your presentation so that the key words on the topic of discussion are emphasized during this background/introductory presentation session.",
+                      "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -1412,9 +1438,10 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -1422,12 +1449,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Market",
+                          "text": "市场",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1480,9 +1508,10 @@
                       },
                       "font": {
                         "size": 12,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -1490,12 +1519,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Innovative and widely accepted.",
+                          "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                           "font": {
                             "size": 12,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1582,9 +1612,10 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -1592,12 +1623,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Industry",
+                          "text": "行业",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1650,9 +1682,10 @@
                       },
                       "font": {
                         "size": 12,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -1660,12 +1693,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Based on sound market decisions.",
+                          "text": "经营数据保持稳健增长，客户覆盖与复购表现进一步改善，为后续扩张奠定基础。",
                           "font": {
                             "size": 12,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1782,9 +1816,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -1792,12 +1827,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1818,9 +1854,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -1828,12 +1865,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1914,9 +1952,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -1924,12 +1963,13 @@
                       },
                       "runs": [
                         {
-                          "text": "High Costs",
+                          "text": "成本高企",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -1950,9 +1990,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -1960,12 +2001,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Outdated systems increase expenses, while small businesses struggle to expand their market reach.",
+                          "text": "传统技术和分散系统推高运营成本，也限制了业务效率与增长空间。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -2046,9 +2088,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -2056,12 +2099,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -2082,9 +2126,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -2092,12 +2137,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -2178,9 +2224,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -2188,12 +2235,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -2214,9 +2262,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -2224,12 +2273,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -2454,17 +2504,17 @@
               ],
               "x_axis": true,
               "y_axis": true,
-              "x_axis_title": "value",
+              "x_axis_title": "数值",
               "axis_color": "#6B7280",
               "categories": [
-                "A",
-                "B",
-                "C",
-                "D"
+                "甲项",
+                "乙项",
+                "丙项",
+                "丁项"
               ],
               "series": [
                 {
-                  "name": "value",
+                  "name": "数值",
                   "values": [
                     60,
                     42,
@@ -2559,7 +2609,7 @@
               ],
               "series": [
                 {
-                  "name": "Artificial Intelligence",
+                  "name": "人工智能",
                   "values": [
                     5,
                     10,
@@ -2568,7 +2618,7 @@
                   ]
                 },
                 {
-                  "name": "Internet of Things",
+                  "name": "物联网平台",
                   "values": [
                     10,
                     20,
@@ -2577,7 +2627,7 @@
                   ]
                 },
                 {
-                  "name": "Other Technology",
+                  "name": "其他技术",
                   "values": [
                     8,
                     15,
@@ -2622,10 +2672,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -2633,13 +2684,14 @@
               },
               "runs": [
                 {
-                  "text": "Company Traction",
+                  "text": "技术驱动增长",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -2671,10 +2723,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -2682,13 +2735,14 @@
               },
               "runs": [
                 {
-                  "text": "Product Overview",
+                  "text": "产品概览",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -2719,11 +2773,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
                 "line_height": 1,
-                "letter_spacing": -1.44
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -2731,14 +2785,14 @@
               },
               "runs": [
                 {
-                  "text": "Our\nTeam",
+                  "text": "我们的团队",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
                     "line_height": 1,
-                    "letter_spacing": -1.44
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -2770,10 +2824,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -2781,13 +2836,14 @@
               },
               "runs": [
                 {
-                  "text": "Table Of Contents",
+                  "text": "目录",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -2824,9 +2880,10 @@
               },
               "font": {
                 "size": 16,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -2834,12 +2891,13 @@
               },
               "runs": [
                 {
-                  "text": "Traction is a period where the company is feeling momentum during its development period. If traction momentum is not harnessed, sales figures can decline and the customer base can shrink. In general, companies will judge success by the amount of revenue and new customers they receive.",
+                  "text": "通过精细化客户运营、渠道优化和数据分析，持续提升线索转化与销售产出。",
                   "font": {
                     "size": 16,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -2922,7 +2980,7 @@
                   "alignment": "left",
                   "runs": [
                     {
-                      "text": "Metric",
+                      "text": "指标",
                       "font": {
                         "size": 14,
                         "family": "Montserrat",
@@ -2942,7 +3000,7 @@
                   "alignment": "left",
                   "runs": [
                     {
-                      "text": "Value",
+                      "text": "数值",
                       "font": {
                         "size": 14,
                         "family": "Montserrat",
@@ -2965,7 +3023,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3007,7 +3065,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Revenue",
+                        "text": "营收",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3049,7 +3107,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Satisfaction",
+                        "text": "满意度",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3091,7 +3149,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3133,7 +3191,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Revenue",
+                        "text": "营收",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3175,7 +3233,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Satisfaction",
+                        "text": "满意度",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3217,7 +3275,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3259,7 +3317,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3301,7 +3359,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3343,7 +3401,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -3897,9 +3955,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -3907,12 +3966,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Internet of Things",
+                      "text": "物联网平台",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -3933,9 +3993,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -3943,12 +4004,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Detail and explain each product. Our examination of community and market issues increases with additional products/services.",
+                      "text": "关注多元包容、员工福祉与社区共建。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -3969,9 +4031,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -3979,12 +4042,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Analytics Dashboard",
+                      "text": "数据分析看板",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4006,9 +4070,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -4016,12 +4081,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4168,9 +4234,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -4178,12 +4245,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Mobile App Suite",
+                      "text": "移动应用套件",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4204,9 +4272,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -4214,12 +4283,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4240,9 +4310,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -4250,12 +4321,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Smart Home Platform",
+                      "text": "智能家居平台",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4277,9 +4349,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -4287,12 +4360,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -4442,10 +4516,11 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -4453,13 +4528,14 @@
                       },
                       "runs": [
                         {
-                          "text": "Sarah Johnson",
+                          "text": "创新产品路线图",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4481,9 +4557,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -4491,12 +4568,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Strategic leader with 15+ years experience in technology and business development. Former VP at Fortune 500 company.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4610,10 +4688,11 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -4621,13 +4700,14 @@
                       },
                       "runs": [
                         {
-                          "text": "David Kim",
+                          "text": "平台核心优势",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4649,9 +4729,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -4659,12 +4740,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Product strategist focused on user experience and market-driven solutions. Former product manager at leading tech companies.",
+                          "text": "经营数据保持稳健增长，客户覆盖与复购表现进一步改善，为后续扩张奠定基础。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4711,10 +4793,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#1E4CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -4722,13 +4805,14 @@
               },
               "runs": [
                 {
-                  "text": "Market Size",
+                  "text": "业务成果与展望",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -4812,9 +4896,10 @@
               },
               "font": {
                 "size": 14,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -4822,12 +4907,13 @@
               },
               "runs": [
                 {
-                  "text": "Market size is the total amount of all sales and customers that can be seen directly by stakeholders. This technique is usually calculated at the end of the year, the market size can be used by companies to determine the potential of their market and business in the future. This is very useful, especially for new companies that will offer services to those who are interested in our services.",
+                  "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -4920,9 +5006,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#FFFFFF",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -4930,12 +5017,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Total Available Market (TAM)",
+                          "text": "销售业绩概览",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#FFFFFF",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4956,10 +5044,11 @@
                       },
                       "font": {
                         "size": 24,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1.07
+                        "line_height": 1.07,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -4967,13 +5056,14 @@
                       },
                       "runs": [
                         {
-                          "text": "1.4 Billion",
+                          "text": "数字化解决方案",
                           "font": {
                             "size": 24,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#1E4CD9",
                             "bold": true,
-                            "line_height": 1.07
+                            "line_height": 1.07,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -4994,9 +5084,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -5004,12 +5095,13 @@
                       },
                       "runs": [
                         {
-                          "text": "In the TAM Section, we can fill in the potential of any person who can buy an offer or the maximum amount of revenue a business can earn by selling their offer.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#334155",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -5074,9 +5166,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#FFFFFF",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -5084,12 +5177,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Serviceable Available Market (SAM)",
+                          "text": "销售业绩概览",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#FFFFFF",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -5110,10 +5204,11 @@
                       },
                       "font": {
                         "size": 24,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1.07
+                        "line_height": 1.07,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -5121,13 +5216,14 @@
                       },
                       "runs": [
                         {
-                          "text": "194 Million",
+                          "text": "技术驱动增长",
                           "font": {
                             "size": 24,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#1E4CD9",
                             "bold": true,
-                            "line_height": 1.07
+                            "line_height": 1.07,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -5148,9 +5244,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -5158,12 +5255,13 @@
                       },
                       "runs": [
                         {
-                          "text": "It is a part of TAM that has the potential to become a target market for the company by considering the type of product, technology available and geographical conditions.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#334155",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -5330,9 +5428,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5340,12 +5439,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 1",
+                                "text": "平台核心优势",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5362,9 +5462,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5372,12 +5473,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5512,9 +5614,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5522,12 +5625,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 2",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5544,9 +5648,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5554,12 +5659,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5694,9 +5800,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5704,12 +5811,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 3",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5726,9 +5834,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5736,12 +5845,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5876,9 +5986,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5886,12 +5997,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 4",
+                                "text": "平台核心优势",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -5908,9 +6020,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -5918,12 +6031,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6058,9 +6172,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6068,12 +6183,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 5",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6090,9 +6206,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6100,12 +6217,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6240,9 +6358,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6250,12 +6369,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 6",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6272,9 +6392,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6282,12 +6403,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6422,9 +6544,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6432,12 +6555,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 7",
+                                "text": "产品能力全景",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6454,9 +6578,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6464,12 +6589,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6604,9 +6730,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6614,12 +6741,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 8",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6636,9 +6764,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6646,12 +6775,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6786,9 +6916,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6796,12 +6927,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 9",
+                                "text": "产品能力全景",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6818,9 +6950,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6828,12 +6961,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -6968,9 +7102,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -6978,12 +7113,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 10",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -7000,9 +7136,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -7010,12 +7147,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -7048,7 +7186,7 @@
   "layouts": [
     {
       "id": "title_slide",
-      "description": "A split cover slide with a left text introduction, compact attribution card, and a large rounded image panel on the right.",
+      "description": "封面版式，突出展示主标题、说明文字和汇报信息。",
       "components": [
         {
           "id": "plain_background",
@@ -7118,10 +7256,11 @@
                   },
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 0.8
+                    "line_height": 1,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -7129,13 +7268,14 @@
                   },
                   "runs": [
                     {
-                      "text": "Pitch Deck",
+                      "text": "商业计划书",
                       "font": {
                         "size": 48,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 0.8
+                        "line_height": 1,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -7197,9 +7337,10 @@
                   },
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -7207,12 +7348,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Add a short subtitle or description here. Add a short subtitle or description here. Add a short subtitle or description here. Add a short subtitle or description here.",
+                      "text": "以灵活架构、统一数据和智能能力支撑业务创新，帮助组织快速响应不断变化的需求。",
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -7326,10 +7468,11 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -7337,13 +7480,14 @@
                       },
                       "runs": [
                         {
-                          "text": "JD",
+                          "text": "张",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -7373,9 +7517,10 @@
                         },
                         "font": {
                           "size": 16,
-                          "family": "Montserrat",
+                          "family": "Noto Sans CJK SC",
                           "color": "#234CD9",
-                          "line_height": 1.2
+                          "line_height": 1.2,
+                          "letter_spacing": 0
                         },
                         "alignment": {
                           "horizontal": "left",
@@ -7383,12 +7528,13 @@
                         },
                         "runs": [
                           {
-                            "text": "John Doe",
+                            "text": "张明",
                             "font": {
                               "size": 16,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.2
+                              "line_height": 1.2,
+                              "letter_spacing": 0
                             }
                           }
                         ],
@@ -7411,9 +7557,10 @@
                         },
                         "font": {
                           "size": 14,
-                          "family": "Montserrat",
+                          "family": "Noto Sans CJK SC",
                           "color": "#234CD9",
-                          "line_height": 1.2
+                          "line_height": 1.2,
+                          "letter_spacing": 0
                         },
                         "alignment": {
                           "horizontal": "left",
@@ -7421,12 +7568,13 @@
                         },
                         "runs": [
                           {
-                            "text": "December 2025",
+                            "text": "2025 年 12 月",
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.2
+                              "line_height": 1.2,
+                              "letter_spacing": 0
                             }
                           }
                         ],
@@ -7496,7 +7644,7 @@
     },
     {
       "id": "title_description_bullet_points_grid_with_icon",
-      "description": "A split slide with a large text panel on the left and a feature card grid on the right.",
+      "description": "内容版式，用于有层次地呈现标题、正文和关键信息。",
       "components": [
         {
           "id": "slide_canvas",
@@ -7586,10 +7734,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#1E4CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -7597,13 +7746,14 @@
               },
               "runs": [
                 {
-                  "text": "Businesses struggle",
+                  "text": "数字化解决方案",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -7625,9 +7775,10 @@
               },
               "font": {
                 "size": 18,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#334155",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -7635,12 +7786,13 @@
               },
               "runs": [
                 {
-                  "text": "Show that we offer a solution that solves the problems previously described and identified. Make sure that the solutions we offer uphold the values of effectiveness, efficiency, and are highly relevant to the market situation and society is here and what is hsd sdksdf klfdslkf lkflkfsldkf.",
+                  "text": "我们提供可落地的解决方案，针对已识别的问题持续创造业务价值。",
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#334155",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -7751,9 +7903,10 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -7761,12 +7914,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Market",
+                          "text": "市场",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -7819,9 +7973,10 @@
                       },
                       "font": {
                         "size": 12,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -7829,12 +7984,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Innovative and widely accepted.",
+                          "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                           "font": {
                             "size": 12,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -7921,9 +8077,10 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -7931,12 +8088,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Industry",
+                          "text": "行业",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -7989,9 +8147,10 @@
                       },
                       "font": {
                         "size": 12,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -7999,12 +8158,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Based on sound market decisions.",
+                          "text": "经营数据保持稳健增长，客户覆盖与复购表现进一步改善，为后续扩张奠定基础。",
                           "font": {
                             "size": 12,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8027,7 +8187,7 @@
     },
     {
       "id": "title_description_bullet_points_list_with_icon",
-      "description": "A split slide with a large text block on the left and stacked rounded information cards on the right.",
+      "description": "内容版式，用于有层次地呈现标题、正文和关键信息。",
       "components": [
         {
           "id": "slide_background",
@@ -8086,10 +8246,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -8097,13 +8258,14 @@
               },
               "runs": [
                 {
-                  "text": "Problem",
+                  "text": "问题",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -8125,9 +8287,10 @@
               },
               "font": {
                 "size": 18,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -8135,12 +8298,13 @@
               },
               "runs": [
                 {
-                  "text": "A problem needs to be discussed further and in detail because this problem is the main foundation in the initial development of a product, service, and decision making. Without a well-defined problem, it will have an impact on a job that is unfocused, unmanaged, and less relevant.",
+                  "text": "以灵活架构、统一数据和智能能力支撑业务创新，帮助组织快速响应不断变化的需求。",
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -8244,9 +8408,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8254,12 +8419,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8280,9 +8446,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8290,12 +8457,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8376,9 +8544,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8386,12 +8555,13 @@
                       },
                       "runs": [
                         {
-                          "text": "High Costs",
+                          "text": "成本高企",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8412,9 +8582,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8422,12 +8593,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Outdated systems increase expenses, while small businesses struggle to expand their market reach.",
+                          "text": "传统技术和分散系统推高运营成本，也限制了业务效率与增长空间。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8508,9 +8680,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8518,12 +8691,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8544,9 +8718,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8554,12 +8729,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8640,9 +8816,10 @@
                       },
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8650,12 +8827,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Inefficiency",
+                          "text": "效率不足",
                           "font": {
                             "size": 20,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.12
+                            "line_height": 1.12,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8676,9 +8854,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -8686,12 +8865,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Businesses struggle to find digital tools that meet their needs, causing operational slowdowns.",
+                          "text": "现有数字工具与业务需求脱节，导致流程迟缓和协作成本上升。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.3
+                            "line_height": 1.3,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -8758,7 +8938,7 @@
     },
     {
       "id": "title_description_chart",
-      "description": "Split slide with a left-aligned text block, rounded chart panel on the right, and a thin bottom accent rule.",
+      "description": "数据版式，用于展示关键指标、趋势和分析结论。",
       "components": [
         {
           "id": "base_canvas",
@@ -8854,10 +9034,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -8865,13 +9046,14 @@
               },
               "runs": [
                 {
-                  "text": "Data Table or Chart",
+                  "text": "数据表或图表",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -8892,9 +9074,10 @@
               },
               "font": {
                 "size": 16,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -8902,12 +9085,13 @@
               },
               "runs": [
                 {
-                  "text": "Present structured information in a flexible table or visualize it with a chart.",
+                  "text": "通过可扩展技术与良好体验连接业务场景，为持续增长提供可靠支撑。",
                   "font": {
                     "size": 16,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -8984,17 +9168,17 @@
               ],
               "x_axis": true,
               "y_axis": true,
-              "x_axis_title": "value",
+              "x_axis_title": "数值",
               "axis_color": "#6B7280",
               "categories": [
-                "A",
-                "B",
-                "C",
-                "D"
+                "甲项",
+                "乙项",
+                "丙项",
+                "丁项"
               ],
               "series": [
                 {
-                  "name": "value",
+                  "name": "数值",
                   "values": [
                     60,
                     42,
@@ -9018,7 +9202,7 @@
     },
     {
       "id": "title_description_chart_table",
-      "description": "Split layout with a large left title and chart card balanced by explanatory text and a metric table on the right.",
+      "description": "数据版式，用于展示关键指标、趋势和分析结论。",
       "components": [
         {
           "id": "page_background",
@@ -9110,10 +9294,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -9121,13 +9306,14 @@
               },
               "runs": [
                 {
-                  "text": "Company Traction",
+                  "text": "技术驱动增长",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -9215,7 +9401,7 @@
               ],
               "series": [
                 {
-                  "name": "Artificial Intelligence",
+                  "name": "人工智能",
                   "values": [
                     5,
                     10,
@@ -9224,7 +9410,7 @@
                   ]
                 },
                 {
-                  "name": "Internet of Things",
+                  "name": "物联网平台",
                   "values": [
                     10,
                     20,
@@ -9233,7 +9419,7 @@
                   ]
                 },
                 {
-                  "name": "Other Technology",
+                  "name": "其他技术",
                   "values": [
                     8,
                     15,
@@ -9272,9 +9458,10 @@
               },
               "font": {
                 "size": 16,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -9282,12 +9469,13 @@
               },
               "runs": [
                 {
-                  "text": "Traction is a period where the company is feeling momentum during its development period. If traction momentum is not harnessed, sales figures can decline and the customer base can shrink. In general, companies will judge success by the amount of revenue and new customers they receive.",
+                  "text": "通过精细化客户运营、渠道优化和数据分析，持续提升线索转化与销售产出。",
                   "font": {
                     "size": 16,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -9328,7 +9516,7 @@
                   "alignment": "left",
                   "runs": [
                     {
-                      "text": "Metric",
+                      "text": "指标",
                       "font": {
                         "size": 14,
                         "family": "Montserrat",
@@ -9353,7 +9541,7 @@
                   "alignment": "left",
                   "runs": [
                     {
-                      "text": "Value",
+                      "text": "数值",
                       "font": {
                         "size": 14,
                         "family": "Montserrat",
@@ -9377,7 +9565,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9419,7 +9607,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Revenue",
+                        "text": "营收",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9461,7 +9649,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Satisfaction",
+                        "text": "满意度",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9503,7 +9691,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Users",
+                        "text": "用户数",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9545,7 +9733,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Revenue",
+                        "text": "营收",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9587,7 +9775,7 @@
                     "alignment": "left",
                     "runs": [
                       {
-                        "text": "Satisfaction",
+                        "text": "满意度",
                         "font": {
                           "size": 14,
                           "family": "Montserrat",
@@ -9632,7 +9820,7 @@
     },
     {
       "id": "title_description_image",
-      "description": "A clean split slide with a large image on the left and stacked title plus paragraph text on the right.",
+      "description": "图文版式，通过主题图片与文字说明共同呈现重点内容。",
       "components": [
         {
           "id": "full_bleed_canvas",
@@ -9730,10 +9918,11 @@
                   },
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -9741,13 +9930,14 @@
                   },
                   "runs": [
                     {
-                      "text": "Image With Description",
+                      "text": "图文说明",
                       "font": {
                         "size": 48,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1
+                        "line_height": 1,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -9770,9 +9960,10 @@
                   },
                   "font": {
                     "size": 18,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#334155",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "left",
@@ -9780,12 +9971,13 @@
                   },
                   "runs": [
                     {
-                      "text": "In the presentation session, the background/introduction can be filled with information that is arranged systematically and effectively with respect to an interesting topic to be used as material for discussion at the opening of the presentation session. The introduction can provide a general overview for those who are listening to your presentation so that the key words on the topic of discussion are emphasized during this background/introductory presentation session.",
+                      "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -9806,7 +9998,7 @@
     },
     {
       "id": "title_list_of_cards_with_alternating_image",
-      "description": "A clean slide with a large header, side-by-side mosaic card groups, and a thin footer accent line.",
+      "description": "内容版式，用于有层次地呈现标题、正文和关键信息。",
       "components": [
         {
           "id": "plain_background",
@@ -9865,10 +10057,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -9876,13 +10069,14 @@
               },
               "runs": [
                 {
-                  "text": "Product Overview",
+                  "text": "产品概览",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -10032,9 +10226,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10042,12 +10237,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Internet of Things",
+                      "text": "物联网平台",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10068,9 +10264,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10078,12 +10275,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Detail and explain each product. Our examination of community and market issues increases with additional products/services.",
+                      "text": "关注多元包容、员工福祉与社区共建。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10104,9 +10302,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10114,12 +10313,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Analytics Dashboard",
+                      "text": "数据分析看板",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10141,9 +10341,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10151,12 +10352,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10303,9 +10505,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10313,12 +10516,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Mobile App Suite",
+                      "text": "移动应用套件",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10339,9 +10543,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10349,12 +10554,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10375,9 +10581,10 @@
                   },
                   "font": {
                     "size": 20,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.12
+                    "line_height": 1.12,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10385,12 +10592,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Smart Home Platform",
+                      "text": "智能家居平台",
                       "font": {
                         "size": 20,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.12
+                        "line_height": 1.12,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10412,9 +10620,10 @@
                   },
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   },
                   "alignment": {
                     "horizontal": "center",
@@ -10422,12 +10631,13 @@
                   },
                   "runs": [
                     {
-                      "text": "Our alternate product category is available. Our products must work together to solve social and economic issues.",
+                      "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.3
+                        "line_height": 1.3,
+                        "letter_spacing": 0
                       }
                     }
                   ],
@@ -10492,7 +10702,7 @@
     },
     {
       "id": "title_list_of_cards_with_image",
-      "description": "A clean title-led slide with equal profile cards aligned horizontally above a thin bottom accent line.",
+      "description": "团队版式，用于展示成员、角色和专业背景。",
       "components": [
         {
           "id": "background_accent",
@@ -10584,11 +10794,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
                 "line_height": 1,
-                "letter_spacing": -1.44
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -10596,14 +10806,14 @@
               },
               "runs": [
                 {
-                  "text": "Our\nTeam",
+                  "text": "我们的团队",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
                     "line_height": 1,
-                    "letter_spacing": -1.44
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -10741,10 +10951,11 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -10752,13 +10963,14 @@
                       },
                       "runs": [
                         {
-                          "text": "Sarah Johnson",
+                          "text": "创新产品路线图",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -10780,9 +10992,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -10790,12 +11003,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Strategic leader with 15+ years experience in technology and business development. Former VP at Fortune 500 company.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -10909,10 +11123,11 @@
                       },
                       "font": {
                         "size": 18,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
                         "bold": true,
-                        "line_height": 1.24
+                        "line_height": 1.24,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -10920,13 +11135,14 @@
                       },
                       "runs": [
                         {
-                          "text": "David Kim",
+                          "text": "平台核心优势",
                           "font": {
                             "size": 18,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
                             "bold": true,
-                            "line_height": 1.24
+                            "line_height": 1.24,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -10948,9 +11164,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#234CD9",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "center",
@@ -10958,12 +11175,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Product strategist focused on user experience and market-driven solutions. Former product manager at leading tech companies.",
+                          "text": "经营数据保持稳健增长，客户覆盖与复购表现进一步改善，为后续扩张奠定基础。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#234CD9",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -10988,7 +11206,7 @@
     },
     {
       "id": "title_image_description_list_with_highlighted_text_heading_description",
-      "description": "A clean split slide with a left title, map visual and paragraph, plus a stacked metric summary column on the right.",
+      "description": "数据版式，用于展示关键指标、趋势和分析结论。",
       "components": [
         {
           "id": "background_layer",
@@ -11047,10 +11265,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#1E4CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -11058,13 +11277,14 @@
               },
               "runs": [
                 {
-                  "text": "Market Size",
+                  "text": "业务成果与展望",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#1E4CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -11148,9 +11368,10 @@
               },
               "font": {
                 "size": 14,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
-                "line_height": 1.3
+                "line_height": 1.3,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -11158,12 +11379,13 @@
               },
               "runs": [
                 {
-                  "text": "Market size is the total amount of all sales and customers that can be seen directly by stakeholders. This technique is usually calculated at the end of the year, the market size can be used by companies to determine the potential of their market and business in the future. This is very useful, especially for new companies that will offer services to those who are interested in our services.",
+                  "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                   "font": {
                     "size": 14,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
-                    "line_height": 1.3
+                    "line_height": 1.3,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -11250,9 +11472,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#FFFFFF",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11260,12 +11483,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Total Available Market (TAM)",
+                          "text": "销售业绩概览",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#FFFFFF",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11286,10 +11510,11 @@
                       },
                       "font": {
                         "size": 24,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1.07
+                        "line_height": 1.07,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11297,13 +11522,14 @@
                       },
                       "runs": [
                         {
-                          "text": "1.4 Billion",
+                          "text": "数字化解决方案",
                           "font": {
                             "size": 24,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#1E4CD9",
                             "bold": true,
-                            "line_height": 1.07
+                            "line_height": 1.07,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11324,9 +11550,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11334,12 +11561,13 @@
                       },
                       "runs": [
                         {
-                          "text": "In the TAM Section, we can fill in the potential of any person who can buy an offer or the maximum amount of revenue a business can earn by selling their offer.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#334155",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11404,9 +11632,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#FFFFFF",
-                        "line_height": 1.14
+                        "line_height": 1.14,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11414,12 +11643,13 @@
                       },
                       "runs": [
                         {
-                          "text": "Serviceable Available Market (SAM)",
+                          "text": "销售业绩概览",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#FFFFFF",
-                            "line_height": 1.14
+                            "line_height": 1.14,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11440,10 +11670,11 @@
                       },
                       "font": {
                         "size": 24,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#1E4CD9",
                         "bold": true,
-                        "line_height": 1.07
+                        "line_height": 1.07,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11451,13 +11682,14 @@
                       },
                       "runs": [
                         {
-                          "text": "194 Million",
+                          "text": "技术驱动增长",
                           "font": {
                             "size": 24,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#1E4CD9",
                             "bold": true,
-                            "line_height": 1.07
+                            "line_height": 1.07,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11478,9 +11710,10 @@
                       },
                       "font": {
                         "size": 14,
-                        "family": "Montserrat",
+                        "family": "Noto Sans CJK SC",
                         "color": "#334155",
-                        "line_height": 1.1
+                        "line_height": 1.1,
+                        "letter_spacing": 0
                       },
                       "alignment": {
                         "horizontal": "left",
@@ -11488,12 +11721,13 @@
                       },
                       "runs": [
                         {
-                          "text": "It is a part of TAM that has the potential to become a target market for the company by considering the type of product, technology available and geographical conditions.",
+                          "text": "聚焦高价值市场和重点客户，以更高效的销售流程推动营收与市场份额增长。",
                           "font": {
                             "size": 14,
-                            "family": "Montserrat",
+                            "family": "Noto Sans CJK SC",
                             "color": "#334155",
-                            "line_height": 1.1
+                            "line_height": 1.1,
+                            "letter_spacing": 0
                           }
                         }
                       ],
@@ -11518,7 +11752,7 @@
     },
     {
       "id": "table_of_contents",
-      "description": "A clean index-style slide layout with a large header, card-based navigation grid, and thin bottom accent rule.",
+      "description": "内容版式，用于有层次地呈现标题、正文和关键信息。",
       "components": [
         {
           "id": "background_canvas",
@@ -11577,10 +11811,11 @@
               },
               "font": {
                 "size": 48,
-                "family": "Montserrat",
+                "family": "Noto Sans CJK SC",
                 "color": "#234CD9",
                 "bold": true,
-                "line_height": 1
+                "line_height": 1,
+                "letter_spacing": 0
               },
               "alignment": {
                 "horizontal": "left",
@@ -11588,13 +11823,14 @@
               },
               "runs": [
                 {
-                  "text": "Table Of Contents",
+                  "text": "目录",
                   "font": {
                     "size": 48,
-                    "family": "Montserrat",
+                    "family": "Noto Sans CJK SC",
                     "color": "#234CD9",
                     "bold": true,
-                    "line_height": 1
+                    "line_height": 1,
+                    "letter_spacing": 0
                   }
                 }
               ],
@@ -11745,9 +11981,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -11755,12 +11992,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 1",
+                                "text": "平台核心优势",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -11777,9 +12015,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -11787,12 +12026,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -11927,9 +12167,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -11937,12 +12178,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 2",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -11959,9 +12201,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -11969,12 +12212,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12109,9 +12353,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12119,12 +12364,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 3",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12141,9 +12387,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12151,12 +12398,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12291,9 +12539,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12301,12 +12550,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 4",
+                                "text": "平台核心优势",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12323,9 +12573,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12333,12 +12584,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12473,9 +12725,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12483,12 +12736,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 5",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12505,9 +12759,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12515,12 +12770,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12655,9 +12911,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12665,12 +12922,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 6",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12687,9 +12945,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12697,12 +12956,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12837,9 +13097,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12847,12 +13108,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 7",
+                                "text": "产品能力全景",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -12869,9 +13131,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -12879,12 +13142,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13019,9 +13283,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13029,12 +13294,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 8",
+                                "text": "数字化解决方案",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13051,9 +13317,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13061,12 +13328,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13201,9 +13469,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13211,12 +13480,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 9",
+                                "text": "产品能力全景",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13233,9 +13503,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13243,12 +13514,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13383,9 +13655,10 @@
                             },
                             "font": {
                               "size": 18,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#1E4CD9",
-                              "line_height": 1.24
+                              "line_height": 1.24,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13393,12 +13666,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Section 10",
+                                "text": "创新产品路线图",
                                 "font": {
                                   "size": 18,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#1E4CD9",
-                                  "line_height": 1.24
+                                  "line_height": 1.24,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13415,9 +13689,10 @@
                             },
                             "font": {
                               "size": 14,
-                              "family": "Montserrat",
+                              "family": "Noto Sans CJK SC",
                               "color": "#234CD9",
-                              "line_height": 1.3
+                              "line_height": 1.3,
+                              "letter_spacing": 0
                             },
                             "alignment": {
                               "horizontal": "left",
@@ -13425,12 +13700,13 @@
                             },
                             "runs": [
                               {
-                                "text": "Brief description for this section.",
+                                "text": "产品整合核心流程与实时洞察，降低使用门槛并提升运营效率和决策质量。",
                                 "font": {
                                   "size": 14,
-                                  "family": "Montserrat",
+                                  "family": "Noto Sans CJK SC",
                                   "color": "#234CD9",
-                                  "line_height": 1.3
+                                  "line_height": 1.3,
+                                  "letter_spacing": 0
                                 }
                               }
                             ],
@@ -13518,15 +13794,22 @@
           "max_length": 80,
           "runs": [
             {
-              "text": "New text",
+              "text": "新文本",
               "font": {
-                "family": "Inter",
+                "family": "Noto Sans CJK SC",
                 "size": 28,
                 "color": "#111111",
-                "bold": true
+                "bold": true,
+                "letter_spacing": 0,
+                "line_height": 1
               }
             }
-          ]
+          ],
+          "font": {
+            "family": "Noto Sans CJK SC",
+            "letter_spacing": 0,
+            "line_height": 1
+          }
         }
       ]
     }

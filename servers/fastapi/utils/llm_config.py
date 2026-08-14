@@ -387,7 +387,11 @@ def get_llm_config(*, use_openai_responses_api: bool = False) -> ClientConfig:
             )
 
 
-def get_extra_body(*, uses_tool_choice: bool = False) -> Optional[dict]:
+def get_extra_body(
+    *,
+    uses_tool_choice: bool = False,
+    enable_web_search: bool = False,
+) -> Optional[dict]:
     llm_provider = get_llm_provider()
     if llm_provider == LLMProvider.DEEPSEEK and (
         disable_thinking() or uses_tool_choice
@@ -395,4 +399,11 @@ def get_extra_body(*, uses_tool_choice: bool = False) -> Optional[dict]:
         return {"thinking": {"type": "disabled"}}
     if llm_provider == LLMProvider.CUSTOM and disable_thinking():
         return {"enable_thinking": False}
+    if llm_provider == LLMProvider.LITELLM:
+        extra_body = {}
+        if disable_thinking():
+            extra_body["enable_thinking"] = False
+        if enable_web_search:
+            extra_body["enable_search"] = True
+        return extra_body or None
     return None

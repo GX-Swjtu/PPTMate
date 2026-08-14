@@ -152,6 +152,48 @@ def test_generate_ppt_outline_default_openai_uses_native_search_tool(monkeypatch
     assert captured_kwargs["disconnect_checker"] is is_disconnected
 
 
+def test_generate_ppt_outline_litellm_enables_native_search_parameter(monkeypatch):
+    captured_kwargs = {}
+    captured_config_kwargs = {}
+
+    async def fake_stream_generate_events(_client, **kwargs):
+        captured_kwargs.update(kwargs)
+        yield content_event('{"slides": [{"content": "## Current facts"}]}')
+
+    def fake_get_llm_config(**kwargs):
+        captured_config_kwargs.update(kwargs)
+        return {}
+
+    monkeypatch.setenv("LLM", "litellm")
+    monkeypatch.setenv("WEB_SEARCH_PROVIDER", "auto")
+    monkeypatch.setenv("DISABLE_THINKING", "false")
+    monkeypatch.setenv("LITELLM_NATIVE_WEB_SEARCH_PARAMETER", "enable_search")
+
+    with patch.object(outline_module, "get_model", return_value="pptmate-chat"), patch.object(
+        outline_module, "get_client", return_value=object()
+    ), patch.object(
+        outline_module,
+        "get_llm_config",
+        side_effect=fake_get_llm_config,
+    ), patch.object(
+        outline_module,
+        "stream_generate_events",
+        side_effect=fake_stream_generate_events,
+    ):
+        _collect_async_chunks(
+            outline_module.generate_ppt_outline(
+                content="What changed today?",
+                n_slides=1,
+                language="English",
+                web_search=True,
+            )
+        )
+
+    assert captured_config_kwargs == {"use_openai_responses_api": False}
+    assert "tools" not in captured_kwargs
+    assert captured_kwargs["extra_body"] == {"enable_search": True}
+
+
 def test_generate_ppt_outline_streams_json_chunks_and_keeps_schema_shape():
     async def fake_stream_generate_events(_client, **_kwargs):
         yield content_event('{"slides": [')

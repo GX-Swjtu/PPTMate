@@ -867,6 +867,7 @@ class ImageGenerationService:
             model=model,
             prompt=prompt,
             n=1,
+            response_format="b64_json",
             size="1024x1024",
         )
 

@@ -1,6 +1,6 @@
 import pytest
 import os
-from unittest.mock import Mock, patch, AsyncMock, MagicMock
+from unittest.mock import AsyncMock, Mock, patch
 from services.image_generation_service import ImageGenerationService
 
 
@@ -98,11 +98,13 @@ class TestImageGenerationOpenAICompatible:
                             base_url="https://api.example.com/v1", api_key="sk-test-key"
                         )
 
-                        # Verify generate call (no response_format sent)
+                        # Ask the gateway to absorb the provider's temporary URL
+                        # and return durable image bytes to the isolated PPTMate Pod.
                         mock_client_instance.images.generate.assert_called_with(
                             model="custom-model",
                             prompt="test prompt",
                             n=1,
+                            response_format="b64_json",
                             size="1024x1024",
                         )
 
@@ -254,7 +256,7 @@ class TestImageGenerationOpenAICompatible:
                         with patch(
                             "services.image_generation_service.aiohttp.ClientSession",
                             return_value=mock_session,
-                        ) as MockSession:
+                        ):
                             image_path = await service.generate_image_openai_compatible(
                                 "test prompt", mock_images_directory
                             )

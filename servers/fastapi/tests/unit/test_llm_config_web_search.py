@@ -85,3 +85,24 @@ def test_custom_disable_thinking_uses_legacy_payload(monkeypatch):
     extra_body = get_extra_body()
 
     assert extra_body == {"enable_thinking": False}
+
+
+def test_litellm_native_web_search_uses_dashscope_compatible_payload(monkeypatch):
+    monkeypatch.setenv("LLM", "litellm")
+    monkeypatch.setenv("DISABLE_THINKING", "false")
+
+    extra_body = get_extra_body(enable_web_search=True)
+
+    assert extra_body == {"enable_search": True}
+
+
+def test_litellm_combines_web_search_with_disabled_thinking(monkeypatch):
+    monkeypatch.setenv("LLM", "litellm")
+    monkeypatch.setenv("DISABLE_THINKING", "true")
+
+    extra_body = get_extra_body(enable_web_search=True)
+
+    assert extra_body == {
+        "enable_thinking": False,
+        "enable_search": True,
+    }

@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import shutil
 import stat
@@ -88,6 +89,11 @@ def _write_template_bundle(root: Path, *, include_raw_layouts: bool = False) -> 
     return template_dir
 
 
+def _thumbnail_url(template_id: str, content: bytes = b"thumbnail") -> str:
+    digest = hashlib.sha256(content).hexdigest()[:16]
+    return f"/app_data/templates/{template_id}/static/thumbnail.png?v={digest}"
+
+
 class _FakeSession:
     def __init__(
         self,
@@ -171,9 +177,7 @@ def test_default_template_import_normalizes_shapes_and_copies_static(
         ]
         == "/app_data/templates/general/static/image.png"
     )
-    assert template.assets["thumbnail"] == (
-        "/app_data/templates/general/static/thumbnail.png"
-    )
+    assert template.assets["thumbnail"] == _thumbnail_url("general")
     assert template.assets["fonts"] == {
         "Inter": "/app_data/templates/general/static/inter.ttf"
     }
@@ -203,6 +207,22 @@ def test_default_template_import_force_replaces_static_assets(tmp_path, monkeypa
 
     assert (old_static_dir / "image.png").read_bytes() == b"image"
     assert not (old_static_dir / "removed-from-bundle.png").exists()
+
+
+def test_default_template_thumbnail_url_changes_with_content(tmp_path):
+    templates_root = tmp_path / "templates"
+    template_dir = _write_template_bundle(templates_root)
+
+    first = default_templates._load_default_template(template_dir)
+    updated_content = b"localized-thumbnail"
+    (template_dir / "static/thumbnail.png").write_bytes(updated_content)
+    updated = default_templates._load_default_template(template_dir)
+
+    assert first.assets["thumbnail"] != updated.assets["thumbnail"]
+    assert updated.assets["thumbnail"] == _thumbnail_url(
+        "general",
+        updated_content,
+    )
 
 
 def test_default_template_import_makes_shared_assets_world_readable(
@@ -282,9 +302,7 @@ def test_default_template_import_updates_existing_database_row(tmp_path, monkeyp
     assert existing.raw_layouts is None
     assert list(existing.layouts) == ["layouts"]
     assert list(existing.merged_components) == ["components"]
-    assert existing.assets["thumbnail"] == (
-        "/app_data/templates/general/static/thumbnail.png"
-    )
+    assert existing.assets["thumbnail"] == _thumbnail_url("general")
     assert (app_data_dir / "templates/general/static/image.png").exists()
 
 
@@ -352,21 +370,47 @@ def test_default_template_import_removes_all_defaults_when_bundle_is_empty(
     assert not (app_data_dir / "templates/legacy-default").exists()
 
 
-def test_bundled_general_template_json_matches_template_v2_shapes():
-    template_dir = Path(__file__).resolve().parents[4] / "templates" / "general"
+def test_all_bundled_template_jsons_match_template_v2_shapes():
+    templates_root = Path(__file__).resolve().parents[4] / "templates"
+    template_ids = {
+        "dynamic",
+        "editorial",
+        "executive",
+        "general",
+        "modern",
+        "momentum",
+        "standard",
+        "swift",
+    }
 
-    template = default_templates._load_default_template(template_dir)
+    assert {
+        path.name
+        for path in templates_root.iterdir()
+        if path.is_dir() and (path / "template.json").is_file()
+    } == template_ids
 
-    template_id = "general"
-    assert template.id == template_id
-    assert template.is_default is True
-    assert list(template.layouts) == ["layouts"]
-    assert len(template.layouts["layouts"]) > 0
-    assert list(template.merged_components) == ["components"]
-    assert len(template.merged_components["components"]) > 0
-    assert template.assets["thumbnail"] == (
-        f"/app_data/templates/{template_id}/static/thumbnail.png"
-    )
+    for template_id in sorted(template_ids):
+        template = default_templates._load_default_template(
+            templates_root / template_id
+        )
+
+        assert template.id == template_id
+        assert template.is_default is True
+        assert list(template.layouts) == ["layouts"]
+        assert len(template.layouts["layouts"]) > 0
+        assert list(template.merged_components) == ["components"]
+        assert len(template.merged_components["components"]) > 0
+        thumbnail = (
+            Path(__file__).resolve().parents[4]
+            / "templates"
+            / template_id
+            / "static"
+            / "thumbnail.png"
+        ).read_bytes()
+        assert template.assets["thumbnail"] == _thumbnail_url(
+            template_id,
+            thumbnail,
+        )
 
 
 def test_resolve_default_template_id_maps_public_name_to_json_id():

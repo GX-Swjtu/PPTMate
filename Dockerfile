@@ -4,6 +4,8 @@ FROM python:3.11-slim-trixie AS fastapi-builder
 
 WORKDIR /app/servers/fastapi
 
+ARG PREWARM_FASTEMBED=true
+
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
@@ -25,8 +27,15 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
 ENV HF_HOME=/root/.cache/huggingface \
     PRESENTON_FASTEMBED_ICON_CACHE_DIR=/root/.cache/presenton/fastembed-icons
-# Warm FastEmbed caches into the image (not a BuildKit cache mount, or HF weights would be missing).
-RUN /opt/venv/bin/python scripts/warm_fastembed_cache.py
+# Upstream images retain the local FastEmbed fallback. The NGL platform build
+# disables this step because both Mem0 and icon queries use LiteLLM embeddings.
+RUN set -eux; \
+    mkdir -p "$HF_HOME" "$PRESENTON_FASTEMBED_ICON_CACHE_DIR"; \
+    case "$PREWARM_FASTEMBED" in \
+        true) /opt/venv/bin/python scripts/warm_fastembed_cache.py ;; \
+        false) echo 'Skipping local FastEmbed model warmup' ;; \
+        *) echo 'PREWARM_FASTEMBED must be true or false' >&2; exit 1 ;; \
+    esac
 
 
 FROM node:20-bookworm-slim AS nextjs-builder

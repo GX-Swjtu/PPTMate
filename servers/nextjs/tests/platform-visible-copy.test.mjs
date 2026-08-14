@@ -14,7 +14,18 @@ async function readSource(relativePath) {
 }
 
 test("platform entry points use the PPTMate brand and approved Chinese copy", async () => {
-  const [uploadPage, uploadForm, sidebar, header, splash, mark, reverseMark] = await Promise.all([
+  const [
+    uploadPage,
+    uploadForm,
+    sidebar,
+    header,
+    splash,
+    mark,
+    reverseMark,
+    templatePreview,
+    currentConfig,
+    providerConstants,
+  ] = await Promise.all([
     readSource("app/(presentation-generator)/upload/page.tsx"),
     readSource("app/(presentation-generator)/upload/components/UploadPage.tsx"),
     readSource("app/(presentation-generator)/(dashboard)/Components/DashboardSidebar.tsx"),
@@ -22,6 +33,13 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     readSource("components/ui/presenton-splash-loader.tsx"),
     readSource("public/pptmate-mark.svg"),
     readSource("public/pptmate-mark-reverse.svg"),
+    readSource(
+      "app/(presentation-generator)/components/TemplatePreviewComponents.tsx",
+    ),
+    readSource(
+      "app/(presentation-generator)/upload/components/CurrentConfig.tsx",
+    ),
+    readSource("utils/providerConstants.ts"),
   ]);
 
   for (const source of [uploadPage, splash]) {
@@ -38,6 +56,16 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
   assert.match(uploadForm, /LanguageType\.ChineseSimplified/);
   assert.match(sidebar, /src="\/pptmate-mark\.svg"/);
   assert.match(header, /src="\/pptmate-mark\.svg"/);
+  assert.match(templatePreview, /模板-\{count\}页/);
+  assert.doesNotMatch(templatePreview, /版式-\{count\}/);
+  assert.match(
+    currentConfig,
+    /textProviderKey === "litellm" && selectedTextModel\s*\? selectedTextModel/,
+  );
+  assert.match(currentConfig, /图片生成：开启/);
+  assert.match(currentConfig, /联网：/);
+  assert.match(providerConstants, /label: "模型原生"/);
+  assert.doesNotMatch(providerConstants, /Default \(Model\)/);
 });
 
 test("Chinese labels do not replace editor protocol values", async () => {

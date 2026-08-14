@@ -43,7 +43,7 @@ export const LayoutsBadge = memo(function LayoutsBadge({
             : "left-4 top-3.5 bg-[#333333] px-3 py-1 font-semibold"
         )}
       >
-        版式-{count}
+        模板-{count}页
       </span>
     );
 });

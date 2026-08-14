@@ -14,6 +14,26 @@ def test_auto_uses_native_search_for_supported_llm(monkeypatch):
     assert web_search.should_expose_external_web_search_tool() is False
 
 
+def test_auto_uses_native_search_parameter_for_litellm(monkeypatch):
+    monkeypatch.setenv("LLM", LLMProvider.LITELLM.value)
+    monkeypatch.setenv("WEB_SEARCH_PROVIDER", WebSearchProvider.AUTO.value)
+    monkeypatch.setenv("LITELLM_NATIVE_WEB_SEARCH_PARAMETER", "enable_search")
+
+    assert web_search.should_use_native_web_search() is False
+    assert web_search.should_use_native_web_search_parameter() is True
+    assert web_search.should_expose_external_web_search_tool() is False
+    assert web_search.get_web_search_route() == ("native", None)
+
+
+def test_litellm_native_search_requires_explicit_parameter_contract(monkeypatch):
+    monkeypatch.setenv("LLM", LLMProvider.LITELLM.value)
+    monkeypatch.setenv("WEB_SEARCH_PROVIDER", WebSearchProvider.AUTO.value)
+    monkeypatch.delenv("LITELLM_NATIVE_WEB_SEARCH_PARAMETER", raising=False)
+
+    assert web_search.should_use_native_web_search_parameter() is False
+    assert web_search.get_web_search_route() == ("unavailable", None)
+
+
 def test_auto_reports_unavailable_without_configured_external_provider(monkeypatch):
     monkeypatch.setenv("LLM", LLMProvider.OLLAMA.value)
     monkeypatch.setenv("WEB_SEARCH_PROVIDER", WebSearchProvider.AUTO.value)

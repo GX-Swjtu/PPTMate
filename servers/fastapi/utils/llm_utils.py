@@ -109,6 +109,7 @@ def get_generate_kwargs(
     response_format: Optional[ResponseFormat] = None,
     reasoning: Optional[ReasoningConfig] = None,
     stream: bool = False,
+    enable_web_search: bool = False,
 ) -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "model": model,
@@ -124,7 +125,10 @@ def get_generate_kwargs(
     if reasoning is not None:
         kwargs["reasoning"] = reasoning
 
-    extra_body = get_extra_body(uses_tool_choice=bool(tools or response_format))
+    extra_body = get_extra_body(
+        uses_tool_choice=bool(tools or response_format),
+        enable_web_search=enable_web_search,
+    )
     if extra_body:
         kwargs["extra_body"] = extra_body
 

@@ -29,7 +29,9 @@ export function configFromEnvironment(): LLMConfig {
     OPENAI_COMPAT_IMAGE_API_KEY: process.env.OPENAI_COMPAT_IMAGE_API_KEY
       ? "__configured__"
       : "",
-    WEB_SEARCH_PROVIDER: "",
+    WEB_GROUNDING:
+      (process.env.WEB_GROUNDING || "false").toLowerCase() === "true",
+    WEB_SEARCH_PROVIDER: process.env.WEB_SEARCH_PROVIDER || "auto",
     DISABLE_ANONYMOUS_TRACKING: "true",
   });
 }

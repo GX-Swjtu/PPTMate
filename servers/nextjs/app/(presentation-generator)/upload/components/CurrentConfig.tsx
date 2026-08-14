@@ -1,5 +1,5 @@
 import { RootState } from '@/store/store';
-import { IMAGE_PROVIDERS, LLM_PROVIDERS, WEB_SEARCH_PROVIDERS } from '@/utils/providerConstants';
+import { LLM_PROVIDERS, WEB_SEARCH_PROVIDERS } from '@/utils/providerConstants';
 import React from 'react'
 import { useSelector } from 'react-redux';
 
@@ -43,15 +43,17 @@ const CurrentConfig = ({ webSearchEnabled }: { webSearchEnabled: boolean }) => {
                                             : textProviderKey === "codex"
                                                 ? llmConfig.CODEX_MODEL
                                                 : "";
-    const textSummary = selectedTextModel
-        ? `${textProviderLabel} (${selectedTextModel})`
-        : textProviderLabel;
+    const textSummary = textProviderKey === "litellm" && selectedTextModel
+        ? selectedTextModel
+        : selectedTextModel
+            ? `${textProviderLabel} (${selectedTextModel})`
+            : textProviderLabel;
 
     const imageSummary = llmConfig.DISABLE_IMAGE_GENERATION
-        ? "图片生成已关闭"
+        ? "图片生成：关闭"
         : llmConfig.IMAGE_PROVIDER
-            ? IMAGE_PROVIDERS[llmConfig.IMAGE_PROVIDER]?.label || llmConfig.IMAGE_PROVIDER
-            : "未配置图片服务";
+            ? "图片生成：开启"
+            : "图片生成：未配置";
     const webSearchProviderKey = (llmConfig.WEB_SEARCH_PROVIDER || "auto").toLowerCase();
     const webSearchProvider =
         WEB_SEARCH_PROVIDERS[webSearchProviderKey]?.label || webSearchProviderKey;

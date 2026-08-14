@@ -5,9 +5,11 @@
   "type": "module",
   "description": "Open-source AI presentation generator",
   "scripts": {
-    "test": "npm run test:template-converter && node --test scripts/package-metadata.test.mjs",
+    "test": "npm run test:template-converter && npm run check:templates:zh-cn && node --test scripts/package-metadata.test.mjs",
     "convert:template": "node scripts/convert-template.mjs",
     "convert:presentation-template": "node scripts/convert-presentation-template.mjs",
+    "localize:templates:zh-cn": "node scripts/localize-default-templates-zh-cn.mjs",
+    "check:templates:zh-cn": "node scripts/localize-default-templates-zh-cn.mjs --check",
     "test:template-converter": "node --test scripts/convert-template.test.mjs scripts/convert-presentation-template.test.mjs",
     "sync:presentation-export": "node scripts/sync-presentation-export.cjs",
     "sync:presentation-export:force": "node scripts/sync-presentation-export.cjs --force",

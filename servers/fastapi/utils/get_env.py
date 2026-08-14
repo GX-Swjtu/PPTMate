@@ -235,6 +235,10 @@ def get_litellm_model_env():
     return os.getenv("LITELLM_MODEL")
 
 
+def get_litellm_native_web_search_parameter_env():
+    return os.getenv("LITELLM_NATIVE_WEB_SEARCH_PARAMETER")
+
+
 def get_lmstudio_base_url_env():
     return os.getenv("LMSTUDIO_BASE_URL")
 

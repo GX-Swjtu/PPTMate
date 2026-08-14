@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import shutil
@@ -116,6 +117,11 @@ def _load_default_template(template_dir: Path) -> TemplateV2:
 
     template_id = _read_template_id(raw, template_dir)
     rewritten = _rewrite_static_asset_urls(raw, template_id)
+    rewritten["thumbnail"] = _version_default_template_thumbnail(
+        raw.get("thumbnail"),
+        rewritten.get("thumbnail"),
+        template_dir,
+    )
 
     layouts = _coerce_slide_layouts(rewritten.get("layouts"))
     merged_components = _coerce_merged_components(rewritten.get("merged_components"))
@@ -257,6 +263,32 @@ def _rewrite_static_asset_url(value: str, template_id: str) -> str:
     if relative.is_absolute() or ".." in relative.parts:
         raise ValueError(f"Invalid default template static asset path: {value}")
     return f"/app_data/templates/{template_id}/{relative.as_posix()}"
+
+
+def _version_default_template_thumbnail(
+    source_value: Any,
+    rewritten_value: Any,
+    template_dir: Path,
+) -> Any:
+    """Attach a content version to bundled thumbnails to invalidate browser caches."""
+    if not isinstance(source_value, str) or not source_value.startswith("static/"):
+        return rewritten_value
+    if not isinstance(rewritten_value, str) or not rewritten_value:
+        return rewritten_value
+
+    relative = PurePosixPath(source_value)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(
+            f"Invalid default template static asset path: {source_value}"
+        )
+
+    source_path = template_dir.joinpath(*relative.parts)
+    if not source_path.is_file():
+        return rewritten_value
+
+    digest = hashlib.sha256(source_path.read_bytes()).hexdigest()[:16]
+    separator = "&" if "?" in rewritten_value else "?"
+    return f"{rewritten_value}{separator}v={digest}"
 
 
 def _collect_image_urls(*values: Any) -> list[str]:

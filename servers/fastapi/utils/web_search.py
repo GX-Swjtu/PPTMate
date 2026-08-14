@@ -14,6 +14,7 @@ from enums.web_search_provider import WebSearchProvider
 from utils.get_env import (
     get_brave_search_api_key_env,
     get_exa_api_key_env,
+    get_litellm_native_web_search_parameter_env,
     get_searxng_base_url_env,
     get_serper_api_key_env,
     get_tavily_api_key_env,
@@ -24,9 +25,10 @@ from utils.llm_provider import get_llm_provider
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_MAX_RESULTS = 5
-NATIVE_WEB_SEARCH_PROVIDERS = frozenset(
+NATIVE_WEB_SEARCH_TOOL_PROVIDERS = frozenset(
     {LLMProvider.OPENAI, LLMProvider.GOOGLE, LLMProvider.ANTHROPIC}
 )
+NATIVE_WEB_SEARCH_PARAMETER_PROVIDERS = frozenset({LLMProvider.LITELLM})
 
 
 @dataclass(frozen=True)
@@ -37,7 +39,27 @@ class WebSearchResult:
 
 
 def supports_native_web_search(provider: LLMProvider | None = None) -> bool:
-    return (provider or get_llm_provider()) in NATIVE_WEB_SEARCH_PROVIDERS
+    resolved_provider = provider or get_llm_provider()
+    return (
+        supports_native_web_search_tool(resolved_provider)
+        or supports_native_web_search_parameter(resolved_provider)
+    )
+
+
+def supports_native_web_search_tool(provider: LLMProvider | None = None) -> bool:
+    return (provider or get_llm_provider()) in NATIVE_WEB_SEARCH_TOOL_PROVIDERS
+
+
+def supports_native_web_search_parameter(
+    provider: LLMProvider | None = None,
+) -> bool:
+    configured_parameter = (
+        get_litellm_native_web_search_parameter_env() or ""
+    ).strip()
+    if configured_parameter != "enable_search":
+        return False
+    resolved_provider = provider or get_llm_provider()
+    return resolved_provider in NATIVE_WEB_SEARCH_PARAMETER_PROVIDERS
 
 
 def get_selected_web_search_provider() -> WebSearchProvider:
@@ -53,7 +75,18 @@ def get_selected_web_search_provider() -> WebSearchProvider:
 
 def should_use_native_web_search() -> bool:
     selected = get_selected_web_search_provider()
-    return selected in {WebSearchProvider.AUTO, WebSearchProvider.NATIVE} and supports_native_web_search()
+    return selected in {
+        WebSearchProvider.AUTO,
+        WebSearchProvider.NATIVE,
+    } and supports_native_web_search_tool()
+
+
+def should_use_native_web_search_parameter() -> bool:
+    selected = get_selected_web_search_provider()
+    return selected in {
+        WebSearchProvider.AUTO,
+        WebSearchProvider.NATIVE,
+    } and supports_native_web_search_parameter()
 
 
 def should_expose_external_web_search_tool(

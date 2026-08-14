@@ -34,6 +34,7 @@ from utils.web_search import (
     get_web_search_context,
     should_expose_external_web_search_tool,
     should_use_native_web_search,
+    should_use_native_web_search_parameter,
 )
 
 LOGGER = logging.getLogger(__name__)
@@ -261,6 +262,10 @@ async def generate_ppt_outline(
     )
 
     use_search_tool = web_search and should_use_native_web_search()
+    use_search_parameter = (
+        web_search and should_use_native_web_search_parameter()
+    )
+    use_native_search = use_search_tool or use_search_parameter
     use_external_search = web_search and should_expose_external_web_search_tool()
     client = get_client(
         config=get_llm_config(use_openai_responses_api=use_search_tool)
@@ -281,7 +286,7 @@ async def generate_ppt_outline(
             route_mode,
             actual_provider_name,
         )
-    elif use_search_tool:
+    elif use_native_search:
         LOGGER.info(
             "Outline web search routing: enabled=true route=native selected_provider=%s actual_provider=model-native model=%s",
             get_selected_web_search_provider().value,
@@ -346,7 +351,7 @@ async def generate_ppt_outline(
         if emit_statuses:
             yield OutlineGenerationStatus(
                 "Searching with model-native web search and drafting outlines"
-                if use_search_tool
+                if use_native_search
                 else "Drafting your presentation outline"
             )
         outline_schema = prepare_schema_for_validation(
@@ -378,6 +383,7 @@ async def generate_ppt_outline(
                 response_format=response_format,
                 tools=([WebSearchTool()] if use_search_tool else None),
                 stream=True,
+                enable_web_search=use_search_parameter,
             ),
         ):
             if getattr(event, "type", None) == "content":

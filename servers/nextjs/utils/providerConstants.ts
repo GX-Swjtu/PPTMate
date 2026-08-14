@@ -42,9 +42,9 @@ export interface WebSearchProviderOption {
 export const WEB_SEARCH_PROVIDERS: Record<string, WebSearchProviderOption> = {
   auto: {
     value: "auto",
-    label: "Default (Model)",
+    label: "模型原生",
     description:
-      "Use model-native web grounding when available. Otherwise web search stays off until you choose an external provider.",
+      "优先使用当前模型自带的联网搜索能力；模型不支持时不会自动切换外部搜索服务。",
     icon: "/providers/model-search.svg",
   },
   searxng: {
