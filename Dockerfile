@@ -9,8 +9,9 @@ ARG PREWARM_FASTEMBED=true
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
-RUN python -m venv --without-pip /opt/venv \
-    && pip install --no-cache-dir uv
+RUN --mount=type=cache,id=pptmate-pip-cache,target=/root/.cache/pip,sharing=locked \
+    python -m venv --without-pip /opt/venv \
+    && pip install uv
 
 COPY servers/fastapi/pyproject.toml servers/fastapi/uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -62,9 +63,11 @@ WORKDIR /app
 
 ARG TARGETARCH
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl unzip \
-    && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,id=pptmate-bookworm-apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=pptmate-bookworm-apt-lists,target=/var/lib/apt/lists,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl unzip
 
 COPY package.json /app/
 
@@ -107,7 +110,10 @@ ENV APP_DATA_DIRECTORY=/app_data \
     START_OLLAMA=false \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-RUN set -eux; \
+RUN --mount=type=cache,id=pptmate-trixie-apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=pptmate-trixie-apt-lists,target=/var/lib/apt/lists,sharing=locked \
+    set -eux; \
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
     printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot; \
     printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/%s trixie-security main\n' "$CHROMIUM_SNAPSHOT" > /etc/apt/sources.list.d/chromium-snapshot.list; \
     packages="ca-certificates curl nginx fontconfig imagemagick zstd \
@@ -127,8 +133,7 @@ RUN set -eux; \
     chromium-driver="${CHROMIUM_VERSION}"; \
     apt-mark hold chromium chromium-common chromium-driver; \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash -; \
-    apt-get install -y --no-install-recommends nodejs; \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends nodejs
 
 # Remove any non-Noto fonts that may have been installed as dependencies.
 RUN find /usr/share/fonts -type f ! -iname 'Noto*' -delete \

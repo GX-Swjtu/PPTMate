@@ -22,7 +22,10 @@ ENV APP_DATA_DIRECTORY=/app_data \
     PRESENTON_FASTEMBED_ICON_CACHE_DIR=/root/.cache/presenton/fastembed-icons \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-RUN printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot \
+RUN --mount=type=cache,id=pptmate-trixie-apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=pptmate-trixie-apt-lists,target=/var/lib/apt/lists,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot \
     && printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/%s trixie-security main\n' "$CHROMIUM_SNAPSHOT" > /etc/apt/sources.list.d/chromium-snapshot.list \
     && apt-get update && apt-get install -y --no-install-recommends --allow-downgrades \
     ca-certificates curl unzip \
@@ -39,17 +42,17 @@ RUN printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snaps
     chromium-common="${CHROMIUM_VERSION}" \
     chromium-driver="${CHROMIUM_VERSION}" \
     && apt-mark hold chromium chromium-common chromium-driver \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && rm -rf /var/lib/apt/lists/*
+    && curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Remove any non-Noto fonts that may have been installed as dependencies.
 RUN find /usr/share/fonts -type f ! -iname 'Noto*' -delete \
     && find /usr/share/fonts -type d -empty -delete \
     && fc-cache -fsv
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,id=pptmate-trixie-apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=pptmate-trixie-apt-lists,target=/var/lib/apt/lists,sharing=locked \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 COPY package.json package-lock.json /app/
 RUN npm --prefix /app install --omit=dev
