@@ -1,10 +1,9 @@
-from contextlib import asynccontextmanager
 import logging
 import logging.config
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-
 from migrations import migrate_database_on_startup
 from services.database import async_session_maker, create_db_and_tables, dispose_engines
 from services.provider_settings import migrate_provider_settings_from_file
@@ -13,7 +12,9 @@ from utils.get_env import get_app_data_directory_env, get_can_change_keys_env
 from utils.model_availability import (
     check_llm_and_image_provider_api_or_model_availability,
 )
+from utils.platform_ai_gateway import warn_if_ai_gateway_key_not_configured
 from utils.user_config import update_env_with_user_config
+
 from api.v1.auth.bootstrap import bootstrap_database_admin
 from api.v1.auth.oidc import (
     cleanup_oidc_state,
@@ -70,6 +71,8 @@ async def app_lifespan(_: FastAPI):
     availability.
     """
     _configure_application_logging()
+    if is_platform_mode():
+        warn_if_ai_gateway_key_not_configured()
     os.makedirs(get_app_data_directory_env(), exist_ok=True)
     await migrate_database_on_startup()
     await create_db_and_tables()

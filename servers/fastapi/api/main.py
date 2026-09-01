@@ -5,16 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
 from starlette.responses import FileResponse
-
-from api.lifespan import app_lifespan
-from api.middlewares import SessionAuthMiddleware, UserConfigEnvUpdateMiddleware
-from api.v1.async_tasks.router import API_V1_ASYNC_TASKS_ROUTER
-from api.v1.auth.router import API_V1_AUTH_ROUTER
-from api.v1.auth.oidc import OIDC_AUTH_ROUTER, is_platform_mode
-from api.v1.admin.router import API_V1_ADMIN_ROUTER
-from api.v1.mock.router import API_V1_MOCK_ROUTER
-from api.v1.ppt.router import API_V1_PPT_ROUTER
-from api.v1.webhook.router import API_V1_WEBHOOK_ROUTER
 from utils.get_env import (
     get_app_data_directory_env,
     get_sentry_dsn_env,
@@ -23,7 +13,17 @@ from utils.get_env import (
 )
 from utils.mime_types import init_sandbox_safe_mimetypes
 from utils.path_helpers import get_resource_path
+from utils.platform_ai_gateway import install_ai_gateway_configuration_metric
 
+from api.lifespan import app_lifespan
+from api.middlewares import SessionAuthMiddleware, UserConfigEnvUpdateMiddleware
+from api.v1.admin.router import API_V1_ADMIN_ROUTER
+from api.v1.async_tasks.router import API_V1_ASYNC_TASKS_ROUTER
+from api.v1.auth.oidc import OIDC_AUTH_ROUTER, is_platform_mode
+from api.v1.auth.router import API_V1_AUTH_ROUTER
+from api.v1.mock.router import API_V1_MOCK_ROUTER
+from api.v1.ppt.router import API_V1_PPT_ROUTER
+from api.v1.webhook.router import API_V1_WEBHOOK_ROUTER
 
 init_sandbox_safe_mimetypes()
 
@@ -123,6 +123,7 @@ if is_platform_mode():
         version=(os.getenv("PPTMATE_BUILD_VERSION") or "development"),
         max_request_body_bytes=110 * 1024 * 1024,
     )
+    install_ai_gateway_configuration_metric(app)
 
 
 @app.middleware("http")
