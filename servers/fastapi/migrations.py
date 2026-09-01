@@ -6,10 +6,8 @@ from alembic import command
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine, inspect, text
-
 from utils.db_utils import get_database_url_and_connect_args, to_sync_sqlalchemy_url
 from utils.get_env import get_migrate_database_on_startup_env
-
 
 LEGACY_BASELINE_REVISION = "00b3c27a13bc"
 # Revision before 95b5127e93cd (template_create_infos); used when DB has theme but not that table.
@@ -29,8 +27,13 @@ REVISION_ASYNC_TASKS = "a7d4c9e2f1b3"
 REVISION_ASYNC_TASK_STATUS_NORMALIZED = "b8e2f4a7c9d1"
 REVISION_MULTI_USER_AUTH = "c9f1a2b3d4e5"
 REVISION_USERNAME_PROVIDER_SETTINGS = "d0a2b4c6e8f1"
-REVISION_PRIMARY_ADMIN_SLOT = "f3a7c1d9e5b2"
+REVISION_PRIMARY_ADMIN_SLOT = "e1b3c5d7f9a2"
+REVISION_SMART_GENERATION = "f3a7c1d9e5b2"
 REVISION_PLATFORM_OIDC = "e4c1a7b9d2f0"
+REVISION_PRESENTON_CLOUD_PROVIDER = "c6e8f1a3b5d7"
+REVISION_SMART_MODE_BACKFILL = "d2f4a6b8c0e1"
+REVISION_TEMPLATE_V2_THEME = "e4c7a9b2d6f1"
+REVISION_HEAD = "f5d8a2c7e4b1"
 
 
 async def migrate_database_on_startup() -> None:
@@ -136,17 +139,29 @@ def _infer_revision_from_schema(
         for table in owned_tables
     )
     if "provider_settings" in tables and "user" in tables and ownership_ready:
-        if (
+        platform_oidc_ready = (
             "application_sessions" in tables
             and "oidc_login_transactions" in tables
             and _has_column(inspector, "user", "oidc_subject")
-        ):
-            return REVISION_PLATFORM_OIDC
-        return (
-            REVISION_PRIMARY_ADMIN_SLOT
-            if _has_column(inspector, "user", "admin_slot")
-            else REVISION_USERNAME_PROVIDER_SETTINGS
         )
+        template_v2_theme_ready = "template_v2" in tables and _has_column(
+            inspector, "template_v2", "theme"
+        )
+        if platform_oidc_ready and template_v2_theme_ready:
+            return REVISION_HEAD
+        if platform_oidc_ready:
+            return REVISION_PLATFORM_OIDC
+        if template_v2_theme_ready:
+            return REVISION_TEMPLATE_V2_THEME
+        if "presenton_cloud_provider" in tables:
+            return REVISION_PRESENTON_CLOUD_PROVIDER
+        if "presentations" in tables and _has_column(
+            inspector, "presentations", "generation_mode"
+        ):
+            return REVISION_SMART_GENERATION
+        if _has_column(inspector, "user", "admin_slot"):
+            return REVISION_PRIMARY_ADMIN_SLOT
+        return REVISION_USERNAME_PROVIDER_SETTINGS
     if "user" in tables and ownership_ready:
         return REVISION_MULTI_USER_AUTH
     if "template_v2" in tables:
@@ -305,6 +320,7 @@ def _is_unversioned_populated_database(database_url: str) -> bool:
         "user",
         "access_tokens",
         "provider_settings",
+        "presenton_cloud_provider",
     }
     engine = create_engine(database_url)
     try:

@@ -28,14 +28,18 @@ from api.v1.auth.token import TOKEN_ROUTER
 from api.v1.auth.oidc import (
     api_keys_enabled,
     is_oidc_auth_mode,
+    is_platform_mode,
     oidc_logout,
     validate_oidc_request_origin,
 )
+from api.v1.auth.presenton_oauth import PRESENTON_OAUTH_ROUTER
 
 
 API_V1_AUTH_ROUTER = APIRouter(prefix="/api/v1/auth", tags=["Auth"])
 if api_keys_enabled():
     API_V1_AUTH_ROUTER.include_router(TOKEN_ROUTER)
+if not is_platform_mode():
+    API_V1_AUTH_ROUTER.include_router(PRESENTON_OAUTH_ROUTER)
 
 
 def normalize_username(username: str) -> str:

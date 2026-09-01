@@ -19,6 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import type { TemplateTheme } from "@/lib/template-theme";
 import type { Density, PanelMode, SchemaField } from "./templatePreviewUtils";
 import {
   BlocksPanel,
@@ -68,6 +69,7 @@ const insertNavItems: Array<{
   { id: "blocks", label: "内容块", Icon: BlocksIcon },
   { id: "texts", label: "文本", Icon: Type },
   { id: "charts", label: "图表", Icon: BarChart3 },
+  { id: "infographics", label: "信息图", Icon: Sparkles },
   { id: "tables", label: "表格", Icon: Rows3 },
   { id: "images", label: "图片", Icon: ImageIcon },
   { id: "elements", label: "元素", Icon: Shapes },
@@ -169,22 +171,26 @@ export function TemplateInsertPanel({
   activePanel,
   onBlockSelect,
   onChartItemSelect,
+  onInfographicItemSelect,
   onElementItemSelect,
   onImageItemSelect,
   onTableItemSelect,
   onTextItemSelect,
   template,
   templateId,
+  templateTheme,
 }: {
   activePanel: PanelMode;
   onBlockSelect: (block: TemplateBlock) => void;
   onChartItemSelect: (item: PaletteItem) => void;
+  onInfographicItemSelect: (item: PaletteItem) => void;
   onElementItemSelect: (item: PaletteItem) => void;
   onImageItemSelect: (item: PaletteItem) => void;
   onTableItemSelect: (item: PaletteItem) => void;
   onTextItemSelect: (item: PaletteItem) => void;
   template: unknown;
   templateId: string;
+  templateTheme: TemplateTheme;
 }) {
   return (
     <aside className="hidden w-[299px] shrink-0 overflow-hidden bg-[#FEFEFF] lg:block">
@@ -199,33 +205,48 @@ export function TemplateInsertPanel({
           title="文本"
           groups={[{ label: "添加", items: textItems }]}
           onItemSelect={onTextItemSelect}
+          previewKind="text"
+          theme={templateTheme}
         />
       ) : activePanel === "charts" ? (
         <InsertPanel
           title="图表"
-          groups={[
-            { label: "图表类型", items: chartTypeItems },
-            { label: "信息图", items: infographicItems },
-          ]}
+          groups={[{ label: "图表类型", items: chartTypeItems }]}
           onItemSelect={onChartItemSelect}
+          previewKind="chart"
+          theme={templateTheme}
+        />
+      ) : activePanel === "infographics" ? (
+        <InsertPanel
+          title="信息图"
+          groups={[{ label: "布局", items: infographicItems }]}
+          onItemSelect={onInfographicItemSelect}
+          previewKind="infographic"
+          theme={templateTheme}
         />
       ) : activePanel === "tables" ? (
         <InsertPanel
           title="表格"
           groups={[{ label: "表格类型", items: tableTypeItems }]}
           onItemSelect={onTableItemSelect}
+          previewKind="table"
+          theme={templateTheme}
         />
       ) : activePanel === "images" ? (
         <InsertPanel
           title="图片"
           groups={[{ label: "添加", items: imageItems }]}
           onItemSelect={onImageItemSelect}
+          previewKind="image"
+          theme={templateTheme}
         />
       ) : activePanel === "elements" ? (
         <InsertPanel
           title="元素"
           groups={elementItemGroups}
           onItemSelect={onElementItemSelect}
+          previewKind="element"
+          theme={templateTheme}
         />
       ) : null}
     </aside>

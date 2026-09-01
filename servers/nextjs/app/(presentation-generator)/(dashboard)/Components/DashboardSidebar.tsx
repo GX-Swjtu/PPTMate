@@ -96,13 +96,21 @@ const DashboardSidebar = () => {
             </div>
 
             {!platformMode && <div className="border-t border-[#E1E1E5] pt-5 font-syne">
+                  <Link
+                    href="/settings"
+                    className="flex flex-col items-center gap-2 transition-colors"
+                >
+                    <Settings className="h-4 w-4" />
+                    <span className="text-[11px] text-slate-800">设置</span>
+                </Link>
+                <div className="py-2"/>
                 <Link
                     href="https://docs.presenton.ai/help"
                     target="_blank"
                     className="flex flex-col items-center gap-2 transition-colors"
                 >
                     <HelpCircle className="h-4 w-4" />
-                    <span className="text-[11px] text-slate-800">Help</span>
+                    <span className="text-[11px] text-slate-800">帮助</span>
                 </Link>
             </div>}
 

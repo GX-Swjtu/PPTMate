@@ -25,6 +25,13 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     templatePreview,
     currentConfig,
     providerConstants,
+    generationModeDialog,
+    chat,
+    generationMetrics,
+    infographicEditor,
+    editorShortcuts,
+    shapeToolbar,
+    presentationActions,
   ] = await Promise.all([
     readSource("app/(presentation-generator)/upload/page.tsx"),
     readSource("app/(presentation-generator)/upload/components/UploadPage.tsx"),
@@ -40,6 +47,23 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
       "app/(presentation-generator)/upload/components/CurrentConfig.tsx",
     ),
     readSource("utils/providerConstants.ts"),
+    readSource(
+      "app/(presentation-generator)/upload/components/GenerationModeDialog.tsx",
+    ),
+    readSource(
+      "app/(presentation-generator)/presentation/components/Chat.tsx",
+    ),
+    readSource(
+      "app/(presentation-generator)/presentation/components/StreamingGenerationMetrics.tsx",
+    ),
+    readSource(
+      "components/slide-editor/infographics/InfographicEditorContent.tsx",
+    ),
+    readSource("components/slide-editor/shortcuts/editorShortcuts.ts"),
+    readSource("components/slide-editor/shapes/ShapeToolbar.tsx"),
+    readSource(
+      "app/(presentation-generator)/presentation/components/PresentationActions.tsx",
+    ),
   ]);
 
   for (const source of [uploadPage, splash]) {
@@ -66,6 +90,21 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
   assert.match(currentConfig, /联网：/);
   assert.match(providerConstants, /label: "模型原生"/);
   assert.doesNotMatch(providerConstants, /Default \(Model\)/);
+  assert.match(generationModeDialog, /选择生成模式/);
+  assert.doesNotMatch(generationModeDialog, /Select Mode/);
+  assert.match(chat, /对话记录/);
+  assert.doesNotMatch(chat, /No saved conversations yet/);
+  assert.match(generationMetrics, /输入 \{formatTokens/);
+  assert.doesNotMatch(generationMetrics, /Live token counts/);
+  assert.match(infographicEditor, /编辑信息图/);
+  assert.doesNotMatch(infographicEditor, /Edit Infographic/);
+  assert.match(editorShortcuts, /title: "幻灯片导航"/);
+  assert.doesNotMatch(editorShortcuts, /title: "Slide navigation"/);
+  assert.match(shapeToolbar, /title="线条起点与终点"/);
+  assert.match(
+    presentationActions,
+    /"vector-line-filled-both": "双向实心箭头"/,
+  );
 });
 
 test("Chinese labels do not replace editor protocol values", async () => {

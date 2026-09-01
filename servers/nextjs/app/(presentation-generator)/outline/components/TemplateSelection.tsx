@@ -10,6 +10,8 @@ import {
   TemplateListSection,
 } from "../../components/TemplateListUi";
 import { MixpanelEvent, trackEvent } from "@/utils/mixpanel";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 interface TemplateSelectionProps {
   presentationId: string | null;
@@ -42,8 +44,11 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
     onSelectTemplate,
     onCreateTemplate,
   }) {
-    const { defaultTemplates, customTemplates, loading } =
-      useTemplateSummaries();
+    const presentonCloudOnly = useSelector(
+      (state: RootState) => state.userConfig.llm_config.LLM === "presenton"
+    );
+    const { defaultTemplates, customTemplates, loading, error } =
+      useTemplateSummaries({ presentonCloudOnly });
 
     useEffect(() => {
       if (loading || !suggestedTemplate || selectedTemplateId) return;
@@ -88,6 +93,14 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
       return <TemplateListLoadingState />;
     }
 
+    if (error) {
+      return (
+        <TemplateListEmptyState
+          message={`模板加载失败：${error}`}
+        />
+      );
+    }
+
     const renderTemplateCard = (
       template: (typeof defaultTemplates)[number],
       index: number,
@@ -128,7 +141,7 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
     const suggestionNotice = suggestedTemplate && selectedTemplateId && (
       <div className="mb-5 rounded-xl border border-[#E4E0FF] bg-[#F7F5FF] px-4 py-3 font-syne text-xs font-medium text-[#5141E5]">
         <strong className="font-semibold">已选择推荐模板。</strong>{" "}
-        Click the highlighted template to continue.
+        点击高亮模板继续。
       </div>
     );
 
@@ -138,10 +151,12 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
           {suggestionNotice}
           <TemplateListSection label="模板" selectionPage>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <CreateCustomTemplate
-                selectionPage
-                onClick={onCreateTemplate}
-              />
+              {!presentonCloudOnly && (
+                <CreateCustomTemplate
+                  selectionPage
+                  onClick={onCreateTemplate}
+                />
+              )}
               {defaultTemplates.map((template, index) =>
                 renderTemplateCard(template, index, "default")
               )}
@@ -156,10 +171,12 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = memo(
         {suggestionNotice}
         <TemplateListSection label="自定义模板" selectionPage>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <CreateCustomTemplate
-              selectionPage
-              onClick={onCreateTemplate}
-            />
+            {!presentonCloudOnly && (
+              <CreateCustomTemplate
+                selectionPage
+                onClick={onCreateTemplate}
+              />
+            )}
             {customTemplates.map((template, index) =>
               renderTemplateCard(template, index, "custom")
             )}

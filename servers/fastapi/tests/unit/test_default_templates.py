@@ -63,6 +63,18 @@ def _write_template_bundle(root: Path, *, include_raw_layouts: bool = False) -> 
                 "description": "General purpose default template.",
                 "thumbnail": "static/thumbnail.png",
                 "fonts": {"Inter": "static/inter.ttf"},
+                "theme": {
+                    "colors": {
+                        "primary": "#3B82F6",
+                        "background": "#FFFFFF",
+                    },
+                    "fonts": {
+                        "textFont": {
+                            "name": "Inter",
+                            "url": "static/inter.ttf",
+                        }
+                    },
+                },
                 "layouts": [
                     {
                         "id": "slide_1",
@@ -181,6 +193,15 @@ def test_default_template_import_normalizes_shapes_and_copies_static(
     assert template.assets["fonts"] == {
         "Inter": "/app_data/templates/general/static/inter.ttf"
     }
+    assert template.theme == {
+        "colors": {"primary": "#3B82F6", "background": "#FFFFFF"},
+        "fonts": {
+            "textFont": {
+                "name": "Inter",
+                "url": "/app_data/templates/general/static/inter.ttf",
+            }
+        },
+    }
     assert template.assets["images"] == ["/app_data/templates/general/static/image.png"]
     assert (
         app_data_dir / "templates/general/static/image.png"
@@ -281,6 +302,7 @@ def test_default_template_import_updates_existing_database_row(tmp_path, monkeyp
         raw_layouts={"layouts": [_raw_layout()]},
         layouts={"layouts": []},
         merged_components={"components": []},
+        theme={"colors": {"primary": "#000000"}},
         assets={"thumbnail": "/old.png"},
         is_default=False,
     )
@@ -303,6 +325,15 @@ def test_default_template_import_updates_existing_database_row(tmp_path, monkeyp
     assert list(existing.layouts) == ["layouts"]
     assert list(existing.merged_components) == ["components"]
     assert existing.assets["thumbnail"] == _thumbnail_url("general")
+    assert existing.theme == {
+        "colors": {"primary": "#3B82F6", "background": "#FFFFFF"},
+        "fonts": {
+            "textFont": {
+                "name": "Inter",
+                "url": "/app_data/templates/general/static/inter.ttf",
+            }
+        },
+    }
     assert (app_data_dir / "templates/general/static/image.png").exists()
 
 
@@ -400,6 +431,9 @@ def test_all_bundled_template_jsons_match_template_v2_shapes():
         assert len(template.layouts["layouts"]) > 0
         assert list(template.merged_components) == ["components"]
         assert len(template.merged_components["components"]) > 0
+        assert template.theme is not None
+        if template_id == "general":
+            assert template.theme["colors"]["primary"] == "#3B82F6"
         thumbnail = (
             Path(__file__).resolve().parents[4]
             / "templates"

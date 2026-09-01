@@ -27,12 +27,18 @@ import {
   MAX_NUMBER_OF_SLIDES,
 } from "@/utils/presentationLimits";
 import { languageLabel } from "../labels";
+import { Button } from "@/components/ui/button";
+import GenerationModeDialog, {
+  type GenerationMode,
+} from "./GenerationModeDialog";
 
 // Types
 interface ConfigurationSelectsProps {
   config: PresentationConfig;
   onConfigChange: (key: keyof PresentationConfig, value: any) => void;
   compact?: boolean;
+  mode?: GenerationMode;
+  onModeChange?: (mode: GenerationMode) => void;
 }
 
 type SlideOption =
@@ -80,7 +86,7 @@ const SlideCountSelect: React.FC<{
   compact?: boolean;
 }> = ({ value, onValueChange, open, onOpenChange, compact = false }) => {
   const [customInput, setCustomInput] = useState(
-    value && !SLIDE_OPTIONS.includes(value as SlideOption) ? value : ""
+    value && !SLIDE_OPTIONS.includes(value as SlideOption) ? value : "",
   );
   const isSelectingPresetRef = useRef(false);
 
@@ -125,7 +131,7 @@ const SlideCountSelect: React.FC<{
             "flex h-[34px] items-center justify-between gap-2 overflow-hidden rounded-full bg-white px-3.5 font-syne font-medium text-[#191919]",
             compact
               ? "border border-[#EDEEEF] shadow-none focus-visible:ring-2 focus-visible:ring-[#5146E5]/25"
-              : "shadow-sm ring-1 ring-inset ring-slate-200 focus-visible:ring-[#5146E5]/30 min-[1800px]:h-10 min-[1800px]:px-4 min-[2200px]:h-11 min-[2200px]:px-5"
+              : "shadow-sm ring-1 ring-inset ring-slate-200 focus-visible:ring-[#5146E5]/30 min-[1800px]:h-10 min-[1800px]:px-4 min-[2200px]:h-11 min-[2200px]:px-5",
           )}
         >
           {compact ? (
@@ -160,14 +166,14 @@ const SlideCountSelect: React.FC<{
           <span
             className={cn(
               "flex flex-1 items-center",
-              compact ? "gap-1.5" : "gap-2.5"
+              compact ? "gap-1.5" : "gap-2.5",
             )}
           >
             <span
               className={cn(
                 compact
                   ? "text-xs font-semibold tracking-[-0.12px]"
-                  : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base"
+                  : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base",
               )}
             >
               {compact && value ? `${value} 张` : displayLabel}
@@ -251,7 +257,7 @@ const SlideCountSelect: React.FC<{
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === option ? "opacity-100" : "opacity-0"
+                      value === option ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {option} 张幻灯片
@@ -287,7 +293,7 @@ const LanguageSelect: React.FC<{
           "flex h-[34px] max-w-[160px] items-center gap-2 overflow-hidden rounded-full bg-white px-3.5 font-syne font-semibold text-[#191919]",
           compact
             ? "border border-[#EDEEEF] shadow-none focus-visible:ring-2 focus-visible:ring-[#5146E5]/25"
-            : "shadow-sm ring-1 ring-inset ring-slate-200 min-[1800px]:h-10 min-[1800px]:max-w-[190px] min-[1800px]:px-4 min-[2200px]:h-11 min-[2200px]:max-w-[220px] min-[2200px]:px-5"
+            : "shadow-sm ring-1 ring-inset ring-slate-200 min-[1800px]:h-10 min-[1800px]:max-w-[190px] min-[1800px]:px-4 min-[2200px]:h-11 min-[2200px]:max-w-[220px] min-[2200px]:px-5",
         )}
       >
         <Languages
@@ -297,13 +303,13 @@ const LanguageSelect: React.FC<{
             "shrink-0",
             compact
               ? "h-3.5 w-3.5"
-              : "h-3.5 w-3.5 min-[1800px]:h-4 min-[1800px]:w-4 min-[2200px]:h-5 min-[2200px]:w-5"
+              : "h-3.5 w-3.5 min-[1800px]:h-4 min-[1800px]:w-4 min-[2200px]:h-5 min-[2200px]:w-5",
           )}
         />
         <span
           className={cn(
             "flex min-w-0 flex-1 items-center",
-            compact ? "gap-0.5" : "truncate"
+            compact ? "gap-0.5" : "truncate",
           )}
         >
           <span
@@ -311,7 +317,7 @@ const LanguageSelect: React.FC<{
               "truncate",
               compact
                 ? "text-xs font-semibold tracking-[-0.12px]"
-                : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base"
+                : "text-xs font-medium min-[1800px]:text-sm min-[2200px]:text-base",
             )}
           >
             {languageLabel(value)}
@@ -356,7 +362,7 @@ const LanguageSelect: React.FC<{
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === language ? "opacity-100" : "opacity-0"
+                    value === language ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {languageLabel(language)}
@@ -373,17 +379,35 @@ export function ConfigurationSelects({
   config,
   onConfigChange,
   compact = false,
+  mode,
+  onModeChange,
 }: ConfigurationSelectsProps) {
   const [openSlides, setOpenSlides] = useState(false);
   const [openLanguage, setOpenLanguage] = useState(false);
+  const [modeDialogOpen, setModeDialogOpen] = useState(false);
+  const showMode = Boolean(mode && onModeChange);
 
   return (
     <div
       className={cn(
         "order-1 flex flex-wrap items-center",
-        compact ? "gap-3" : "gap-4 min-[1800px]:gap-5"
+        compact ? "gap-3" : "gap-4 min-[1800px]:gap-5",
       )}
     >
+      {showMode ? (
+        <Button
+          type="button"
+          onClick={() => setModeDialogOpen(true)}
+          className={cn(
+            "rounded-full border border-[#EDEEEF] bg-white px-4 py-1 font-syne text-sm font-medium text-[#101323] hover:bg-white",
+            compact ? "h-[34px] shadow-none" : "h-[38px] shadow-sm",
+          )}
+        >
+          {mode === "standard" ? "标准模式" : "智能模式"}
+          <ChevronUp className="h-4 w-4" />
+        </Button>
+      ) : null}
+
       <SlideCountSelect
         value={config.slides}
         onValueChange={(value) => onConfigChange("slides", value)}
@@ -403,6 +427,13 @@ export function ConfigurationSelects({
         onConfigChange={onConfigChange}
         compact={compact}
       />
+      {showMode ? (
+        <GenerationModeDialog
+          open={modeDialogOpen}
+          onOpenChange={setModeDialogOpen}
+          onSelect={(nextMode) => onModeChange?.(nextMode)}
+        />
+      ) : null}
     </div>
   );
 }
