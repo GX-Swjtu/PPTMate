@@ -19,6 +19,7 @@ nltk
 chroma
 container.db
 .next-build
+/servers/nextjs/next-env.d.ts
 .cursor
 .vscode
 .agents
