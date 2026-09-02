@@ -19,9 +19,7 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     uploadForm,
     sidebar,
     header,
-    splash,
     mark,
-    reverseMark,
     templatePreview,
     currentConfig,
     providerConstants,
@@ -37,9 +35,7 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     readSource("app/(presentation-generator)/upload/components/UploadPage.tsx"),
     readSource("app/(presentation-generator)/(dashboard)/Components/DashboardSidebar.tsx"),
     readSource("app/(presentation-generator)/(dashboard)/dashboard/components/Header.tsx"),
-    readSource("components/ui/presenton-splash-loader.tsx"),
     readSource("public/pptmate-mark.svg"),
-    readSource("public/pptmate-mark-reverse.svg"),
     readSource(
       "app/(presentation-generator)/components/TemplatePreviewComponents.tsx",
     ),
@@ -66,16 +62,13 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     ),
   ]);
 
-  for (const source of [uploadPage, splash]) {
-    assert.match(source, /PPTMate/);
-    assert.match(source, /智能演示生产平台/);
-  }
+  assert.match(uploadPage, /PPTMate/);
+  assert.match(uploadPage, /智能演示生产平台/);
   assert.match(
     uploadPage,
     /上传资料，通过 AI 快速生成、修改和完善演示文稿。/,
   );
   assert.match(mark, /<svg/);
-  assert.match(reverseMark, /<svg/);
   assert.doesNotMatch(mark, /fill="none"/);
   assert.match(uploadForm, /LanguageType\.ChineseSimplified/);
   assert.match(sidebar, /src="\/pptmate-mark\.svg"/);
@@ -105,6 +98,24 @@ test("platform entry points use the PPTMate brand and approved Chinese copy", as
     presentationActions,
     /"vector-line-filled-both": "双向实心箭头"/,
   );
+});
+
+test("startup routing has no brand animation or fixed minimum delay", async () => {
+  const [rootPage, initializer, authGate, loader] = await Promise.all([
+    readSource("app/page.tsx"),
+    readSource("app/ConfigurationInitializer.tsx"),
+    readSource("components/Auth/AuthGate.tsx"),
+    readSource("components/ui/presenton-splash-loader.tsx"),
+  ]);
+
+  assert.match(rootPage, /redirect\("\/upload"\)/);
+  assert.doesNotMatch(rootPage, /ConfigurationInitializer/);
+  assert.match(initializer, /PRESENTON_SPLASH_MIN_DURATION_MS/);
+  assert.match(authGate, /PRESENTON_SPLASH_MIN_DURATION_MS/);
+  assert.match(loader, /PRESENTON_SPLASH_MIN_DURATION_MS = 0/);
+  assert.match(loader, /configuration-loader/);
+  assert.doesNotMatch(loader, /pptmate-mark-reverse\.svg/);
+  assert.doesNotMatch(loader, /SPLASH_ANIMATION_MS/);
 });
 
 test("Chinese labels do not replace editor protocol values", async () => {
