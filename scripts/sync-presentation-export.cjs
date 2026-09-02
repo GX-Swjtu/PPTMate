@@ -179,7 +179,12 @@ async function resolveLatestTag() {
   return latest.tag_name;
 }
 
-function downloadFile(url, outputPath, redirects = 5) {
+function downloadFile(
+  url,
+  outputPath,
+  redirects = 5,
+  runFileSync = execFileSync,
+) {
   const proxyUrl = (
     process.env.HTTPS_PROXY ||
     process.env.https_proxy ||
@@ -188,8 +193,8 @@ function downloadFile(url, outputPath, redirects = 5) {
     ""
   ).trim();
   if (proxyUrl) {
-    ensureDir(path.dirname(outputPath));
-    execFileSync(
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    runFileSync(
       "curl",
       [
         "--fail",
@@ -205,7 +210,7 @@ function downloadFile(url, outputPath, redirects = 5) {
         outputPath,
         url,
       ],
-      { stdio: "inherit" }
+      { stdio: "inherit" },
     );
     return Promise.resolve();
   }
@@ -222,7 +227,12 @@ function downloadFile(url, outputPath, redirects = 5) {
       (res) => {
         if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
           if (redirects <= 0) return reject(new Error(`Too many redirects: ${url}`));
-          downloadFile(res.headers.location, outputPath, redirects - 1).then(resolve, reject);
+          downloadFile(
+            res.headers.location,
+            outputPath,
+            redirects - 1,
+            runFileSync,
+          ).then(resolve, reject);
           return;
         }
         if (res.statusCode < 200 || res.statusCode >= 300) {
@@ -368,6 +378,7 @@ if (require.main === module) {
 
 module.exports = {
   clearDirectoryContents,
+  downloadFile,
   getRuntimePlatformArch,
   validateSharpRuntime,
 };
