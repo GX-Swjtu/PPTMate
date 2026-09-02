@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setCanChangeKeys, setLLMConfig } from '@/store/slices/userConfig';
 import { hasValidLLMConfig, normalizeLLMConfig } from '@/utils/storeHelpers';
 import { usePathname, useRouter } from 'next/navigation';
@@ -14,6 +14,12 @@ import {
 } from '@/utils/api';
 import { notify } from '@/components/ui/sonner';
 import { PRESENTON_SPLASH_MIN_DURATION_MS } from '@/components/ui/presenton-splash-loader';
+import {
+  fetchProviderConfiguration,
+  ProviderConfigurationRequestError,
+  ProviderConfigurationSource,
+  providerConfigurationSourceFor,
+} from '@/utils/providerConfiguration';
 
 function ConfigurationLoadingScreen() {
   return (
@@ -59,6 +65,9 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
   const [hasMetSplashDuration, setHasMetSplashDuration] = useState(
     () => !shouldShowStartupSplash
   );
+  const [providerConfigurationSource, setProviderConfigurationSource] =
+    useState<ProviderConfigurationSource | null>(null);
+  const lastConfigurationCheckRoute = useRef(route);
   const router = useRouter();
 
   // Fetch user config state
@@ -71,37 +80,47 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
 
   useEffect(() => {
     if (
+      providerConfigurationSource === null ||
       route === '/' ||
       isSettingsRoute ||
-      route.startsWith('/pdf-maker')
+      route.startsWith('/pdf-maker') ||
+      lastConfigurationCheckRoute.current === route
     ) {
       return;
     }
+    lastConfigurationCheckRoute.current = route;
 
     let cancelled = false;
     let selectedProvider: string | undefined;
     const revalidateProviderConfiguration = async () => {
       try {
-        const configResponse = await fetch('/api/user-config', {
-          cache: 'no-store',
-        });
-        if (!configResponse.ok) {
-          await assertBackendReachable();
-          throw new Error(`user-config returned ${configResponse.status}`);
-        }
-
-        const config = normalizeLLMConfig(await configResponse.json());
+        const snapshot = await fetchProviderConfiguration(
+          providerConfigurationSource
+        );
+        const config = normalizeLLMConfig(snapshot.config);
         selectedProvider = config.LLM;
         dispatch(setLLMConfig(config));
 
-        if (!hasValidLLMConfig(config)) {
+        const isConfigured =
+          providerConfigurationSource === 'editable'
+            ? hasValidLLMConfig(config)
+            : snapshot.configured === true;
+        if (!isConfigured) {
           if (!cancelled) {
-            notify.warning(
-              "Provider setup required",
-              "Choose and configure a text provider before opening other pages.",
-              { id: "provider-setup-required" }
-            );
-            router.replace('/');
+            if (providerConfigurationSource === 'editable') {
+              notify.warning(
+                "Provider setup required",
+                "Choose and configure a text provider before opening other pages.",
+                { id: "provider-setup-required" }
+              );
+              router.replace('/');
+            } else {
+              notify.error(
+                "实例尚未完成配置",
+                "请联系管理员检查 AI 服务配置。",
+                { id: "runtime-configuration-required" }
+              );
+            }
           }
           return;
         }
@@ -113,7 +132,6 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
           { cache: 'no-store', credentials: 'include' }
         );
         if (!statusResponse.ok) {
-          await assertBackendReachable();
           throw new Error(`Presenton status returned ${statusResponse.status}`);
         }
         const status = await statusResponse.json() as { linked?: boolean };
@@ -129,11 +147,43 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
         }
       } catch (error) {
         console.error('Failed to revalidate provider configuration:', error);
-        if (!cancelled && isBackendConnectionError(error)) {
+        let reportedError: unknown = error;
+        if (
+          !(error instanceof ProviderConfigurationRequestError) ||
+          error.status >= 500
+        ) {
+          try {
+            await assertBackendReachable();
+          } catch (backendError) {
+            reportedError = backendError;
+          }
+        }
+
+        if (!cancelled && isBackendConnectionError(reportedError)) {
           notify.error(
             "Cannot reach backend",
-            error.message,
+            reportedError.message,
             { id: "backend-unreachable" }
+          );
+        } else if (
+          !cancelled &&
+          error instanceof ProviderConfigurationRequestError &&
+          error.status === 401
+        ) {
+          notify.error(
+            "Could not verify your session",
+            "Refresh the page to sign in again.",
+            { id: "configuration-session-unavailable" }
+          );
+        } else if (
+          !cancelled &&
+          error instanceof ProviderConfigurationRequestError &&
+          error.status === 403
+        ) {
+          notify.error(
+            "Could not access provider settings",
+            "Your current page has been kept open. Contact an administrator if this continues.",
+            { id: "configuration-access-denied" }
           );
         } else if (!cancelled && selectedProvider === 'presenton') {
           notify.error(
@@ -155,7 +205,13 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
     return () => {
       cancelled = true;
     };
-  }, [dispatch, isSettingsRoute, route, router]);
+  }, [
+    dispatch,
+    isSettingsRoute,
+    providerConfigurationSource,
+    route,
+    router,
+  ]);
 
   useEffect(() => {
     if (!shouldShowStartupSplash) {
@@ -171,6 +227,7 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
   }, [shouldShowStartupSplash]);
 
   const setLoadingToFalseAfterNavigatingTo = (pathname: string) => {
+    lastConfigurationCheckRoute.current = pathname;
     if (window.location.pathname === pathname) {
       setIsLoading(false);
       return;
@@ -222,13 +279,13 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
       return;
     }
     dispatch(setCanChangeKeys(canChangeKeys));
+    const configurationSource = providerConfigurationSourceFor(canChangeKeys);
 
     if (canChangeKeys) {
       let llmConfig: LLMConfig = {};
       try {
-        const res = await fetch('/api/user-config');
-        if (!res.ok) throw new Error(`user-config returned ${res.status}`);
-        llmConfig = await res.json();
+        const snapshot = await fetchProviderConfiguration(configurationSource);
+        llmConfig = snapshot.config;
       } catch (e) {
         console.error('Failed to fetch user config:', e);
         notify.error(
@@ -242,6 +299,7 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
       llmConfig = normalizeLLMConfig(llmConfig);
 
       dispatch(setLLMConfig(llmConfig));
+      setProviderConfigurationSource(configurationSource);
 
       let hasPresentonCloud = false;
       if (llmConfig.LLM === 'presenton') {
@@ -321,19 +379,15 @@ export function ConfigurationInitializer({ children }: { children: React.ReactNo
       }
     } else {
       try {
-        const res = await fetch("/api/runtime-config", {
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error(`runtime-config returned ${res.status}`);
-        const runtime = await res.json();
-        const runtimeConfig = normalizeLLMConfig(
-          (runtime.config || {}) as LLMConfig
-        );
+        const snapshot = await fetchProviderConfiguration(configurationSource);
+        const runtimeConfig = normalizeLLMConfig(snapshot.config);
         dispatch(setLLMConfig(runtimeConfig));
-        if (!runtime.configured) {
+        setProviderConfigurationSource(configurationSource);
+        if (!snapshot.configured) {
           notify.error(
             "实例尚未完成配置",
-            "请联系管理员检查 AI 服务配置。"
+            "请联系管理员检查 AI 服务配置。",
+            { id: "runtime-configuration-required" }
           );
           setIsLoading(false);
           return;
