@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import base64
 import hashlib
 import hmac
@@ -33,6 +34,8 @@ ALLOWED_ROLES = frozenset({"pptmate.user", "pptmate.admin"})
 ADMIN_ROLE = "pptmate.admin"
 SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "TRACE"})
 MAX_OIDC_TOKEN_LIFETIME_SECONDS = 5 * 60
+REFRESH_WAIT_SECONDS = 5.0
+REFRESH_POLL_SECONDS = 0.1
 
 
 def _truthy(value: str | None) -> bool:
@@ -377,20 +380,39 @@ class OidcAuthenticator:
     async def authenticate(
         self, request: Request, session: AsyncSession
     ) -> tuple[OidcPrincipal, User, ApplicationSession]:
+        deadline = asyncio.get_running_loop().time() + REFRESH_WAIT_SECONDS
+        while True:
+            try:
+                return await self._authenticate_once(request, session)
+            except HTTPException as exc:
+                if exc.status_code != 503 or exc.detail != {"code": "OIDC_REFRESH_IN_PROGRESS"}:
+                    raise
+                remaining = deadline - asyncio.get_running_loop().time()
+                if remaining <= 0:
+                    raise
+                # The refresh transaction is already released. Wait without a
+                # row lock, then revalidate the session and user from storage.
+                await asyncio.sleep(min(REFRESH_POLL_SECONDS, remaining))
+
+    async def _authenticate_once(
+        self, request: Request, session: AsyncSession
+    ) -> tuple[OidcPrincipal, User, ApplicationSession]:
         raw = request.cookies.get(self.settings.session_cookie_name, "").strip()
         if not raw:
             raise HTTPException(status_code=401, detail={"code": "SESSION_MISSING"})
         now = get_current_utc_datetime()
         record = await session.scalar(
-            select(ApplicationSession).where(
+            select(ApplicationSession)
+            .where(
                 ApplicationSession.token_hash == _digest(raw, self.key),
                 ApplicationSession.expires_at > now,
                 ApplicationSession.absolute_expires_at > now,
             )
+            .execution_options(populate_existing=True)
         )
         if record is None:
             raise HTTPException(status_code=401, detail={"code": "SESSION_EXPIRED"})
-        user = await session.get(User, record.user_id)
+        user = await session.get(User, record.user_id, populate_existing=True)
         if user is None or not user.is_active or user.oidc_subject != record.subject:
             raise HTTPException(status_code=401, detail={"code": "SESSION_INVALID"})
         try:
@@ -422,14 +444,22 @@ class OidcAuthenticator:
         self, session: AsyncSession, record: ApplicationSession
     ) -> tuple[OidcPrincipal, ApplicationSession, User]:
         now = get_current_utc_datetime()
+        observed_version = record.token_version
         locked = await session.scalar(
             select(ApplicationSession)
-            .where(ApplicationSession.id == record.id)
+            .where(
+                ApplicationSession.id == record.id,
+                ApplicationSession.expires_at > now,
+                ApplicationSession.absolute_expires_at > now,
+            )
             .with_for_update()
+            .execution_options(populate_existing=True)
         )
         if locked is None:
             raise HTTPException(status_code=401, detail={"code": "SESSION_EXPIRED"})
-        if (
+        # A rotation may finish between the initial read and acquiring the row
+        # lock. Re-read through authenticate instead of rotating again.
+        if locked.token_version != observed_version or (
             locked.refresh_lease_id is not None
             and locked.refresh_lease_expires_at is not None
             and _aware(locked.refresh_lease_expires_at) > now
@@ -461,11 +491,13 @@ class OidcAuthenticator:
                 expected_subject=expected_subject,
             )
         except HTTPException as exc:
-            if exc.status_code == 401:
+            if exc.status_code in {401, 403}:
                 await session.execute(
                     delete(ApplicationSession).where(ApplicationSession.id == record.id)
                 )
                 await session.commit()
+                if exc.status_code == 403:
+                    raise
                 raise HTTPException(
                     status_code=401, detail={"code": "OIDC_REFRESH_INVALID"}
                 ) from exc
@@ -485,12 +517,15 @@ class OidcAuthenticator:
             ) from exc
 
         replacement_refresh = str(payload.get("refresh_token") or refresh_token)
+        refreshed_at = get_current_utc_datetime()
         updated = await session.execute(
             update(ApplicationSession)
             .where(
                 ApplicationSession.id == record.id,
                 ApplicationSession.refresh_lease_id == lease_id,
                 ApplicationSession.token_version == token_version,
+                ApplicationSession.expires_at > refreshed_at,
+                ApplicationSession.absolute_expires_at > refreshed_at,
             )
             .values(
                 access_token_encrypted=self.cipher.encrypt(access_token),
@@ -502,6 +537,7 @@ class OidcAuthenticator:
                 refresh_lease_id=None,
                 refresh_lease_expires_at=None,
             )
+            .execution_options(synchronize_session="fetch")
         )
         if updated.rowcount != 1:
             await session.rollback()
@@ -509,9 +545,11 @@ class OidcAuthenticator:
                 status_code=503, detail={"code": "OIDC_REFRESH_RESULT_STALE"}
             )
         user = await session.scalar(
-            select(User).where(User.oidc_subject == expected_subject)
+            select(User)
+            .where(User.oidc_subject == expected_subject)
+            .execution_options(populate_existing=True)
         )
-        if user is None:
+        if user is None or not user.is_active or user.id != record.user_id:
             await session.rollback()
             raise HTTPException(status_code=401, detail={"code": "SESSION_INVALID"})
         _update_user_from_identity(user, identity, principal)

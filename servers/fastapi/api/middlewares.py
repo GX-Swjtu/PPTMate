@@ -96,7 +96,14 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
                         "setup_required": True,
                     },
                 )
-            principal, user = await resolve_request_principal(request, session)
+            try:
+                principal, user = await resolve_request_principal(request, session)
+            except HTTPException as exc:
+                return JSONResponse(
+                    status_code=exc.status_code,
+                    content={"detail": exc.detail},
+                    headers=exc.headers,
+                )
             if principal is None:
                 return JSONResponse(
                     status_code=401,

@@ -6,13 +6,14 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from urllib.parse import parse_qs, urlsplit
 
+import httpx
 import jwt
 import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi import FastAPI, HTTPException
 from fastapi.testclient import TestClient
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from api.v1.auth.oidc import (
@@ -334,6 +335,7 @@ def test_oidc_callback_rejects_nonce_mismatch(monkeypatch, tmp_path):
 
 
 def test_active_refresh_lease_prevents_concurrent_rotation(monkeypatch, tmp_path):
+    monkeypatch.setattr("api.v1.auth.oidc.REFRESH_WAIT_SECONDS", 0.02)
     private_key = _configure_oidc(monkeypatch, tmp_path)
     _client, engine, session_maker = _build_client(tmp_path)
     authenticator = oidc_authenticator()
@@ -392,6 +394,319 @@ def test_active_refresh_lease_prevents_concurrent_rotation(monkeypatch, tmp_path
     asyncio.run(engine.dispose())
 
 
+@pytest.fixture
+def refresh_scenario(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+    from api import middlewares
+
+    private_key = _configure_oidc(monkeypatch, tmp_path)
+    client, engine, session_maker = _build_client(tmp_path)
+    authenticator = oidc_authenticator()
+    cookie = "synthetic-refresh-test-session"
+    expired_token = _access_token(private_key, roles=("pptmate.user",), expired=True)
+    valid_token = _access_token(private_key, roles=("pptmate.user",))
+
+    async def seed():
+        async with session_maker() as session:
+            user = User(
+                username="employee",
+                oidc_subject="platform-user-id",
+                hashed_password="unused",
+                is_active=True,
+                is_verified=True,
+            )
+            session.add(user)
+            await session.flush()
+            record = ApplicationSession(
+                token_hash=hmac.new(
+                    authenticator.key, cookie.encode(), hashlib.sha256
+                ).hexdigest(),
+                user_id=user.id,
+                subject="platform-user-id",
+                access_token_encrypted=authenticator.cipher.encrypt(expired_token),
+                refresh_token_encrypted=authenticator.cipher.encrypt("refresh-token"),
+                identity_encrypted=authenticator.cipher.encrypt("{}"),
+                expires_at=datetime.now(UTC) + timedelta(hours=1),
+                absolute_expires_at=datetime.now(UTC) + timedelta(days=1),
+            )
+            session.add(record)
+            await session.commit()
+            return record.id, user.id
+
+    session_id, user_id = asyncio.run(seed())
+    monkeypatch.setattr(middlewares, "async_session_maker", session_maker)
+    monkeypatch.setattr(middlewares, "is_disable_auth_enabled", lambda: False)
+    app = client.app
+    app.add_middleware(middlewares.SessionAuthMiddleware)
+    business_calls = []
+
+    @app.get("/api/v1/ppt/template/all")
+    async def read_templates():
+        business_calls.append("read")
+        return {"items": []}
+
+    @app.post("/api/v1/ppt/presentation/update")
+    async def save_presentation():
+        business_calls.append("write")
+        return {"saved": True}
+
+    yield SimpleNamespace(
+        app=app,
+        authenticator=authenticator,
+        session_maker=session_maker,
+        session_id=session_id,
+        user_id=user_id,
+        private_key=private_key,
+        valid_token=valid_token,
+        cookie=cookie,
+        business_calls=business_calls,
+    )
+    asyncio.run(engine.dispose())
+
+
+@pytest.mark.parametrize(
+    "outcome",
+    [
+        "success",
+        "invalid_grant",
+        "unavailable",
+        "access_revoked",
+        "logout",
+        "disabled",
+        "expired",
+    ],
+)
+def test_expired_session_concurrent_requests_wait_before_business_execution(
+    monkeypatch, refresh_scenario, outcome
+):
+    scenario = refresh_scenario
+    authenticator = scenario.authenticator
+    access_token = (
+        _access_token(scenario.private_key, roles=())
+        if outcome == "access_revoked"
+        else scenario.valid_token
+    )
+
+    async def exercise():
+        started, release, all_waiting = (
+            asyncio.Event(),
+            asyncio.Event(),
+            asyncio.Event(),
+        )
+        refresh_calls = 0
+        waiting_requests = set()
+        original_once = authenticator._authenticate_once
+
+        async def observe_waiters(request, session):
+            try:
+                return await original_once(request, session)
+            except HTTPException as exc:
+                if exc.detail == {"code": "OIDC_REFRESH_IN_PROGRESS"}:
+                    waiting_requests.add(id(request))
+                    if len(waiting_requests) == 3:
+                        all_waiting.set()
+                raise
+
+        async def refresh(_token):
+            nonlocal refresh_calls
+            refresh_calls += 1
+            started.set()
+            await release.wait()
+            if outcome in {"invalid_grant", "unavailable"}:
+                raise HTTPException(
+                    status_code=401 if outcome == "invalid_grant" else 502
+                )
+            return {"access_token": access_token, "refresh_token": "rotated-refresh"}
+
+        async def userinfo(_token):
+            return {
+                "sub": "platform-user-id",
+                "preferred_username": "employee",
+                "email": "employee@example.invalid",
+                "name": "Employee",
+            }
+
+        monkeypatch.setattr(authenticator, "_authenticate_once", observe_waiters)
+        monkeypatch.setattr(authenticator.client, "refresh", refresh)
+        monkeypatch.setattr(authenticator.client, "userinfo", userinfo)
+        transport = httpx.ASGITransport(app=scenario.app, raise_app_exceptions=False)
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="https://pptmate.ngl.local",
+            cookies={"ngl_pptmate_session": scenario.cookie},
+            headers={"Origin": "https://pptmate.ngl.local"},
+        ) as client:
+            leader = asyncio.create_task(client.get("/api/v1/auth/status"))
+            await asyncio.wait_for(started.wait(), 2)
+            followers = [
+                asyncio.create_task(
+                    client.get("/api/v1/ppt/template/all?default=true")
+                ),
+                asyncio.create_task(
+                    client.get("/api/v1/ppt/template/all?default=false")
+                ),
+                asyncio.create_task(client.post("/api/v1/ppt/presentation/update")),
+            ]
+            try:
+                await asyncio.wait_for(all_waiting.wait(), 2)
+                assert scenario.business_calls == []
+                assert all(not task.done() for task in followers)
+                if outcome in {"logout", "disabled", "expired"}:
+                    async with scenario.session_maker() as session:
+                        if outcome == "logout":
+                            statement = delete(ApplicationSession).where(
+                                ApplicationSession.id == scenario.session_id
+                            )
+                        elif outcome == "disabled":
+                            statement = (
+                                update(User)
+                                .where(User.id == scenario.user_id)
+                                .values(is_active=False)
+                            )
+                        else:
+                            statement = (
+                                update(ApplicationSession)
+                                .where(ApplicationSession.id == scenario.session_id)
+                                .values(
+                                    expires_at=datetime.now(UTC) - timedelta(seconds=1)
+                                )
+                            )
+                        await session.execute(statement)
+                        await session.commit()
+            finally:
+                release.set()
+            responses = await asyncio.gather(leader, *followers)
+            if outcome == "success":
+                assert [response.status_code for response in responses] == [200] * 4
+                assert refresh_calls == 1
+                assert sorted(scenario.business_calls) == ["read", "read", "write"]
+                # The next normal request uses the rotated token directly.
+                assert (await client.get("/api/v1/ppt/template/all")).status_code == 200
+                assert refresh_calls == 1
+            else:
+                assert scenario.business_calls == []
+                expected = 503 if outcome == "unavailable" else 401
+                assert [response.status_code for response in responses[1:]] == [
+                    expected
+                ] * 3
+                if outcome == "unavailable":
+                    assert all(
+                        response.json()["detail"]["code"] == "OIDC_REFRESH_UNAVAILABLE"
+                        for response in responses
+                    )
+                if outcome in {"logout", "expired"}:
+                    assert responses[0].status_code == 503
+                    assert (
+                        responses[0].json()["detail"]["code"]
+                        == "OIDC_REFRESH_RESULT_STALE"
+                    )
+                elif outcome != "unavailable":
+                    assert responses[0].json()["authenticated"] is False
+                if outcome == "logout":
+                    async with scenario.session_maker() as session:
+                        assert (
+                            await session.get(ApplicationSession, scenario.session_id)
+                            is None
+                        )
+
+    asyncio.run(exercise())
+
+
+def test_refresh_wait_timeout_preserves_status_and_retry_after(
+    monkeypatch, refresh_scenario
+):
+    scenario = refresh_scenario
+    monkeypatch.setattr("api.v1.auth.oidc.REFRESH_WAIT_SECONDS", 0.02)
+
+    async def exercise():
+        async with scenario.session_maker() as session:
+            await session.execute(
+                update(ApplicationSession)
+                .where(ApplicationSession.id == scenario.session_id)
+                .values(
+                    refresh_lease_id=uuid.uuid4(),
+                    refresh_lease_expires_at=datetime.now(UTC) + timedelta(minutes=1),
+                )
+            )
+            await session.commit()
+        transport = httpx.ASGITransport(app=scenario.app, raise_app_exceptions=False)
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="https://pptmate.ngl.local",
+            cookies={"ngl_pptmate_session": scenario.cookie},
+        ) as client:
+            response = await asyncio.wait_for(client.get("/api/v1/ppt/template/all"), 1)
+            assert response.status_code == 503
+            assert response.json() == {"detail": {"code": "OIDC_REFRESH_IN_PROGRESS"}}
+            assert response.headers["retry-after"] == "1"
+            assert scenario.business_calls == []
+
+    asyncio.run(exercise())
+
+
+def test_refresh_reloads_rotation_completed_after_initial_session_read(
+    refresh_scenario,
+):
+    scenario = refresh_scenario
+
+    async def exercise():
+        async with scenario.session_maker() as stale_session:
+            record = await stale_session.get(ApplicationSession, scenario.session_id)
+            async with scenario.session_maker() as other_session:
+                await other_session.execute(
+                    update(ApplicationSession)
+                    .where(ApplicationSession.id == scenario.session_id)
+                    .values(
+                        token_version=1,
+                        access_token_encrypted=scenario.authenticator.cipher.encrypt(
+                            scenario.valid_token
+                        ),
+                    )
+                )
+                await other_session.commit()
+            with pytest.raises(HTTPException) as changed:
+                await scenario.authenticator._refresh(stale_session, record)
+            assert changed.value.detail == {"code": "OIDC_REFRESH_IN_PROGRESS"}
+
+    asyncio.run(exercise())
+
+
+def test_provider_timeout_returns_unavailable_and_releases_lease(
+    monkeypatch, refresh_scenario
+):
+    scenario = refresh_scenario
+
+    async def exercise():
+        def timeout(request):
+            raise httpx.ReadTimeout("synthetic provider timeout", request=request)
+
+        async with httpx.AsyncClient(
+            transport=httpx.MockTransport(timeout)
+        ) as provider:
+            monkeypatch.setattr(
+                scenario.authenticator.client, "_http_client", lambda: provider
+            )
+            transport = httpx.ASGITransport(
+                app=scenario.app, raise_app_exceptions=False
+            )
+            async with httpx.AsyncClient(
+                transport=transport,
+                base_url="https://pptmate.ngl.local",
+                cookies={"ngl_pptmate_session": scenario.cookie},
+            ) as client:
+                response = await client.get("/api/v1/ppt/template/all")
+                assert response.status_code == 503
+                assert response.json() == {
+                    "detail": {"code": "OIDC_REFRESH_UNAVAILABLE"}
+                }
+                assert scenario.business_calls == []
+            async with scenario.session_maker() as session:
+                record = await session.get(ApplicationSession, scenario.session_id)
+                assert record.refresh_lease_id is None
+
+    asyncio.run(exercise())
+
+
 def test_refresh_rotation_uses_compare_and_swap(monkeypatch, tmp_path):
     private_key = _configure_oidc(monkeypatch, tmp_path)
     _client, engine, session_maker = _build_client(tmp_path)
@@ -439,9 +754,7 @@ def test_refresh_rotation_uses_compare_and_swap(monkeypatch, tmp_path):
                 )
                 await concurrent_session.commit()
             return {
-                "access_token": _access_token(
-                    private_key, roles=("pptmate.user",)
-                ),
+                "access_token": _access_token(private_key, roles=("pptmate.user",)),
                 "refresh_token": "rotated-refresh-token",
             }
 
