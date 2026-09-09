@@ -110,6 +110,11 @@ from services.community_presentations import (
     merge_reference_fonts,
     normalize_community_ids,
 )
+from services.smart_template_reference import (
+    build_template_design_context,
+    extract_template_style,
+    get_reference_template_id,
+)
 from utils.llm_calls.generate_smart_presentation import (
     generate_smart_presentation,
     resolve_smart_slide_count,
@@ -1574,6 +1579,7 @@ async def create_presentation(
     web_search: Annotated[bool, Body()] = False,
     generation_mode: Annotated[Literal["standard", "smart"], Body()] = "standard",
     community_design_ids: Annotated[Optional[List[int]], Body()] = None,
+    reference_template_id: Annotated[str | None, Body(max_length=200)] = None,
     sql_session: AsyncSession = Depends(get_async_session),
 ):
 
@@ -1614,6 +1620,23 @@ async def create_presentation(
             detail="A prompt, document, or community reference is required",
         )
 
+    reference_layout = None
+    if reference_template_id is not None:
+        if generation_mode != "smart":
+            raise HTTPException(
+                status_code=400,
+                detail="Template references are available only in Smart mode",
+            )
+        # The application-owned session enforces built-in/owner template visibility.
+        template = await sql_session.get(TemplateV2, reference_template_id)
+        if template is None:
+            raise HTTPException(
+                status_code=404,
+                detail="所选参考模板不存在或无法访问，请返回上传页重新选择模板。",
+            )
+        extract_template_style(template)
+        reference_layout = {"smart_template_reference": {"template_id": template.id}}
+
     presentation_id = uuid.uuid4()
     language_to_store = (language or "").strip()
     validated_file_paths = (
@@ -1646,6 +1669,7 @@ async def create_presentation(
         web_search=web_search,
         generation_mode=generation_mode,
         community_design_ids=normalized_community_ids or None,
+        layout=reference_layout,
     )
 
     try:
@@ -1876,10 +1900,28 @@ async def _stream_smart_presentation(
                 else "Preparing Smart presentation"
             )
         ).to_string()
+        template_context = ""
+        template_fonts = None
+        reference_template_id = get_reference_template_id(presentation.layout)
+        if reference_template_id is not None:
+            template = await sql_session.get(TemplateV2, reference_template_id)
+            if template is None:
+                raise HTTPException(
+                    status_code=404,
+                    detail="所选参考模板不存在或无法访问，请返回上传页重新选择模板。",
+                )
+            template_context = build_template_design_context(template)
+            template_fonts = _extract_template_fonts_from_assets(template.assets)
+            # Older in-progress records may contain style data; keep only the ID.
+            presentation.layout = {"smart_template_reference": {"template_id": template.id}}
+
         references = await load_community_references(
             presentation.community_design_ids
         )
         community_context = build_community_design_context(references)
+        design_context = "\n\n".join(
+            context for context in (template_context, community_context) if context
+        )
         reference_fonts = merge_reference_fonts(references)
 
         source_parts: list[str] = []
@@ -1910,6 +1952,9 @@ async def _stream_smart_presentation(
             source_context = source_context[:90_000]
 
         resolved_fonts = presentation.fonts or reference_fonts
+        if template_context:
+            # Keep fonts used by saved slides and add the current template's fonts.
+            resolved_fonts = {**(resolved_fonts or {}), **(template_fonts or {})}
         presentation.fonts = _platform_safe_fonts(resolved_fonts) or (
             {}
             if is_platform_mode()
@@ -1933,6 +1978,8 @@ async def _stream_smart_presentation(
                 else (
                     "Applying community design reference"
                     if references
+                    else "正在参考所选模板设计演示文稿"
+                    if template_context
                     else "Designing the complete presentation"
                 )
             )
@@ -2026,8 +2073,9 @@ async def _stream_smart_presentation(
                 include_title_slide=presentation.include_title_slide,
                 include_table_of_contents=presentation.include_table_of_contents,
                 source_context=source_context,
-                community_design_context=community_context,
+                community_design_context=design_context,
                 fonts=presentation.fonts,
+                default_max_output_tokens=32_768 if template_context else None,
                 existing_slides=[
                     {"html": slide.html_content or ""} for slide in existing_slides
                 ],

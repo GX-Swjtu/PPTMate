@@ -30,6 +30,7 @@ export function PromptInput({
   hasAttachments = false,
 }: PromptInputProps) {
   const isCommunityStart =
+    process.env.NEXT_PUBLIC_PLATFORM_MODE !== "true" &&
     variant === "smart" && references.length === 0 && !value.trim();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {

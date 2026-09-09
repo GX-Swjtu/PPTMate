@@ -743,6 +743,7 @@ async def generate_smart_presentation(
     source_context: str = "",
     community_design_context: str = "",
     fonts: Optional[dict[str, str]] = None,
+    default_max_output_tokens: int | None = None,
     existing_slides: Optional[Sequence[dict[str, str]]] = None,
     existing_title: Optional[str] = None,
     on_slide: SmartSlideCallback | None = None,
@@ -757,6 +758,12 @@ async def generate_smart_presentation(
         "max_output_tokens",
         None,
     )
+    # Honor explicit limits and non-default profiles. Gateway model aliases may
+    # otherwise fall back to an 8K budget that is exhausted by reasoning alone.
+    if configured_output_token_limit is None and getattr(
+        getattr(client_config, "generation", None), "profile", "balanced"
+    ) == "balanced":
+        configured_output_token_limit = default_max_output_tokens
     reasoning, configured_thinking_support = get_smart_reasoning_config(model)
     accepted_slides: list[dict[str, str]] = []
     for index, saved_slide in enumerate(existing_slides or []):

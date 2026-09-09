@@ -71,6 +71,8 @@ function rememberNonSotaToastDismissed() {
 }
 
 export function showTemplateV2ModelWarningIfNeeded(config: LLMConfig) {
+    // Platform operators select the vision model behind the gateway alias.
+    if (process.env.NEXT_PUBLIC_PLATFORM_MODE === "true") return;
     if (isSotaTemplateModel(config) || hasDismissedNonSotaToast()) return;
 
     notify.warning(

@@ -34,6 +34,8 @@ import {
   parseLimitedSlideCount,
 } from "@/utils/presentationLimits";
 import CommunityReferencePicker from "./CommunityReferencePicker";
+import SmartTemplatePicker from "./SmartTemplatePicker";
+import type { TemplateListItem } from "../../services/api/template";
 import {
   CommunityPresentationApi,
   type CommunityPresentation,
@@ -41,6 +43,7 @@ import {
 
 type GenerationMode = "smart" | "standard";
 
+const COMMUNITY_REFERENCES_ENABLED = process.env.NEXT_PUBLIC_PLATFORM_MODE !== "true";
 const DEFAULT_LANGUAGE =
   process.env.NEXT_PUBLIC_PLATFORM_MODE === "true"
     ? LanguageType.ChineseSimplified
@@ -152,6 +155,7 @@ const UploadPage = () => {
   const [generationMode, setGenerationMode] = useState<GenerationMode>("standard");
   const [communityReference, setCommunityReference] =
     useState<CommunityPresentation | null>(null);
+  const [templateReference, setTemplateReference] = useState<TemplateListItem | null>(null);
   const [config, setConfig] = useState<PresentationConfig>({
     slides: null,
     language: DEFAULT_LANGUAGE,
@@ -176,7 +180,7 @@ const UploadPage = () => {
     if (requestedPrompt) {
       setConfig((current) => ({ ...current, prompt: requestedPrompt }));
     }
-    if (Number.isSafeInteger(requestedCommunityId) && requestedCommunityId > 0) {
+    if (COMMUNITY_REFERENCES_ENABLED && Number.isSafeInteger(requestedCommunityId) && requestedCommunityId > 0) {
       CommunityPresentationApi.getById(requestedCommunityId)
         .then((presentation) => {
           if (!active) return;
@@ -470,6 +474,7 @@ const UploadPage = () => {
       include_title_slide: !!config?.includeTitleSlide,
       web_search: !!config?.webSearch,
       generation_mode: generationMode,
+      reference_template_id: generationMode === "smart" ? templateReference?.id : undefined,
       community_design_ids:
         generationMode === "smart" && communityReference
           ? [communityReference.id]
@@ -533,6 +538,7 @@ const UploadPage = () => {
       include_title_slide: !!config?.includeTitleSlide,
       web_search: !!config?.webSearch,
       generation_mode: generationMode,
+      reference_template_id: generationMode === "smart" ? templateReference?.id : undefined,
       community_design_ids:
         generationMode === "smart" && communityReference
           ? [communityReference.id]
@@ -591,7 +597,7 @@ const UploadPage = () => {
       />
       <div
         className={`mx-auto max-w-[760px] space-y-[18px] px-4 lg:max-w-[780px] xl:max-w-[900px] min-[1600px]:max-w-[1050px] min-[1920px]:max-w-[1280px] ${
-          generationMode === "smart" ? "mb-[75px]" : "mb-8"
+          COMMUNITY_REFERENCES_ENABLED && generationMode === "smart" ? "mb-[75px]" : "mb-8"
         }`}
       >
         <div className="flex min-h-[34px] w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -611,13 +617,16 @@ const UploadPage = () => {
           value={config.prompt}
           variant={generationMode}
           references={
-            generationMode === "smart" && communityReference
+            generationMode === "smart" && templateReference
+              ? [{ id: templateReference.id, label: `模板：${templateReference.name}` }]
+              : generationMode === "smart" && communityReference
               ? [{ id: String(communityReference.id), label: communityReference.title || "社区设计" }]
               : []
           }
-          onRemoveReference={() =>
-            handleCommunityReferenceChange(null, "prompt_reference")
-          }
+          onRemoveReference={() => {
+            setTemplateReference(null);
+            handleCommunityReferenceChange(null, "prompt_reference");
+          }}
           onChange={(value) => handleConfigChange("prompt", value)}
           onSubmit={handleGeneratePresentation}
           hasAttachments={files.length > 0}
@@ -633,7 +642,13 @@ const UploadPage = () => {
 
       </div>
 
-      {generationMode === "smart" && (
+      {!COMMUNITY_REFERENCES_ENABLED && generationMode === "smart" && (
+        <div className="px-4 sm:px-6">
+          <SmartTemplatePicker selectedTemplate={templateReference} onSelect={setTemplateReference} />
+        </div>
+      )}
+
+      {COMMUNITY_REFERENCES_ENABLED && generationMode === "smart" && (
         <div className="px-4 sm:px-6">
           <CommunityReferencePicker
             selectedId={communityReference?.id ?? null}

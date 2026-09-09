@@ -401,6 +401,50 @@ def test_smart_generation_keeps_prefix_when_continuation_hits_token_limit(
     ]
 
 
+@pytest.mark.parametrize(
+    "configured,profile,fallback,expected",
+    [
+        (None, "balanced", 32_768, 32_768),
+        (4_000, "balanced", 32_768, 4_000),
+        (None, "fast", 32_768, None),
+        (None, "deep", 32_768, None),
+        (None, "balanced", None, None),
+    ],
+)
+def test_template_budget_preserves_explicit_limits_and_profiles(
+    monkeypatch, configured, profile, fallback, expected
+):
+    from utils.llm_calls import generate_smart_presentation as smart
+
+    observed_limits = []
+    response = (
+        "<!-- PRESENTATION_TITLE: Budget test --><!-- SLIDE_START -->"
+        + _smart_slide_html()
+        + "<!-- SLIDE_END -->"
+    )
+
+    async def stream(_client, _model, _messages, on_chunk, **kwargs):
+        observed_limits.append(kwargs["max_output_tokens"])
+        await on_chunk(response)
+        return response, SimpleNamespace(finish_reason=None)
+
+    monkeypatch.setattr(smart, "get_client", lambda **_: object())
+    monkeypatch.setattr(smart, "get_model", lambda: "gateway-alias")
+    monkeypatch.setattr(smart, "get_smart_reasoning_config", lambda _: (None, False))
+    monkeypatch.setattr(smart, "get_llm_config", lambda **_: SimpleNamespace(
+        generation=SimpleNamespace(max_output_tokens=configured, profile=profile)
+    ))
+    monkeypatch.setattr(smart, "_stream_deck_response", stream)
+
+    deck = asyncio.run(smart.generate_smart_presentation(
+        content="Budget test", n_slides=1, language="English", tone=None,
+        verbosity=None, instructions=None, include_title_slide=False,
+        include_table_of_contents=False, default_max_output_tokens=fallback,
+    ))
+    assert observed_limits == [expected]
+    assert len(deck["slides"]) == 1
+
+
 def test_smart_generation_resumes_from_existing_checkpoint(monkeypatch):
     response = (
         "<!-- PRESENTATION_TITLE: Saved deck -->"
