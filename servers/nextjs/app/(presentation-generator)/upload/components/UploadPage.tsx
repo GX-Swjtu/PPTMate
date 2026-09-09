@@ -600,7 +600,11 @@ const UploadPage = () => {
           COMMUNITY_REFERENCES_ENABLED && generationMode === "smart" ? "mb-[75px]" : "mb-8"
         }`}
       >
-        <div className="flex min-h-[34px] w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className={`flex min-h-[34px] w-full gap-3 ${
+          process.env.NEXT_PUBLIC_PLATFORM_MODE === "true"
+            ? "flex-wrap items-center justify-between"
+            : "flex-col sm:flex-row sm:items-center sm:justify-between"
+        }`}>
           <div className="flex flex-wrap items-center gap-2">
             <CurrentConfig webSearchEnabled={config.webSearch} />
           </div>
