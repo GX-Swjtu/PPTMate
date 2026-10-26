@@ -66,6 +66,7 @@ ARG TARGETARCH
 RUN --mount=type=cache,id=pptmate-bookworm-apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=pptmate-bookworm-apt-lists,target=/var/lib/apt/lists,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean \
+    && sed -i 's|http://deb.debian.org|http://mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources \
     && apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl unzip
 
@@ -107,6 +108,7 @@ RUN --mount=type=cache,id=pptmate-trixie-apt-cache,target=/var/cache/apt,sharing
     --mount=type=cache,id=pptmate-trixie-apt-lists,target=/var/lib/apt/lists,sharing=locked \
     set -eux; \
     rm -f /etc/apt/apt.conf.d/docker-clean; \
+    sed -i 's|http://deb.debian.org|http://mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources; \
     printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99snapshot; \
     printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/%s trixie-security main\n' "$CHROMIUM_SNAPSHOT" > /etc/apt/sources.list.d/chromium-snapshot.list; \
     packages="ca-certificates curl nginx fontconfig imagemagick zstd \
