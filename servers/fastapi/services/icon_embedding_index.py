@@ -25,6 +25,7 @@ class IconEmbeddingIndex:
     model: str
     dimensions: int
     corpus_sha256: str
+    generation: str = ""
 
 
 def load_icon_documents(icons_path: str | Path) -> list[str]:
@@ -86,6 +87,7 @@ def save_icon_embedding_index(
     documents: Sequence[str],
     embeddings: np.ndarray,
     model: str,
+    generation: str = "",
 ) -> None:
     output = Path(output_path)
     clean_model = model.strip()
@@ -116,6 +118,7 @@ def save_icon_embedding_index(
                 corpus_sha256=np.asarray(icon_corpus_sha256(document_tuple)),
                 documents=np.asarray(document_tuple, dtype=np.str_),
                 embeddings=matrix,
+                generation=np.asarray(generation),
             )
         os.chmod(temporary_name, 0o644)
         os.replace(temporary_name, output)
@@ -137,13 +140,8 @@ def _read_scalar(archive: np.lib.npyio.NpzFile, name: str) -> object:
     return value.item()
 
 
-def load_icon_embedding_index(
-    index_path: str | Path,
-    *,
-    expected_model: str,
-    expected_dimensions: int,
-    expected_documents: Sequence[str],
-) -> IconEmbeddingIndex:
+def read_icon_embedding_index(index_path: str | Path) -> IconEmbeddingIndex:
+    """Read and validate a self-contained index, including older index files."""
     path = Path(index_path)
     try:
         with np.load(path, allow_pickle=False) as archive:
@@ -153,6 +151,7 @@ def load_icon_embedding_index(
             corpus_sha256 = str(_read_scalar(archive, "corpus_sha256"))
             documents_array = np.asarray(archive["documents"])
             embeddings = np.asarray(archive["embeddings"], dtype=np.float32)
+            generation = str(_read_scalar(archive, "generation")) if "generation" in archive else ""
     except IconEmbeddingIndexError:
         raise
     except (OSError, ValueError, KeyError) as exc:
@@ -160,20 +159,12 @@ def load_icon_embedding_index(
 
     if schema_version != ICON_EMBEDDING_INDEX_SCHEMA_VERSION:
         raise IconEmbeddingIndexError(f"Unsupported icon index schema version: {schema_version}")
-    if model != expected_model:
-        raise IconEmbeddingIndexError(f"Icon index model is {model!r}; expected {expected_model!r}")
-    if dimensions != expected_dimensions:
-        raise IconEmbeddingIndexError(
-            f"Icon index has {dimensions} dimensions; expected {expected_dimensions}"
-        )
     if documents_array.ndim != 1:
         raise IconEmbeddingIndexError("Icon index documents must be one-dimensional")
 
     documents = tuple(str(document) for document in documents_array.tolist())
-    expected_document_tuple = tuple(expected_documents)
-    expected_corpus_sha256 = icon_corpus_sha256(expected_document_tuple)
-    if documents != expected_document_tuple or corpus_sha256 != expected_corpus_sha256:
-        raise IconEmbeddingIndexError("Icon index corpus does not match the bundled icon metadata")
+    if len(documents) != len(set(documents)) or corpus_sha256 != icon_corpus_sha256(documents):
+        raise IconEmbeddingIndexError("Icon index corpus checksum is invalid")
     if embeddings.shape != (len(documents), dimensions):
         raise IconEmbeddingIndexError("Icon index embedding shape does not match its metadata")
 
@@ -183,4 +174,26 @@ def load_icon_embedding_index(
         model=model,
         dimensions=dimensions,
         corpus_sha256=corpus_sha256,
+        generation=generation,
     )
+
+
+def load_icon_embedding_index(
+    index_path: str | Path,
+    *,
+    expected_model: str,
+    expected_dimensions: int,
+    expected_documents: Sequence[str],
+) -> IconEmbeddingIndex:
+    index = read_icon_embedding_index(index_path)
+    if index.model != expected_model:
+        raise IconEmbeddingIndexError(
+            f"Icon index model is {index.model!r}; expected {expected_model!r}"
+        )
+    if index.dimensions != expected_dimensions:
+        raise IconEmbeddingIndexError(
+            f"Icon index has {index.dimensions} dimensions; expected {expected_dimensions}"
+        )
+    if index.documents != tuple(expected_documents):
+        raise IconEmbeddingIndexError("Icon index corpus does not match the bundled icon metadata")
+    return index

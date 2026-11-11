@@ -1,31 +1,33 @@
 """Generate the versioned icon index through an OpenAI-compatible gateway.
 
 The API key is read from an environment variable or a file and is never accepted
-as a command-line value. The platform runs this idempotently in a Kubernetes init
-container; Docker builds never call the embedding API.
+as a command-line value. Valid indexes are reused without calling the API.
+Runtime icon searches prepare missing/stale indexes on demand; Docker builds
+and readiness probes never do so.
 """
 
 from __future__ import annotations
 
 import argparse
+import logging
 import os
 import sys
 from pathlib import Path
 
-import numpy as np
-from openai import OpenAI
 from services.icon_embedding_index import (
     DEFAULT_OPENAI_ICON_INDEX_FILENAME,
-    IconEmbeddingIndexError,
     load_icon_documents,
     load_icon_embedding_index,
-    save_icon_embedding_index,
+)
+from services.icon_index_preparation import (
+    MAX_EMBEDDING_BATCH_SIZE,
+    pending_index_path,
+    prepare_icon_embedding_index,
 )
 
 FASTAPI_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODEL = "pptmate-embedding"
 DEFAULT_DIMENSIONS = 1024
-MAX_EMBEDDING_BATCH_SIZE = 10
 
 
 def _arguments() -> argparse.Namespace:
@@ -80,7 +82,10 @@ def _arguments() -> argparse.Namespace:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Regenerate an otherwise valid existing index.",
+        help=(
+            "Start a fresh full rebuild after an API model change. "
+            "Resume interrupted builds WITHOUT --force."
+        ),
     )
     return parser.parse_args()
 
@@ -103,37 +108,6 @@ def _read_api_key(api_key_file: Path | None) -> str:
     ).strip()
 
 
-def _embed_documents(
-    client: OpenAI,
-    *,
-    documents: list[str],
-    model: str,
-    expected_dimensions: int,
-    batch_size: int,
-) -> np.ndarray:
-    vectors: list[list[float]] = []
-    for start in range(0, len(documents), batch_size):
-        batch = documents[start : start + batch_size]
-        response = client.embeddings.create(model=model, input=batch)
-        ordered = sorted(response.data, key=lambda item: item.index)
-        if len(ordered) != len(batch):
-            raise RuntimeError(
-                f"Embedding batch returned {len(ordered)} vectors for {len(batch)} documents"
-            )
-        for item in ordered:
-            if len(item.embedding) != expected_dimensions:
-                raise RuntimeError(
-                    "Embedding response has "
-                    f"{len(item.embedding)} dimensions; expected {expected_dimensions}"
-                )
-            vectors.append(item.embedding)
-        completed = min(start + batch_size, len(documents))
-        if completed == len(documents) or completed % 100 == 0:
-            print(f"Embedded {completed}/{len(documents)} icons")
-
-    return np.asarray(vectors, dtype=np.float32)
-
-
 def main() -> int:
     arguments = _arguments()
     model = arguments.model.strip()
@@ -146,6 +120,8 @@ def main() -> int:
 
     documents = load_icon_documents(arguments.icons)
     if arguments.check:
+        if pending_index_path(arguments.output).exists():
+            raise RuntimeError("Icon index rebuild is incomplete; run without --force to resume")
         index = load_icon_embedding_index(
             arguments.output,
             expected_model=model,
@@ -158,59 +134,31 @@ def main() -> int:
         )
         return 0
 
-    if arguments.output.is_file() and not arguments.force:
-        try:
-            index = load_icon_embedding_index(
-                arguments.output,
-                expected_model=model,
-                expected_dimensions=arguments.dimensions,
-                expected_documents=documents,
-            )
-        except IconEmbeddingIndexError as exc:
-            print(f"Existing icon index is stale and will be regenerated: {exc}")
-        else:
-            print(
-                f"Icon index is already valid: {len(index.documents)} documents, "
-                f"{index.dimensions} dimensions, model {index.model}"
-            )
-            return 0
-
-    base_url = arguments.base_url.strip().rstrip("/")
-    api_key = _read_api_key(arguments.api_key_file)
-    if not base_url:
-        raise RuntimeError("Embedding base URL is required")
-    if not api_key:
-        raise RuntimeError("Embedding API key is required")
-
-    client = OpenAI(
-        api_key=api_key,
-        base_url=base_url,
-        timeout=90.0,
-        max_retries=3,
-    )
-    embeddings = _embed_documents(
-        client,
-        documents=documents,
+    index = prepare_icon_embedding_index(
+        icons_path=arguments.icons,
+        output_path=arguments.output,
         model=model,
-        expected_dimensions=arguments.dimensions,
+        dimensions=arguments.dimensions,
+        base_url=arguments.base_url.strip(),
+        api_key=_read_api_key(arguments.api_key_file),
+        force=arguments.force,
         batch_size=arguments.batch_size,
     )
-    save_icon_embedding_index(
-        arguments.output,
-        documents=documents,
-        embeddings=embeddings,
-        model=model,
-    )
     print(
-        f"Wrote icon index to {arguments.output}: "
-        f"{len(documents)} documents, {embeddings.shape[1]} dimensions"
+        f"Icon index is ready: {len(index.documents)} documents, "
+        f"{index.dimensions} dimensions, model {index.model}"
     )
     return 0
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     try:
         raise SystemExit(main())
     except Exception as exc:
-        print(f"Icon index generation failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+        print(
+            f"Icon index generation failed: {type(exc).__name__}. "
+            "Completed batches are retained; retry without --force.",
+            file=sys.stderr,
+        )
         raise SystemExit(1) from None

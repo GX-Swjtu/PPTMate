@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = "==3.11.*"
 
 [[package]]
@@ -1849,6 +1849,7 @@ dependencies = [
     { name = "fastapi-users", extra = ["sqlalchemy"] },
     { name = "fastembed-vectorstore" },
     { name = "fastmcp" },
+    { name = "filelock" },
     { name = "fonttools" },
     { name = "google-genai" },
     { name = "greenlet" },
@@ -1886,6 +1887,7 @@ requires-dist = [
     { name = "fastapi-users", extras = ["sqlalchemy"], specifier = ">=14.0.1" },
     { name = "fastembed-vectorstore", specifier = ">=0.5.2" },
     { name = "fastmcp", specifier = ">=2.11.0" },
+    { name = "filelock", specifier = ">=3.29.0" },
     { name = "fonttools", specifier = ">=4.55.0" },
     { name = "google-genai", specifier = ">=1.28.0" },
     { name = "greenlet", specifier = ">=3.0.3" },

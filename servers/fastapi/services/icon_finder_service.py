@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
+import threading
+import time
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 from openai import AsyncOpenAI
@@ -18,14 +22,15 @@ from services.icon_embedding_index import (
     DEFAULT_OPENAI_ICON_INDEX_FILENAME,
     IconEmbeddingIndex,
     load_icon_documents,
-    load_icon_embedding_index,
 )
+from services.icon_index_preparation import pending_index_path, prepare_icon_embedding_index
 
 LOCAL_ICON_EMBEDDER = "fastembed"
 OPENAI_ICON_EMBEDDER = "openai"
 DEFAULT_ICON_EMBEDDING_MODEL = "pptmate-embedding"
 DEFAULT_ICON_EMBEDDING_DIMENSIONS = 1024
 DEFAULT_ICON_QUERY_CACHE_SIZE = 256
+LOGGER = logging.getLogger(__name__)
 
 
 def _icon_fastembed_cache_directory() -> str:
@@ -69,8 +74,12 @@ class IconFinderService:
         self.embedding_index: IconEmbeddingIndex | None = None
         self._openai_client: AsyncOpenAI | None = None
         self._query_embedding_cache: OrderedDict[str, np.ndarray] = OrderedDict()
+        self._query_cache_lock = threading.Lock()
         self._initialized = False
         self._initialization_failed = False
+        self._initialization_lock = threading.Lock()
+        self._source_signature = None
+        self._retry_at = 0.0
 
     def _initialize_icons_collection(self) -> None:
         if self._initialized or self._initialization_failed:
@@ -92,7 +101,26 @@ class IconFinderService:
             self.embedding_index = None
 
     def _initialize_openai_collection(self) -> None:
-        icons_path = get_resource_path("assets/icons.json")
+        icons_path, index_path = self._index_paths()
+        api_key, base_url = self._gateway_credentials()
+        index = prepare_icon_embedding_index(
+            icons_path=icons_path,
+            output_path=index_path,
+            model=self.embedding_model,
+            dimensions=self.embedding_dimensions,
+            api_key=api_key,
+            base_url=base_url,
+        )
+        with self._query_cache_lock:
+            self.embedding_index = index
+            self._query_embedding_cache.clear()
+        LOGGER.info(
+            "Icon index loaded: documents=%s dimensions=%s",
+            len(self.embedding_index.documents),
+            self.embedding_dimensions,
+        )
+
+    def _index_paths(self) -> tuple[str, str]:
         configured_index_path = (os.getenv("ICON_EMBEDDING_INDEX_PATH") or "").strip()
         if configured_index_path:
             index_path = (
@@ -102,18 +130,34 @@ class IconFinderService:
             )
         else:
             index_path = get_resource_path(f"assets/{DEFAULT_OPENAI_ICON_INDEX_FILENAME}")
+        return get_resource_path("assets/icons.json"), index_path
 
-        documents = load_icon_documents(icons_path)
-        self.embedding_index = load_icon_embedding_index(
-            index_path,
-            expected_model=self.embedding_model,
-            expected_dimensions=self.embedding_dimensions,
-            expected_documents=documents,
-        )
-        print(
-            "[IconFinder] Loaded OpenAI-compatible icon index "
-            f"({len(documents)} documents, {self.embedding_dimensions} dimensions)"
-        )
+    def _index_signature(self) -> tuple:
+        icons, index = self._index_paths()
+        signature = []
+        for path in (icons, index, pending_index_path(index)):
+            try:
+                stat = Path(path).stat()
+                signature.append((stat.st_ino, stat.st_size, stat.st_mtime_ns))
+            except FileNotFoundError:
+                signature.append(None)
+        return tuple(signature)
+
+    @staticmethod
+    def _gateway_credentials() -> tuple[str, str]:
+        key = (
+            os.getenv("ICON_EMBEDDING_API_KEY")
+            or os.getenv("OPENAI_API_KEY")
+            or os.getenv("LITELLM_API_KEY")
+            or ""
+        ).strip()
+        base = (
+            os.getenv("ICON_EMBEDDING_BASE_URL")
+            or os.getenv("OPENAI_BASE_URL")
+            or os.getenv("LITELLM_BASE_URL")
+            or ""
+        ).strip()
+        return key, base
 
     def _initialize_fastembed_collection(self) -> None:
         # Keep the upstream local provider available for non-platform builds. Imports are
@@ -164,31 +208,48 @@ class IconFinderService:
         print(f"[IconFinder] Local vector store saved to {writable_vectorstore_path}")
 
     def ensure_initialized(self) -> bool:
+        if self.provider == OPENAI_ICON_EMBEDDER:
+            # No network on startup/health checks. The first actual icon search
+            # prepares missing/stale data off the event loop. A replaced index is
+            # reloaded, including after a previous failure or a manual --force.
+            with self._initialization_lock:
+                signature = self._index_signature()
+                if signature == self._source_signature:
+                    if self.embedding_index is not None and not self._initialization_failed:
+                        return True
+                    if time.monotonic() < self._retry_at:
+                        return False
+                try:
+                    self._initialize_openai_collection()
+                    self._initialization_failed = False
+                    self._initialized = True
+                except Exception as exc:
+                    self.embedding_index = None
+                    self._initialization_failed = True
+                    self._retry_at = time.monotonic() + 60
+                    LOGGER.warning(
+                        "Icon index unavailable: error_type=%s; retry after backoff or file change",
+                        type(exc).__name__,
+                    )
+                # Keep the signature observed BEFORE loading on success. If a
+                # second process replaces the file while we load it, the next
+                # request must notice. Our own rebuild may cause one free reload.
+                self._source_signature = (
+                    self._index_signature() if self._initialization_failed else signature
+                )
+                return self.embedding_index is not None
         if not self._initialized and not self._initialization_failed:
             self._initialize_icons_collection()
         if self._initialization_failed:
             return False
-        if self.provider == OPENAI_ICON_EMBEDDER:
-            return self.embedding_index is not None
         return self.vectorstore is not None
 
     def _get_openai_client(self) -> AsyncOpenAI:
         if self._openai_client is not None:
             return self._openai_client
 
-        api_key = (
-            os.getenv("ICON_EMBEDDING_API_KEY")
-            or os.getenv("OPENAI_API_KEY")
-            or os.getenv("LITELLM_API_KEY")
-            or ""
-        ).strip()
-        base_url = (
-            os.getenv("ICON_EMBEDDING_BASE_URL")
-            or os.getenv("OPENAI_BASE_URL")
-            or os.getenv("LITELLM_BASE_URL")
-            or ""
-        ).strip()
-        if not api_key:
+        api_key, base_url = self._gateway_credentials()
+        if not api_key or api_key == "novalue":
             raise RuntimeError("Icon embedding API key is unavailable")
         if not base_url:
             raise RuntimeError("Icon embedding base URL is unavailable")
@@ -202,10 +263,12 @@ class IconFinderService:
         return self._openai_client
 
     async def _embed_openai_query(self, query: str) -> np.ndarray:
-        cached = self._query_embedding_cache.get(query)
-        if cached is not None:
-            self._query_embedding_cache.move_to_end(query)
-            return cached
+        with self._query_cache_lock:
+            index_at_start = self.embedding_index
+            cached = self._query_embedding_cache.get(query)
+            if cached is not None:
+                self._query_embedding_cache.move_to_end(query)
+                return cached
 
         response = await self._get_openai_client().embeddings.create(
             model=self.embedding_model,
@@ -227,10 +290,12 @@ class IconFinderService:
             raise RuntimeError("Icon query embedding has zero length")
         normalized = np.ascontiguousarray(vector / norm, dtype=np.float32)
 
-        self._query_embedding_cache[query] = normalized
-        self._query_embedding_cache.move_to_end(query)
-        while len(self._query_embedding_cache) > self.query_cache_size:
-            self._query_embedding_cache.popitem(last=False)
+        with self._query_cache_lock:
+            if self.embedding_index is index_at_start:
+                self._query_embedding_cache[query] = normalized
+                self._query_embedding_cache.move_to_end(query)
+            while len(self._query_embedding_cache) > self.query_cache_size:
+                self._query_embedding_cache.popitem(last=False)
         return normalized
 
     @staticmethod
@@ -260,12 +325,25 @@ class IconFinderService:
         return absolute_fastapi_asset_url(f"/static/icons/{normalized_weight}/{filename}")
 
     async def _search_openai(self, query: str, k: int) -> list[str]:
-        if self.embedding_index is None:
-            return []
-        query_embedding = await self._embed_openai_query(query)
-        scores = self.embedding_index.embeddings @ query_embedding
-        selected = np.argsort(-scores, kind="stable")[:k]
-        return [self.embedding_index.documents[int(index)] for index in selected]
+        for _ in range(2):
+            if self._index_signature() != self._source_signature:
+                if not await asyncio.to_thread(self.ensure_initialized):
+                    return []
+            index = self.embedding_index
+            if index is None:
+                return []
+            query_embedding = await self._embed_openai_query(query)
+            # A CLI rebuild changes disk state without replacing this worker's
+            # object. Recheck after the API await before comparing vector spaces.
+            if (
+                self.embedding_index is not index
+                or self._index_signature() != self._source_signature
+            ):
+                continue
+            scores = index.embeddings @ query_embedding
+            selected = np.argsort(-scores, kind="stable")[:k]
+            return [index.documents[int(position)] for position in selected]
+        raise RuntimeError("Icon index changed during query; retry the search")
 
     async def search_icons(
         self,
@@ -282,7 +360,14 @@ class IconFinderService:
             return []
         if requested_results <= 0:
             return []
-        if not normalized_query or not self.ensure_initialized():
+        if not normalized_query:
+            return []
+        ready = (
+            await asyncio.to_thread(self.ensure_initialized)
+            if self.provider == OPENAI_ICON_EMBEDDER
+            else self.ensure_initialized()
+        )
+        if not ready:
             return []
 
         try:
