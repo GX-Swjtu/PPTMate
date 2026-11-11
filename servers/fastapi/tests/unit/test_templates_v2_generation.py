@@ -48,6 +48,11 @@ class _FakeResponse:
         self.tool_calls = tool_calls or []
 
 
+@pytest.fixture(autouse=True)
+def native_schema_mode(monkeypatch):
+    monkeypatch.setenv("LLM_STRUCTURED_OUTPUT_FORMAT", "json_schema")
+
+
 class _FakeClient:
     def __init__(self, content=None, responses=None):
         self.content = content
@@ -1073,3 +1078,44 @@ def test_validation_retry_rebuilds_messages_without_provider_response_items():
     assert retry_messages[2].content == ['{\n  "title": "bad"\n}']
     assert isinstance(retry_messages[3], UserMessage)
     assert "required_json_schema:" in retry_messages[3].content
+
+
+def test_json_object_preview_preserves_upstream_history(monkeypatch):
+    monkeypatch.setenv("LLM_STRUCTURED_OUTPUT_FORMAT", "json_object")
+    payload = _generated_layout()
+    calls = []
+
+    def generate(**kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1:
+            tool_call = AssistantToolCall(
+                id="preview-one",
+                name="previewSlide",
+                arguments=json.dumps(payload),
+            )
+            return _FakeResponse(
+                None,
+                messages=[*kwargs["messages"], AssistantMessage(tool_calls=[tool_call])],
+                tool_calls=[tool_call],
+            )
+        return _FakeResponse(payload)
+
+    monkeypatch.setattr(
+        PreviewSlideTool,
+        "render",
+        lambda *_: ImageContentPart(data=b"preview", mime_type="image/png"),
+    )
+    result = _generate_preview_candidate(
+        client=SimpleNamespace(generate=generate),
+        model="test",
+        messages=[SystemMessage(content="Generate")],
+        label="template",
+        preview_tool=PreviewSlideTool(),
+        validation_retries=1,
+    )
+    assert result.id == payload["id"]
+    assert len(calls) == 2
+    for call in calls:
+        assert call["response_format"].type == "json_object"
+        assert [m.content for m in call["messages"] if isinstance(m, SystemMessage)] == ["Generate"]
+    assert any(isinstance(m, ToolResponseMessage) for m in calls[1]["messages"])

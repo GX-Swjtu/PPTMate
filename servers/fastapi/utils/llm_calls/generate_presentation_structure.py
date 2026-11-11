@@ -57,7 +57,7 @@ You need to select a layout for each slide based on the mentioned guidelines.
 
 # Output Rules: 
 - One layout index for each slide.
-- Example: [0, 1, 2, 3, 4]
+- Example: {{"slides": [0, 1, 2, 3, 4]}}
 
 {presentation_layout}
 """
@@ -201,6 +201,7 @@ async def generate_presentation_structure(
             model,
             messages=messages,
             response_format=response_format,
+            include_schema_in_prompt=True,
             json_schema=structure_schema,
             strict=False,
             validate_schema=True,

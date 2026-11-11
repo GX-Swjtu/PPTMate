@@ -165,6 +165,9 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):
                         status_code=404,
                         content={"detail": "Asset not found"},
                     )
+                # Authentication is complete. Detach loaded user data and roll
+                # back any read transaction before a potentially slow handler.
+                await session.close()
                 return await call_next(request)
             finally:
                 reset_current_session_token(session_context_token)

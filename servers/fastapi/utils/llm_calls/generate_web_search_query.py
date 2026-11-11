@@ -19,7 +19,8 @@ Generate a concise web search query that finds useful factual context for a pres
 - Include terms such as "latest", the relevant year, statistics, trends, or examples when
   they would improve the presentation.
 - Do not answer the user's request.
-- Do not include explanations, quotation marks, search operators, or multiple queries.
+- Do not include explanations, quotation marks inside the query, search operators,
+  or multiple queries.
 """.strip()
 
 SEARCH_QUERY_RESPONSE_SCHEMA = {
@@ -62,6 +63,7 @@ async def generate_web_search_query(
             ),
         ],
         response_format=response_format,
+        include_schema_in_prompt=True,
         json_schema=SEARCH_QUERY_RESPONSE_SCHEMA,
         strict=False,
         validate_schema=True,

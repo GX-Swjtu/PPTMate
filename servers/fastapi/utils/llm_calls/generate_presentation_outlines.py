@@ -381,6 +381,7 @@ async def generate_ppt_outline(
                     include_table_of_contents,
                 ),
                 response_format=response_format,
+                include_schema_in_prompt=True,
                 tools=([WebSearchTool()] if use_search_tool else None),
                 stream=True,
                 enable_web_search=use_search_parameter,

@@ -19,9 +19,11 @@ from llmai.shared import (
     UserMessage,
     normalize_content_parts,
 )
+from llmai.shared.errors import LLMError
 
 from utils.llm_config import get_extra_body
 from utils.schema_utils import get_schema_validation_errors
+from utils.structured_output import adapt_structured_output
 
 LOGGER = logging.getLogger(__name__)
 CLIENT_DISCONNECT_POLL_SECONDS = 0.1
@@ -116,10 +118,14 @@ def get_generate_kwargs(
     reasoning: Optional[ReasoningConfig] = None,
     stream: bool = False,
     enable_web_search: bool = False,
+    include_schema_in_prompt: bool = False,
 ) -> dict[str, Any]:
+    request_messages, response_format = adapt_structured_output(
+        messages, response_format, include_schema_in_prompt=include_schema_in_prompt
+    )
     kwargs: dict[str, Any] = {
         "model": model,
-        "messages": list(messages),
+        "messages": request_messages,
         "stream": stream,
     }
     if max_tokens is not None:
@@ -321,6 +327,7 @@ async def generate_structured_with_schema_retries(
     strict: bool = False,
     validate_schema: bool = False,
     validate_schema_max_loop_count: int = 4,
+    include_schema_in_prompt: bool = False,
     disconnect_checker: Optional[DisconnectChecker] = None,
     text_chunk_callback: Optional[TextChunkCallback] = None,
 ) -> dict:
@@ -335,20 +342,31 @@ async def generate_structured_with_schema_retries(
         content: Optional[dict] = None
         for attempt in range(3):
             await _raise_if_client_disconnected(disconnect_checker)
-            content = await _generate_structured_content(
-                client,
-                disconnect_checker=disconnect_checker,
-                text_chunk_callback=(
-                    text_chunk_callback
-                    if validation_attempt == 0 and attempt == 0
-                    else None
-                ),
-                **get_generate_kwargs(
-                    model=model,
-                    messages=working_messages,
-                    response_format=response_format,
-                ),
-            )
+            try:
+                content = await _generate_structured_content(
+                    client,
+                    disconnect_checker=disconnect_checker,
+                    text_chunk_callback=(
+                        text_chunk_callback
+                        if validation_attempt == 0 and attempt == 0
+                        else None
+                    ),
+                    **get_generate_kwargs(
+                        model=model,
+                        messages=working_messages,
+                        response_format=response_format,
+                        include_schema_in_prompt=include_schema_in_prompt,
+                    ),
+                )
+            except (json.JSONDecodeError, LLMError) as exc:
+                # llmai parses the final streamed JSON before returning it.
+                # Blank/truncated JSON must use the bounded parse retry path;
+                # provider/authentication errors must still propagate unchanged.
+                if not isinstance(exc, json.JSONDecodeError) and not isinstance(
+                    exc.cause, json.JSONDecodeError
+                ):
+                    raise
+                LOGGER.warning("Structured JSON parse failed on attempt %s/3", attempt + 1)
             if content is not None:
                 break
             if attempt < 2:
@@ -356,8 +374,8 @@ async def generate_structured_with_schema_retries(
 
         if content is None:
             raise HTTPException(
-                status_code=400,
-                detail="LLM did not return any content",
+                status_code=502,
+                detail="LLM did not return a valid JSON object",
             )
 
         if not validate_schema:
@@ -375,10 +393,13 @@ async def generate_structured_with_schema_retries(
         formatted_validation_errors = " | ".join(validation_errors)
         if validation_attempt == max_validation_loops - 1:
             LOGGER.warning(
-                "Validation error after max fixes, returning last response: %s",
-                formatted_validation_errors,
+                "JSON schema validation failed after %s attempts",
+                max_validation_loops,
             )
-            return content
+            raise HTTPException(
+                status_code=502,
+                detail="LLM JSON response did not match the required schema after retries",
+            )
 
         LOGGER.warning(
             "Validation error, attempting fix %s/%s: %s",

@@ -335,6 +335,10 @@ def get_llm_max_output_tokens_env():
     return os.getenv("LLM_MAX_OUTPUT_TOKENS")
 
 
+def get_llm_structured_output_format_env():
+    return os.getenv("LLM_STRUCTURED_OUTPUT_FORMAT")
+
+
 def get_llm_reasoning_mode_env():
     return os.getenv("LLM_REASONING_MODE")
 

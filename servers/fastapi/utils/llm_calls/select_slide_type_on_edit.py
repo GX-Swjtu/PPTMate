@@ -81,6 +81,7 @@ async def get_slide_layout_from_prompt(
             model,
             messages=messages,
             response_format=response_format,
+            include_schema_in_prompt=True,
             json_schema=layout_index_schema,
             strict=False,
             validate_schema=True,

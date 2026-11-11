@@ -1779,6 +1779,9 @@ async def prepare_presentation(
         )
     total_outlines = len(outlines)
 
+    # Layout and presentation reads must not hold a transaction during the LLM call.
+    await sql_session.commit()
+
     if structure_layout.ordered:
         presentation_structure = structure_layout.to_presentation_structure()
     else:
@@ -1854,6 +1857,7 @@ async def _stream_smart_presentation(
                 .order_by(SlideModel.index)
             )
         )
+        await sql_session.commit()
         if existing_slides:
             if presentation.fonts:
                 yield SSEResponse(
@@ -1915,6 +1919,8 @@ async def _stream_smart_presentation(
             # Older in-progress records may contain style data; keep only the ID.
             presentation.layout = {"smart_template_reference": {"template_id": template.id}}
 
+        # Template reads must finish before external reference/document/search I/O.
+        await sql_session.commit()
         references = await load_community_references(
             presentation.community_design_ids
         )
@@ -2264,7 +2270,10 @@ async def stream_presentation(
         )
         presentation.set_structure(structure)
         sql_session.add(presentation)
-        await sql_session.commit()
+
+    # Also end the ordinary SELECT transaction when no structure repair is needed.
+    # Generation and asset fetching can take minutes without touching the database.
+    await sql_session.commit()
 
     image_generation_service = ImageGenerationService(get_images_directory())
 

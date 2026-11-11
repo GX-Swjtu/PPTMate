@@ -92,6 +92,10 @@ async def stream_outlines(
     if not presentation:
         raise HTTPException(status_code=404, detail="Presentation not found")
 
+    # Keep loaded attributes (expire_on_commit=False), but release the database
+    # connection before document processing, memory calls and model streaming.
+    await sql_session.commit()
+
     search_route, actual_search_provider = get_web_search_route()
     LOGGER.info(
         "Starting outline stream: presentation_id=%s web_search_enabled=%s "

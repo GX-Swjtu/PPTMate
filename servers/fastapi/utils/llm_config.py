@@ -78,6 +78,7 @@ from utils.get_env import (
     get_web_grounding_env,
     get_llm_generation_profile_env,
     get_llm_max_output_tokens_env,
+    get_llm_structured_output_format_env,
     get_llm_reasoning_budget_tokens_env,
     get_llm_reasoning_effort_env,
     get_llm_reasoning_mode_env,
@@ -184,6 +185,21 @@ def has_explicit_reasoning_settings() -> bool:
             get_llm_reasoning_budget_tokens_env(),
         )
     )
+
+
+def get_structured_output_format() -> str:
+    configured = (get_llm_structured_output_format_env() or "").strip()
+    if configured:
+        if configured not in {"json_object", "json_schema"}:
+            raise HTTPException(
+                status_code=400,
+                detail="LLM_STRUCTURED_OUTPUT_FORMAT must be json_object or json_schema",
+            )
+        return configured
+    # Gateway aliases may switch providers without changing the model name.
+    if get_llm_provider() in {LLMProvider.LITELLM, LLMProvider.DEEPSEEK}:
+        return "json_object"
+    return "json_schema"
 
 
 def get_generation_defaults() -> GenerationDefaults:

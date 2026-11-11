@@ -40,6 +40,7 @@ from templates.v2.tools import PREVIEW_SLIDE_TOOL_NAME, PreviewSlideTool
 from utils.asset_directory_utils import resolve_image_path_to_filesystem
 from utils.llm_config import get_llm_config
 from utils.llm_provider import get_model
+from utils.structured_output import adapt_structured_output
 
 DEFAULT_VALIDATION_RETRIES = 5
 MAX_PARALLEL_SLIDE_LAYOUTS = 10
@@ -399,6 +400,7 @@ def merge_similar_components(layouts: SlideLayouts) -> MergedComponents:
         label="similar component clusters",
         output_model=SimilarComponentsList,
         response_name="SimilarComponentsResponse",
+        include_schema_in_prompt=True,
         validation_retries=DEFAULT_VALIDATION_RETRIES,
         extra_validator=lambda clusters: _validate_similarity_groups(
             clusters,
@@ -1126,6 +1128,12 @@ def _generate_preview_candidate(
                         ),
                     }
                 )
+            (
+                generate_kwargs["messages"],
+                generate_kwargs["response_format"],
+            ) = adapt_structured_output(
+                generate_kwargs["messages"], generate_kwargs["response_format"]
+            )
             response = client.generate(**generate_kwargs)
             tool_call = None
             if preview_tool_available:
@@ -1328,8 +1336,10 @@ def _generate_with_validation_retries(
     validation_retries: int,
     extra_validator: Callable[[Any], None] | None = None,
     max_tokens: int = 8192,
+    include_schema_in_prompt: bool = False,
 ) -> dict[str, Any]:
     attempt_messages = list(messages)
+    needs_schema_prompt = include_schema_in_prompt
     last_error: Exception | None = None
     max_attempts = validation_retries + 1
 
@@ -1347,14 +1357,19 @@ def _generate_with_validation_retries(
             len(attempt_messages),
         )
         try:
-            response = client.generate(
-                model=model,
-                messages=attempt_messages,
-                response_format=JSONSchemaResponse(
+            request_messages, response_format = adapt_structured_output(
+                attempt_messages,
+                JSONSchemaResponse(
                     name=response_name,
                     strict=False,
                     json_schema=_llm_response_schema(output_model),
                 ),
+                include_schema_in_prompt=needs_schema_prompt,
+            )
+            response = client.generate(
+                model=model,
+                messages=request_messages,
+                response_format=response_format,
                 max_tokens=max_tokens,
             )
         except Exception as exc:
@@ -1408,6 +1423,8 @@ def _generate_with_validation_retries(
                 error=exc,
                 invalid_response=parsed,
             )
+            # The upstream repair message already supplies the complete schema.
+            needs_schema_prompt = False
         except (JSONDecodeError, ValueError) as exc:
             last_error = exc
             if attempt > validation_retries:

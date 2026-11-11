@@ -158,6 +158,7 @@ async def get_edited_slide_content(
             model,
             messages=messages,
             response_format=response_format,
+            include_schema_in_prompt=True,
             json_schema=response_schema,
             strict=False,
             validate_schema=True,
