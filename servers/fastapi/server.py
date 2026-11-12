@@ -1,6 +1,8 @@
 import uvicorn
 import argparse
+import os
 from api.main import app
+from api.v1.auth.oidc import is_platform_mode
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the FastAPI server")
@@ -20,10 +22,21 @@ if __name__ == "__main__":
     reload = args.reload == "true"
     host = "127.0.0.1"
 
+    logging_options = {}
+    if is_platform_mode():
+        from ngl_observability import build_uvicorn_log_config
+
+        # Platform middleware owns bounded business/error logs and already
+        # excludes successful health probes; avoid duplicate Uvicorn access logs.
+        logging_options["log_config"] = build_uvicorn_log_config(
+            service_name="pptmate", environment=os.getenv("APP_ENV", "development")
+        )
+
     uvicorn.run(
         "api.main:app",
         host=host,
         port=args.port,
         log_level=args.log_level,
         reload=reload,
+        **logging_options,
     )

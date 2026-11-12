@@ -101,6 +101,8 @@ ENV APP_DATA_DIRECTORY=/app_data \
     PRESENTON_FASTEMBED_ICON_CACHE_DIR=/root/.cache/presenton/fastembed-icons \
     PATH="/opt/venv/bin:${PATH}" \
     NODE_ENV=production \
+    LITEPARSE_TESSDATA_PATH=/usr/share/tesseract-ocr/5/tessdata \
+    LITEPARSE_NUM_WORKERS=2 \
     START_OLLAMA=false \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
@@ -119,7 +121,7 @@ RUN --mount=type=cache,id=pptmate-trixie-apt-cache,target=/var/cache/apt,sharing
     libglib2.0-0t64 libgtk-3-0t64 libnspr4 libnss3 libpango-1.0-0 \
     libx11-6 libxcb1 libxcomposite1 libxdamage1 libxext6 libxfixes3 \
     libxkbcommon0 libxrandr2 libxshmfence1 libxss1 libxtst6"; \
-    if [ "$INSTALL_TESSERACT" = "true" ]; then packages="$packages tesseract-ocr tesseract-ocr-eng"; fi; \
+    if [ "$INSTALL_TESSERACT" = "true" ]; then packages="$packages tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim tesseract-ocr-chi-tra"; fi; \
     apt-get update; \
     apt-get install -y --no-install-recommends --allow-downgrades \
     $packages \

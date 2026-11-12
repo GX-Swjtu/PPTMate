@@ -75,6 +75,7 @@ class TestImageGenerationOpenAICompatible:
                         "services.image_generation_service.AsyncOpenAI"
                     ) as MockClient:
                         mock_client_instance = MockClient.return_value
+                        mock_client_instance.close = AsyncMock()
 
                         # Mock response with b64_json
                         mock_response = Mock()
@@ -111,6 +112,7 @@ class TestImageGenerationOpenAICompatible:
                         )
 
                         # Verify file creation
+                        mock_client_instance.close.assert_awaited_once()
                         assert os.path.exists(image_path)
                         assert image_path.startswith(mock_images_directory)
 
@@ -181,6 +183,7 @@ class TestImageGenerationOpenAICompatible:
                         "services.image_generation_service.AsyncOpenAI"
                     ) as MockClient:
                         mock_client_instance = MockClient.return_value
+                        mock_client_instance.close = AsyncMock()
                         mock_data = Mock()
                         mock_data.b64_json = None
                         mock_data.url = "https://api.example.com/images/result.png"
@@ -211,6 +214,7 @@ class TestImageGenerationOpenAICompatible:
                         assert call_kwargs["headers"] == {
                             "Authorization": "Bearer sk-test-key"
                         }
+                        mock_client_instance.close.assert_awaited_once()
                         assert os.path.exists(image_path)
                         assert image_path.startswith(mock_images_directory)
 
@@ -237,6 +241,7 @@ class TestImageGenerationOpenAICompatible:
                         "services.image_generation_service.AsyncOpenAI"
                     ) as MockClient:
                         mock_client_instance = MockClient.return_value
+                        mock_client_instance.close = AsyncMock()
                         mock_data = Mock()
                         mock_data.b64_json = None
                         mock_data.url = "/images/result.png"
@@ -270,6 +275,7 @@ class TestImageGenerationOpenAICompatible:
                         assert call_args.kwargs["headers"] == {
                             "Authorization": "Bearer sk-test-key"
                         }
+                        mock_client_instance.close.assert_awaited_once()
                         assert os.path.exists(image_path)
 
     @pytest.mark.anyio
@@ -295,6 +301,7 @@ class TestImageGenerationOpenAICompatible:
                         "services.image_generation_service.AsyncOpenAI"
                     ) as MockClient:
                         mock_client_instance = MockClient.return_value
+                        mock_client_instance.close = AsyncMock()
                         mock_data = Mock()
                         mock_data.b64_json = None
                         mock_data.url = "https://cdn.example.net/images/result.png"
@@ -323,4 +330,5 @@ class TestImageGenerationOpenAICompatible:
 
                         call_kwargs = mock_session.get.call_args.kwargs
                         assert call_kwargs["headers"] == {}
+                        mock_client_instance.close.assert_awaited_once()
                         assert os.path.exists(image_path)

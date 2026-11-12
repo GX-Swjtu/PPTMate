@@ -3,45 +3,45 @@ import base64
 import json
 import os
 import secrets
+import uuid
 from weakref import WeakKeyDictionary
 
 import aiohttp
 from fastapi import HTTPException
 from google import genai
 from google.genai import types
-from openai import NOT_GIVEN, AsyncOpenAI
 from models.image_prompt import ImagePrompt
 from models.sql.image_asset import ImageAsset
+from openai import NOT_GIVEN, AsyncOpenAI
+from utils.asset_directory_utils import absolute_fastapi_asset_url
 from utils.get_env import (
+    get_comfyui_url_env,
+    get_comfyui_workflow_env,
     get_dall_e_3_quality_env,
     get_gpt_image_1_5_quality_env,
-    get_pexels_api_key_env,
-    get_open_webui_image_url_env,
     get_open_webui_image_api_key_env,
-    get_openai_compat_image_base_url_env,
+    get_open_webui_image_url_env,
     get_openai_compat_image_api_key_env,
+    get_openai_compat_image_base_url_env,
     get_openai_compat_image_model_env,
+    get_pexels_api_key_env,
+    get_pixabay_api_key_env,
     is_parallel_image_generation_enabled,
 )
-from utils.get_env import get_pixabay_api_key_env
-from utils.get_env import get_comfyui_url_env
-from utils.get_env import get_comfyui_workflow_env
+from utils.image_generation_error import normalize_image_generation_error
 from utils.image_provider import (
+    is_comfyui_selected,
+    is_dalle3_selected,
+    is_gemini_flash_selected,
     is_gpt_image_1_5_selected,
     is_image_generation_disabled,
-    is_pixels_selected,
-    is_pixabay_selected,
-    is_gemini_flash_selected,
     is_nanobanana_pro_selected,
-    is_dalle3_selected,
-    is_comfyui_selected,
     is_open_webui_selected,
     is_openai_compatible_selected,
+    is_pixabay_selected,
+    is_pixels_selected,
 )
-from utils.asset_directory_utils import absolute_fastapi_asset_url
-from utils.image_generation_error import normalize_image_generation_error
-import uuid
-
+from utils.image_request_limits import get_image_request_limiter, image_retry_delay
 
 COMFYUI_MAX_SEED = 0xFFFFFFFFFFFFFFFF
 COMFYUI_SEED_SOURCE_VALUE_KEYS = {"value", "int", "integer", "number"}
@@ -148,7 +148,28 @@ class ImageGenerationService:
     async def _call_image_provider(self, image_prompt: str) -> str:
         if self.is_stock_provider_selected():
             return await self.image_gen_func(image_prompt)
-        return await self.image_gen_func(image_prompt, self.output_directory)
+        limiter = get_image_request_limiter()
+        if limiter is None:
+            return await self.image_gen_func(image_prompt, self.output_directory)
+        for attempt in range(3):
+            try:
+                async with limiter.request():
+                    return await self.image_gen_func(image_prompt, self.output_directory)
+            except Exception as exc:
+                normalized = normalize_image_generation_error(exc)
+                code = getattr(normalized, "provider_code", None)
+                if normalized.status_code != 429 or code in {
+                    "insufficient_quota", "billing_hard_limit_reached", "quota_exceeded"
+                }:
+                    raise
+                response = getattr(exc, "response", None)
+                headers = (
+                    response.headers if response is not None else getattr(exc, "headers", None)
+                )
+                delay = image_retry_delay(headers)
+                limiter.defer(delay)
+                if attempt == 2:
+                    raise
 
     async def generate_image_openai(
         self, prompt: str, output_directory: str, model: str, quality: str
@@ -862,14 +883,16 @@ class ImageGenerationService:
         origin = f"{parsed.scheme}://{parsed.netloc}"
 
         client = AsyncOpenAI(base_url=base_url, api_key=api_key, max_retries=0)
-
-        response = await client.images.generate(
-            model=model,
-            prompt=prompt,
-            n=1,
-            response_format="b64_json",
-            size="1024x1024",
-        )
+        try:
+            response = await client.images.generate(
+                model=model,
+                prompt=prompt,
+                n=1,
+                response_format="b64_json",
+                size="1024x1024",
+            )
+        finally:
+            await client.close()
 
         item = response.data[0]
         image_path = os.path.join(output_directory, f"{uuid.uuid4()}.png")

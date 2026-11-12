@@ -34,13 +34,19 @@ function toNumber(value, fallback, min, max) {
 }
 
 function normalizeOcrLanguage(raw) {
-  const s = String(raw ?? "").trim();
+  const s = String(raw ?? "").trim().toLowerCase();
   if (!s) return "eng";
-  if (!s.includes(",")) return s;
+  // Keep LiteParse's supported short language names usable with local files.
+  const aliases = {
+    en: "eng", fr: "fra", de: "deu", es: "spa", it: "ita", pt: "por",
+    ru: "rus", zh: "chi_sim", "zh-cn": "chi_sim", "zh-tw": "chi_tra",
+    ja: "jpn", ko: "kor", ar: "ara", hi: "hin", th: "tha", vi: "vie",
+  };
   return s
-    .split(",")
+    .split(/[,+]/)
     .map((part) => part.trim())
     .filter(Boolean)
+    .map((part) => aliases[part] || part)
     .join("+");
 }
 
@@ -120,6 +126,20 @@ try {
   }
   if (tessdataPath) {
     config.tessdataPath = tessdataPath;
+  }
+
+  // Images always need OCR. Do not reject text documents or text-rich PDFs
+  // here: LiteParse can extract those without initializing an OCR worker.
+  const isImage = /\.(png|jpe?g|webp|bmp|gif|tiff?)$/i.test(resolvedPath);
+  if (isImage && ocrEnabled && !ocrServerUrl && tessdataPath && !/^https?:\/\//i.test(tessdataPath)) {
+    for (const language of ocrLanguage.split("+")) {
+      const languageFile = path.join(tessdataPath, `${language}.traineddata`);
+      try {
+        fs.accessSync(languageFile, fs.constants.R_OK);
+      } catch {
+        throw new Error(`OCR language data unavailable: ${language}. Install its traineddata file in LITEPARSE_TESSDATA_PATH.`);
+      }
+    }
   }
 
   const parser = new LiteParse(config);

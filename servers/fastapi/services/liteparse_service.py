@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import signal
 import subprocess
 import tempfile
 import threading
@@ -422,6 +423,7 @@ class LiteParseService:
                     stdout=stdout_file,
                     stderr=subprocess.PIPE,
                     env=self._build_node_env(),
+                    start_new_session=os.name != "nt",
                     **_windows_hidden_subprocess_kwargs(),
                 )
 
@@ -438,7 +440,16 @@ class LiteParseService:
                 try:
                     returncode = process.wait(timeout=self.timeout_seconds)
                 except subprocess.TimeoutExpired as exc:
-                    process.kill()
+                    # Converters may spawn children which inherit stderr. Kill
+                    # the whole POSIX group so neither children nor the reader
+                    # thread outlive a timed-out parse.
+                    if os.name != "nt":
+                        try:
+                            os.killpg(process.pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass
+                    else:
+                        process.kill()
                     process.wait()
                     stderr_thread.join(timeout=5)
                     raise LiteParseError(
